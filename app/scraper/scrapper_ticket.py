@@ -39,18 +39,27 @@ class ITLAScraper:
 
         email_input = page.locator("#email")
         await email_input.click()
-        await email_input.press_sequentially(self.credentials["email"], delay=50)
+        await email_input.press_sequentially(
+            self.credentials["email"],
+            delay=50
+        )
 
         password_input = page.locator("#password")
         await password_input.click()
-        await password_input.press_sequentially(self.credentials["password"], delay=50)
+        await password_input.press_sequentially(
+            self.credentials["password"],
+            delay=50
+        )
 
         await page.get_by_role("button", name="Iniciar Sesión").click()
         await page.wait_for_timeout(3000)
         await page.wait_for_load_state("networkidle")
 
         try:
-            await page.wait_for_selector(".btn-logout, button:has-text('Salir')", timeout=5000)
+            await page.wait_for_selector(
+                ".btn-logout, button:has-text('Salir')", 
+                timeout=5000
+            )
             print("✅ Login successful")
             return True
         except Exception:
@@ -86,10 +95,30 @@ class ITLAScraper:
         await page.locator("#reserve_date").fill(self.ticket["date"])
         print(f"  ✓ Date: {self.ticket['date']}")
 
-        await self._ngx_select(page, "time_in", self.ticket["arrival_route"], "Arrival route")
-        await self._ngx_select(page, "stop_in", self.ticket["pickup_stop"], "Pickup stop")
-        await self._ngx_select(page, "time_out", self.ticket["departure_route"], "Departure route")
-        await self._ngx_select(page, "stop_out", self.ticket["dropoff_stop"], "Dropoff stop")
+        await self._ngx_select(
+            page,
+            "time_in",
+            self.ticket["arrival_route"],
+            "Arrival route"
+        )
+        await self._ngx_select(
+            page,
+            "stop_in",
+            self.ticket["pickup_stop"],
+            "Pickup stop"
+        )
+        await self._ngx_select(
+            page,
+            "time_out",
+            self.ticket["departure_route"],
+            "Departure route"
+        )
+        await self._ngx_select(
+            page,
+            "stop_out",
+            self.ticket["dropoff_stop"],
+            "Dropoff stop"
+        )
 
         print("✅ Form completed")
 
@@ -127,13 +156,16 @@ class ITLAScraper:
 
     @staticmethod
     def _normalize(s):
-        return unicodedata.normalize("NFD", s).encode("ascii", "ignore").decode().lower()
+        return unicodedata.normalize("NFD", s).encode(
+            "ascii",
+            "ignore"
+        ).decode().lower()
 
 
 if __name__ == "__main__":
     credentials = {
-        "email": "your_email",
-        "password": "your_password"
+        "email": "arammymussett@gmail.com",
+        "password": "2007344Itla#"
     }
 
     ticket = {

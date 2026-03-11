@@ -1,7 +1,13 @@
 from datetime import datetime
 from sqlalchemy import (
-    Boolean, Column, Date, DateTime, ForeignKey,
-    Integer, String, Text
+    Boolean,
+    Column,
+    Date,
+    DateTime,
+    ForeignKey,
+    Integer,
+    String,
+    Text
 )
 from sqlalchemy.orm import DeclarativeBase, relationship
 
