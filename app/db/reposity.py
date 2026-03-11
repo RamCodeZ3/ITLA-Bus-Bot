@@ -7,15 +7,15 @@ from models.purchase import Purchase
 class UserRepository:
     def __init__(self, session: Session):
         self.session = session
-
+    
     def create(
             self,
-            telegram_id: int,
+            discord_id: int,
             email: str,
             encrypted_password: str
         ) -> User:
         user = User(
-            telegram_id=telegram_id,
+            discord_id=discord_id,
             email=email,
             encrypted_password=encrypted_password
         )
@@ -24,9 +24,9 @@ class UserRepository:
         self.session.refresh(user)
         return user
 
-    def get_by_telegram_id(self, telegram_id: int) -> User | None:
+    def get_by_discord_id(self, discord_id: int) -> User | None:
         return self.session.query(User).filter_by(
-            telegram_id=telegram_id
+            discord_id=discord_id
         ).first()
 
 
