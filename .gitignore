@@ -167,4 +167,5 @@ poetry.toml
 # ruff
 .ruff_cache/
 
-# LSP config files
+# database
+itla_bot.db
