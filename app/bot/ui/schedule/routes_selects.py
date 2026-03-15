@@ -7,6 +7,7 @@ from utils.schedule_utils import (
     DAYS_ES
 )
 
+
 class DepartureStopSelect(PagedView):
     def __init__(self, state: ScheduleState, page: int = 0):
         super().__init__(state, "Parada de bajada (salida)", page)
