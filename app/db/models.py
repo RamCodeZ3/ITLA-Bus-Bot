@@ -7,7 +7,8 @@ from sqlalchemy import (
     ForeignKey,
     Integer,
     String,
-    Text
+    Text,
+    BigInteger
 )
 from sqlalchemy.orm import DeclarativeBase, relationship
 
@@ -20,7 +21,7 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    telegram_id = Column(Integer, unique=True, nullable=False)
+    discord_id = Column(BigInteger, unique=True, nullable=False)
     email = Column(String(255), nullable=False)
     encrypted_password = Column(Text, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)

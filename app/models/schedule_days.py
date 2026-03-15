@@ -3,7 +3,7 @@ from typing import Optional
 
 
 class ScheduleDays(BaseModel):
-    shedule_id: int
+    schedule_id: int
     day: str
     ticket_type: str
     arrival_route: Optional[str] = None

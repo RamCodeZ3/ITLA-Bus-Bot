@@ -1,0 +1,707 @@
+WEEKDAY_ROUTES = {
+    "arrival": {
+        "routes": [
+            "27 de Febrero 8:00AM",
+            "27 de Febrero 10:00AM",
+            "27 de Febrero 2:00PM",
+            "27 de Febrero 6:00PM",
+            "Charles de Gaulle - Villa Mella 8:00AM",
+            "Charles de Gaulle - Villa Mella 2:00PM",
+            "John F. Kennedy / San Vicente de Paul 2:00PM",
+            "John F. Kennedy / San Vicente de Paul 6:00PM",
+            "Charles de Gaulle - Villa Mella 10:00AM",
+            "Juan Bosch-Marginal Las Américas 4:00PM",
+            "La Romana 8:00AM",
+            "La Romana 6:00PM",
+            "Independencia 8:00AM",
+            "Independencia 4:00PM",
+            "John F. Kennedy / San Vicente de Paul 8:00AM",
+            "Charles de Gaulle - Villa Mella 6:00PM",
+            "Alimentadora SDE-Sede Central 12:00PM",
+            "Alimentadora SDE-Sede Central 3:20PM",
+            "San Pedro 8:00AM",
+            "San Pedro 4:00PM",
+            "Juan Bosch-Marginal Las Américas 8:00AM"
+        ],
+        "stops_by_route": {
+            "27 de Febrero 8:00AM": [
+                "PINTURA AVE. ISABEL AGUIAR (Después de cruzar) PARADA OMSA",
+                "SECRETARIA FUERZAS ARMADAS PARADA OMSA",
+                "AVE. CAONABO (Después de cruzar) PARADA OMSA",
+                "AVE. NÚÑEZ DE CÁCERES (Después de cruzar) PARADA OMSA",
+                "AVE. DR. ARTURO F. DEFILLÓ (Después de cruzar) PARADA OMSA",
+                "AVE. WINSTON CHURCHILL (Después de cruzar) PARADA OMSA",
+                "AVE. ABRAHAM LINCOLN (Después de cruzar) PARADA OMSA",
+                "AVE. TIRADENTE (Después de cruzar) PARADA OMSA",
+                "AVE. MÁXIMO GÓMEZ (Después de cruzar) PARADA OMSA",
+                "AVE. LEOPOLDO NAVARRO (Después de cruzar) PARADA OMSA",
+                "AVE. MÉXICO (Después de cruzar la Duarte) PARADA OMSA",
+                "AVE. VENEZUELA (Después de cruzar) PARADA OMSA",
+                "AVE. SABANA LARGA (Antes de Cruzar)",
+                "LOS TRES OJOS (Puente Peatonal)",
+                "PUENTE JUAN CARLOS (Después de cruzar) PARADA OMSA",
+                "ITLA Sede Central (última parada)",
+                "AVE. MÉXICO ( Club San Carlos) PARADA DE LA OMSA",
+                "AVE. DR. DELGADO DON BOSCO",
+                "Calle Real (Después de cruzar la 25 de Febrero) PARADA OMSA",
+                "AVE. MÉXICO ( SAN CARLOS- BOMBA SHELL)"
+            ],
+            "27 de Febrero 10:00AM": [
+                "PINTURA AVE. ISABEL AGUIAR (Después de cruzar) PARADA OMSA",
+                "SECRETARIA FUERZAS ARMADAS PARADA OMSA",
+                "AVE. CAONABO (Después de cruzar) PARADA OMSA",
+                "AVE. PRIVADA (Después de cruzar) PARADA OMSA",
+                "AVE. NÚÑEZ DE CÁCERES (Después de cruzar) PARADA OMSA",
+                "AVE. DR. ARTURO F. DEFILLÓ (Después de cruzar) PARADA OMSA",
+                "AVE. WINSTON CHURCHILL (Después de cruzar) PARADA OMSA",
+                "AVE. ABRAHAM LINCOLN (Después de cruzar) PARADA OMSA",
+                "AVE. TIRADENTE (Después de cruzar) PARADA OMSA",
+                "AVE. MÁXIMO GÓMEZ (Después de cruzar) PARADA OMSA",
+                "AVE. LEOPOLDO NAVARRO (Después de cruzar) PARADA OMSA",
+                "AVE. VENEZUELA (Después de cruzar) PARADA OMSA",
+                "AVE. SABANA LARGA (Antes de Cruzar)",
+                "BOMBA SHELL – FRENTE AL DARÍO CONTRERAS",
+                "LOS TRES OJOS (Puente Peatonal)",
+                "PUENTE JUAN CARLOS (Después de cruzar) PARADA OMSA",
+                "ITLA Sede Central (última parada)",
+                "AVE. MÉXICO ( Club San Carlos) PARADA DE LA OMSA",
+                "AVE. MÉXICO (Después de cruzar la Duarte) PARADA OMSA",
+                "Calle Real (Después de cruzar la 25 de Febrero) PARADA OMSA"
+            ],
+            "27 de Febrero 2:00PM": [
+                "HNAS. MIRABAL ESQ. CHARLES G. (LA SIRENA, VILLA MELLA)",
+                "SABANA PERDIDA (FRENTE AL OLE) PARADA OMSA",
+                "CLUB LOS TRINITARIOS (FRENTE SUPER MERCADO SUPER-NACIONAL)",
+                "INVIVIENDA (FRENTE A CLARO) PRADA OMSA",
+                "VILLA CARMEN (PARADA OMSA)",
+                "SAN ISIDRO DESPUÉS DE CRUZAR (PARADA OMSA)",
+                "PARADA OMSA – FRENTE A LA PLANTA CREDIGAS (BRISA DEL ESTE)",
+                "PUENTE JUAN CARLOS (Después de cruzar) PARADA OMSA",
+                "AUTOPISTA LAS AMÉRICAS KM. 101/2 BARRIO NUEVO",
+                "AUTOPISTA LAS AMÉRICAS KM. 12 LA LLAVE",
+                "ITLA Sede Central (última parada)",
+                "CANSINO (FRENTE COLMADO COME Y BEBE)",
+                "MENDOZA (PARADA OMSA)",
+                "SUPERMERCADO BRAVO (ANTES DE LA CARRETERA MELLA)",
+                "CALLE TEODORO STANLEY (FRENTE AL TRIBUNAL LABORAL)"
+            ],
+            "27 de Febrero 6:00PM": [
+                "Km. 9 Aut. Duarte (Parada del Metro María Montes)",
+                "Av. Núñez de Cáceres (después de Cruzar Parada del Metro P. F. Bonó)",
+                "Av. Doctor Defilló (Viverde Rica) después de cruzar parada del Metro)",
+                "Av. Winston Churchill (Parada de motores debajo del Puente Peatonal)",
+                "Av. Abraham Lincoln (Parada OMSA Ágora Mall)",
+                "Av. López de Vega (Parada OMSA) después de cruzar Parada del Metro",
+                "Parada OMSA después de cruzar Av. Tiradentes",
+                "Parada OMSA después de cruzar Av. Ortega y Gasset",
+                "Parada OMSA después de cruzar Av. Máximo Gómez (Torre Popular)",
+                "Parada OMSA 1er. Puente Peatonal V Centenario",
+                "Parada OMSA 3er. Puente Peatonal V Centenario",
+                "Av. Padre Castellano esq. Josefa Brea (Parada Motores)",
+                "Av. Padre Castellano esq. C/ 10 (Frente a Funeraria La Milagrosa)",
+                "Puente Peatonal Gualey",
+                "Av. San Vicente de Paul (Después del Letreo Santo Domingo Este, parada de la OMSA)",
+                "Av. San Vicente de Paul esq. C/ Ñ (Frente a Claro)",
+                "Av. San Vicente de Paul esq. Fernando de Navarrete (Bomba de Los Minas)",
+                "Av. San Vicente de Paul esq. C/ Juan Pablo Duarte (Después de Cruzar Comedores Económicos del Estado)",
+                "Av. San Vicente de Paul esq. C/ 4 de Agosto (Frente a Electromuebles Kewrys)",
+                "Av. San Vicente de Paul después de Cruzar Carretera Mella (Restaurante Jardín Oriental)",
+                "Av. San Vicente de Paul esq. Carretera de Mendosa (Plaza Galerías del Este)",
+                "Av. San Vicente de Paul esq. Calle Costa Rica (Restaurant Adrián Tropical)",
+                "Av. San Vicente de Paul esq. Club de Leones (Plaza Alma Rosa)",
+                "Av. San Vicente esq. Nicolas Silfa Canario (Frente Colmado Super Pérez)",
+                "Terminal Santo Domingo Este (Extensión ITLA SDE)",
+                "Final del recorrido: Sede Central ITLA (ITLA Caleta)"
+            ],
+            "Charles de Gaulle - Villa Mella 8:00AM": [
+                "HNAS. MIRABAL ESQ. CHARLES G. (LA SIRENA, VILLA MELLA)",
+                "SABANA PERDIDA (FRENTE AL OLE) PARADA OMSA",
+                "CANSINO (FRENTE COLMADO COME Y BEBE)",
+                "SUPERMERCADO BRAVO (ANTES DE LA CARRETERA MELLA)",
+                "CALLE TEODORO STANLEY (FRENTE AL TRIBUNAL LABORAL)",
+                "CLUB LOS TRINITARIOS (FRENTE SUPER MERCADO SUPER-NACIONAL)",
+                "INVIVIENDA (FRENTE A CLARO) PRADA OMSA",
+                "VILLA CARMEN (PARADA OMSA)",
+                "MENDOZA (PARADA OMSA)",
+                "SAN ISIDRO DESPUÉS DE CRUZAR (PARADA OMSA)",
+                "PARADA OMSA – FRENTE A LA PLANTA CREDIGAS (BRISA DEL ESTE)",
+                "PUENTE JUAN CARLOS"
+            ],
+            "Charles de Gaulle - Villa Mella 2:00PM": [
+                "Parada Inicio: Parque Central (Frente a Parroquia Santa Rosa)",
+                "Av. Pedro A Lluberes esq. C/ Dolores Tejada (Frente a BanJoven)",
+                "Av. Padre Abreu esq. C/ Héctor Quezada (Frente a Bomba Texaco)",
+                "Av. Profesor Juan Bosch (Frente Multiplaza)",
+                "Av. Profesor Juan Bosch (Frente a Yina Bambú Shop )",
+                "Final del Recorrido ITLA La Caleta"
+            ],
+            "John F. Kennedy / San Vicente de Paul 2:00PM": [
+                "KM 12 Av. Independencia (Frente a Plaza Luperón)",
+                "KM 11 (Funeraria municipal)",
+                "KM 10 1/2 (Residencial Atlántida)",
+                "KM 10 (Parada OMSA Casa de España)",
+                "KM 10 (Frente a Farmacia Baik, INVI)",
+                "KM 9 1/2 (Frente al Supermercado Nacional).",
+                "KM 9 (Frente al colegio San Gabriel)",
+                "KM 8 1/2 (Plaza del pollo)",
+                "KM 8 (Farmacia GBC)",
+                "KM 7 1/2 (Frente a Supermercado Ole)",
+                "km 7 (Frente a PROMESECAL)",
+                "KM 6 1/2 (Frente a METALDOM)",
+                "KM 6 (Frente a la Cervecería Nacional)",
+                "Farmacia FarmaExtra (Sector 30 De mayo)",
+                "Asociación Popular (Sector El Cacique)",
+                "Av. Independencia (Frente a Clínica Independencia)",
+                "Av. Independencia Esq. Jiménez Moya (Frente a Energía y Minas)",
+                "Parada OMSA Av. Independencia Esq. Abraham Lincoln",
+                "Plaza Juan Varón (Frente a Obelisco Macho)",
+                "Calle Palo Hincado esq. George Washington, Zona colonial",
+                "C/ Palo Hincado antes de cruzar Av. Simón Bolívar",
+                "Parada Espress: Terminal del Este (ITLA SDE)",
+                "ITLA Sede Central (última parada)"
+            ],
+            "John F. Kennedy / San Vicente de Paul 6:00PM": [
+                "Km. 9 Aut. Duarte (Parada del Metro María Montes)",
+                "Av. Núñez de Cáceres (después de Cruzar Parada del Metro P. F. Bonó)",
+                "Av. Doctor Defilló (Viverde Rica) después de cruzar parada del Metro)",
+                "Av. Winston Churchill (Parada de motores debajo del Puente Peatonal)",
+                "Av. Abraham Lincoln (Parada OMSA Ágora Mall)",
+                "Av. López de Vega (Parada OMSA) después de cruzar Parada del Metro",
+                "Parada OMSA después de cruzar Av. Tiradentes",
+                "Parada OMSA después de cruzar Av. Ortega y Gasset",
+                "Parada OMSA después de cruzar Av. Máximo Gómez (Torre Popular)",
+                "Parada OMSA 1er. Puente Peatonal V Centenario",
+                "Parada OMSA 3er. Puente Peatonal V Centenario",
+                "Av. Padre Castellano esq. Josefa Brea (Parada Motores)",
+                "Av. Padre Castellano esq. C/ 10 (Frente a Funeraria La Milagrosa)",
+                "Puente Peatonal Gualey",
+                "Av. San Vicente de Paul (Después del Letreo Santo Domingo Este, parada de la OMSA)",
+                "Av. San Vicente de Paul esq. C/ Ñ (Frente a Claro)",
+                "Av. San Vicente de Paul esq. Fernando de Navarrete (Bomba de Los Minas)",
+                "Av. San Vicente de Paul esq. C/ Juan Pablo Duarte (Después de Cruzar Comedores Económicos del Estado)",
+                "Av. San Vicente de Paul esq. C/ 4 de Agosto (Frente a Electromuebles Kewrys)",
+                "Av. San Vicente de Paul después de Cruzar Carretera Mella (Restaurante Jardín Oriental)",
+                "Av. San Vicente de Paul esq. Carretera de Mendosa (Plaza Galerías del Este)",
+                "Av. San Vicente de Paul esq. Calle Costa Rica (Restaurant Adrián Tropical)",
+                "Av. San Vicente de Paul esq. Club de Leones (Plaza Alma Rosa)",
+                "Av. San Vicente esq. Nicolas Silfa Canario (Frente Colmado Super Pérez)",
+                "Terminal Santo Domingo Este (Extensión ITLA SDE)",
+                "Final del recorrido: Sede Central ITLA (ITLA Caleta)"
+            ],
+            "Charles de Gaulle - Villa Mella 10:00AM": [
+                "ITLA Sede Central (última parada)"
+            ],
+            "Juan Bosch-Marginal Las Américas 4:00PM": [
+                "Calle JOSE HAZIM AZAR (Frente al Supermercado JUMBO)",
+                "AUTOPISTA LAS AMERICAS (Frente a la parada de Boca Chica)",
+                "AUTOPISTA LAS AMERICAS (Boca Chica, frente a los Bomberos)",
+                "AUTOPISTA LAS AMERICAS (Vistas de Caucedo, debajo del elevado.)",
+                "ITLA Sede Central (última parada)",
+                "AVE. INDEPENDENCIA (después de cruzar frente a McDonald)",
+                "AUTOPISTA LAS AMERICAS (Puente Peatonal frente a Claro)"
+            ],
+            "La Romana 8:00AM": [
+                "PUENTE JUAN CARLOS (Después de cruzar) PARADA OMSA",
+                "Los Frailes (frente a Corripio)",
+                "Los Frailes (Entrada del Olé)",
+                "Peatonal las Américas KM 11",
+                "Entrada del Burrito (Frente a la Bomba)",
+                "Barrio Nuevo",
+                "Kilómetro 11 de las Américas (Frente a Repuestos Lula)",
+                "Kilómetro 12 de las Américas (Puente Peatonal)",
+                "La llave de las Américas",
+                "Kilómetro 12 ½ de las Américas (Los Furgones)",
+                "Parque los Molinos (PARADA OMSA)",
+                "Km 14 (Almacenes Garrido)",
+                "Km 14 ½ (Aguas Locas)",
+                "Ciudad Juan Bosch (Super Olé)",
+                "Escuela Primaria Ciudad Juan Bosch",
+                "Sembrador 1ro, Ciudad Juan Bosch (Parada de la OMSA)",
+                "Residencial Camino Verde, Ciudad Juan Bosch",
+                "Control de la OMSA, Ciudad Juan Bosch",
+                "La Capilla",
+                "Entrada de Cancela (planta de gas)"
+            ],
+            "La Romana 6:00PM": [
+                "PINTURA AVE. ISABEL AGUIAR (Después de cruzar) PARADA OMSA",
+                "SECRETARIA FUERZAS ARMADAS PARADA OMSA",
+                "AVE. CAONABO (Después de cruzar) PARADA OMSA",
+                "AVE. PRIVADA (Después de cruzar) PARADA OMSA",
+                "AVE. NÚÑEZ DE CÁCERES (Después de cruzar) PARADA OMSA",
+                "AVE. DR. ARTURO F. DEFILLÓ (Después de cruzar) PARADA OMSA",
+                "AVE. WINSTON CHURCHILL (Después de cruzar) PARADA OMSA",
+                "AVE. ABRAHAM LINCOLN (Después de cruzar) PARADA OMSA",
+                "AVE. TIRADENTE (Después de cruzar) PARADA OMSA",
+                "AVE. MÁXIMO GÓMEZ (Después de cruzar) PARADA OMSA",
+                "AVE. LEOPOLDO NAVARRO (Después de cruzar) PARADA OMSA",
+                "AVE. VENEZUELA (Después de cruzar) PARADA OMSA",
+                "AVE. SABANA LARGA (Antes de Cruzar)",
+                "BOMBA SHELL – FRENTE AL DARÍO CONTRERAS",
+                "LOS TRES OJOS (Puente Peatonal)",
+                "PUENTE JUAN CARLOS (Después de cruzar) PARADA OMSA",
+                "ITLA Sede Central (última parada)",
+                "AVE. MÉXICO ( Club San Carlos) PARADA DE LA OMSA",
+                "AVE. MÉXICO (Después de cruzar la Duarte) PARADA OMSA",
+                "Calle Real (Después de cruzar la 25 de Febrero) PARADA OMSA"
+            ],
+            "Independencia 8:00AM": [
+                "Km. 9 Aut. Duarte (Parada del Metro María Montes)",
+                "Av. Núñez de Cáceres (después de Cruzar Parada del Metro P. F. Bonó)",
+                "Av. Doctor Defilló (Viverde Rica) después de cruzar parada del Metro)",
+                "Av. Winston Churchill (Parada de motores debajo del Puente Peatonal)",
+                "Av. Abraham Lincoln (Parada OMSA Ágora Mall)",
+                "Av. López de Vega (Parada OMSA) después de cruzar Parada del Metro",
+                "Parada OMSA después de cruzar Av. Tiradentes",
+                "Parada OMSA después de cruzar Av. Ortega y Gasset",
+                "Parada OMSA después de cruzar Av. Máximo Gómez (Torre Popular)",
+                "Parada OMSA 1er. Puente Peatonal V Centenario",
+                "Parada OMSA 3er. Puente Peatonal V Centenario",
+                "Av. Padre Castellano esq. Josefa Brea (Parada Motores)",
+                "Av. Padre Castellano esq. C/ 10 (Frente a Funeraria La Milagrosa)",
+                "Puente Peatonal Gualey",
+                "Av. San Vicente de Paul (Después del Letreo Santo Domingo Este, parada de la OMSA)",
+                "Av. San Vicente de Paul esq. C/ Ñ (Frente a Claro)",
+                "Av. San Vicente de Paul esq. Fernando de Navarrete (Bomba de Los Minas)",
+                "Av. San Vicente de Paul esq. C/ Juan Pablo Duarte (Después de Cruzar Comedores Económicos del Estado)",
+                "Av. San Vicente de Paul esq. C/ 4 de Agosto (Frente a Electromuebles Kewrys)",
+                "Av. San Vicente de Paul después de Cruzar Carretera Mella (Restaurante Jardín Oriental)",
+                "Av. San Vicente de Paul esq. Carretera de Mendosa (Plaza Galerías del Este)",
+                "Av. San Vicente de Paul esq. Calle Costa Rica (Restaurant Adrián Tropical)",
+                "Av. San Vicente de Paul esq. Club de Leones (Plaza Alma Rosa)",
+                "Av. San Vicente esq. Nicolas Silfa Canario (Frente Colmado Super Pérez)",
+                "Terminal Santo Domingo Este (Extensión ITLA SDE)",
+                "Final del recorrido: Sede Central ITLA (ITLA Caleta)"
+            ],
+            "Independencia 4:00PM": [
+                "Parada Inicio: Parque Central (Frente a Parroquia Santa Rosa)",
+                "Av. Pedro A Lluberes esq. C/ Dolores Tejada (Frente a BanJoven)",
+                "Av. Padre Abreu esq. C/ Héctor Quezada (Frente a Bomba Texaco)",
+                "Av. Profesor Juan Bosch (Frente Multiplaza)",
+                "Av. Profesor Juan Bosch (Frente a Yina Bambú Shop )",
+                "Final del Recorrido ITLA La Caleta"
+            ],
+            "John F. Kennedy / San Vicente de Paul 8:00AM": [
+                "Km. 9 Aut. Duarte (Parada del Metro María Montes)",
+                "Av. Núñez de Cáceres (después de Cruzar Parada del Metro P. F. Bonó)",
+                "Av. Doctor Defilló (Viverde Rica) después de cruzar parada del Metro)",
+                "Av. Winston Churchill (Parada de motores debajo del Puente Peatonal)",
+                "Av. Abraham Lincoln (Parada OMSA Ágora Mall)",
+                "Av. López de Vega (Parada OMSA) después de cruzar Parada del Metro",
+                "Parada OMSA después de cruzar Av. Tiradentes",
+                "Parada OMSA después de cruzar Av. Ortega y Gasset",
+                "Parada OMSA después de cruzar Av. Máximo Gómez (Torre Popular)",
+                "Parada OMSA 1er. Puente Peatonal V Centenario",
+                "Parada OMSA 3er. Puente Peatonal V Centenario",
+                "Av. Padre Castellano esq. Josefa Brea (Parada Motores)",
+                "Av. Padre Castellano esq. C/ 10 (Frente a Funeraria La Milagrosa)",
+                "Puente Peatonal Gualey",
+                "Av. San Vicente de Paul (Después del Letreo Santo Domingo Este, parada de la OMSA)",
+                "Av. San Vicente de Paul esq. C/ Ñ (Frente a Claro)",
+                "Av. San Vicente de Paul esq. Fernando de Navarrete (Bomba de Los Minas)",
+                "Av. San Vicente de Paul esq. C/ Juan Pablo Duarte (Después de Cruzar Comedores Económicos del Estado)",
+                "Av. San Vicente de Paul esq. C/ 4 de Agosto (Frente a Electromuebles Kewrys)",
+                "Av. San Vicente de Paul después de Cruzar Carretera Mella (Restaurante Jardín Oriental)",
+                "Av. San Vicente de Paul esq. Carretera de Mendosa (Plaza Galerías del Este)",
+                "Av. San Vicente de Paul esq. Calle Costa Rica (Restaurant Adrián Tropical)",
+                "Av. San Vicente de Paul esq. Club de Leones (Plaza Alma Rosa)",
+                "Av. San Vicente esq. Nicolas Silfa Canario (Frente Colmado Super Pérez)",
+                "Terminal Santo Domingo Este (Extensión ITLA SDE)",
+                "Final del recorrido: Sede Central ITLA (ITLA Caleta)"
+            ],
+            "Charles de Gaulle - Villa Mella 6:00PM": [
+                "Calle JOSE HAZIM AZAR (Frente al Supermercado JUMBO)",
+                "AUTOPISTA LAS AMERICAS (Frente a la parada de Boca Chica)",
+                "AUTOPISTA LAS AMERICAS (Boca Chica, frente a los Bomberos)",
+                "AUTOPISTA LAS AMERICAS (Vistas de Caucedo, debajo del elevado.)",
+                "ITLA Sede Central (última parada)",
+                "AVE. INDEPENDENCIA (después de cruzar frente a McDonald)",
+                "AUTOPISTA LAS AMERICAS (Puente Peatonal frente a Claro)"
+            ],
+            "Alimentadora SDE-Sede Central 12:00PM": [
+                "PINTURA AVE. ISABEL AGUIAR (Después de cruzar) PARADA OMSA",
+                "SECRETARIA FUERZAS ARMADAS PARADA OMSA",
+                "AVE. CAONABO (Después de cruzar) PARADA OMSA",
+                "AVE. PRIVADA (Después de cruzar) PARADA OMSA",
+                "AVE. NÚÑEZ DE CÁCERES (Después de cruzar) PARADA OMSA",
+                "AVE. DR. ARTURO F. DEFILLÓ (Después de cruzar) PARADA OMSA",
+                "AVE. WINSTON CHURCHILL (Después de cruzar) PARADA OMSA",
+                "AVE. ABRAHAM LINCOLN (Después de cruzar) PARADA OMSA",
+                "AVE. TIRADENTE (Después de cruzar) PARADA OMSA",
+                "AVE. MÁXIMO GÓMEZ (Después de cruzar) PARADA OMSA",
+                "AVE. LEOPOLDO NAVARRO (Después de cruzar) PARADA OMSA",
+                "AVE. VENEZUELA (Después de cruzar) PARADA OMSA",
+                "AVE. SABANA LARGA (Antes de Cruzar)",
+                "BOMBA SHELL – FRENTE AL DARÍO CONTRERAS",
+                "LOS TRES OJOS (Puente Peatonal)",
+                "PUENTE JUAN CARLOS (Después de cruzar) PARADA OMSA",
+                "ITLA Sede Central (última parada)",
+                "AVE. MÉXICO ( Club San Carlos) PARADA DE LA OMSA",
+                "AVE. MÉXICO (Después de cruzar la Duarte) PARADA OMSA",
+                "Calle Real (Después de cruzar la 25 de Febrero) PARADA OMSA"
+            ],
+            "Alimentadora SDE-Sede Central 3:20PM": [
+                "Parada Inicio: Parque Central (Frente a Parroquia Santa Rosa)",
+                "Av. Pedro A Lluberes esq. C/ Dolores Tejada (Frente a BanJoven)",
+                "Av. Padre Abreu esq. C/ Héctor Quezada (Frente a Bomba Texaco)",
+                "Av. Profesor Juan Bosch (Frente Multiplaza)",
+                "Av. Profesor Juan Bosch (Frente a Yina Bambú Shop )",
+                "Final del Recorrido ITLA La Caleta"
+            ],
+            "San Pedro 8:00AM": [
+                "Calle JOSE HAZIM AZAR (Frente al Supermercado JUMBO)",
+                "AUTOPISTA LAS AMERICAS (Frente a la parada de Boca Chica)",
+                "AUTOPISTA LAS AMERICAS (Boca Chica, frente a los Bomberos)",
+                "AUTOPISTA LAS AMERICAS (Vistas de Caucedo, debajo del elevado.)",
+                "ITLA Sede Central (última parada)",
+                "AVE. INDEPENDENCIA (después de cruzar frente a McDonald)",
+                "AUTOPISTA LAS AMERICAS (Puente Peatonal frente a Claro)"
+            ],
+            "San Pedro 4:00PM": [
+                "Parada Inicio: Parque Central (Frente a Parroquia Santa Rosa)",
+                "Av. Pedro A Lluberes esq. C/ Dolores Tejada (Frente a BanJoven)",
+                "Av. Padre Abreu esq. C/ Héctor Quezada (Frente a Bomba Texaco)",
+                "Av. Profesor Juan Bosch (Frente Multiplaza)",
+                "Av. Profesor Juan Bosch (Frente a Yina Bambú Shop )",
+                "Final del Recorrido ITLA La Caleta"
+            ],
+            "Juan Bosch-Marginal Las Américas 8:00AM": []
+        }
+    },
+    "departure": {
+        "routes": [
+            "27 de Febrero 1:00PM",
+            "27 de Febrero 4:00PM",
+            "27 de Febrero 6:00PM",
+            "27 de Febrero 8:30PM",
+            "27 de Febrero 10:00PM",
+            "Charles de Gaulle - Villa Mella 1:00PM",
+            "John F. Kennedy / San Vicente de Paul 10:00PM",
+            "Independencia 1:00PM",
+            "Independencia 10:00PM",
+            "Alimentadora SDE-Sede Central 7:45AM",
+            "Alimentadora SDE-Sede Central 11:30AM",
+            "La Romana 2:00PM",
+            "La Romana 10:00PM",
+            "John F. Kennedy / San Vicente de Paul 1:00PM",
+            "John F. Kennedy / San Vicente de Paul 6:00PM",
+            "Charles de Gaulle - Villa Mella 6:00PM",
+            "Charles de Gaulle - Villa Mella 10:00PM",
+            "San Pedro 2:00PM",
+            "San Pedro 10:00PM",
+            "Juan Bosch-Marginal Las Américas 1:00PM",
+            "Juan Bosch-Marginal Las Américas 10:00PM"
+        ],
+        "stops_by_route": {
+            "27 de Febrero 1:00PM": [
+                "PINTURA AVE. ISABEL AGUIAR (Después de cruzar) PARADA OMSA"
+            ],
+            "27 de Febrero 4:00PM": [
+                "PINTURA AVE. ISABEL AGUIAR (Después de cruzar) PARADA OMSA"
+            ],
+            "27 de Febrero 6:00PM": [
+                "PINTURA AVE. ISABEL AGUIAR (Después de cruzar) PARADA OMSA"
+            ],
+            "27 de Febrero 8:30PM": [
+                "Km. 9 Aut. Duarte (Parada del Metro María Montes)"
+            ],
+            "27 de Febrero 10:00PM": [
+                "KM 12 Av. Independencia (Frente a Plaza Luperón)"
+            ],
+            "Charles de Gaulle - Villa Mella 1:00PM": [
+                "LOS TRES OJOS (Puente Peatonal)"
+            ],
+            "John F. Kennedy / San Vicente de Paul 10:00PM": [
+                "Final de Recorrido: Parque Central La Romana"
+            ],
+            "Independencia 1:00PM": [
+                "Km. 9 Aut. Duarte (Parada del Metro María Montes)"
+            ],
+            "Independencia 10:00PM": [
+                "HNAS. MIRABAL ESQ. CHARLES G. (LA SIRENA, VILLA MELLA)"
+            ],
+            "Alimentadora SDE-Sede Central 7:45AM": [
+                "Calle JOSE HAZIM AZAR (Frente al Supermercado JUMBO)"
+            ],
+            "Alimentadora SDE-Sede Central 11:30AM": [
+                "PUENTE JUAN CARLOS (Después de cruzar) PARADA OMSA"
+            ],
+            "La Romana 2:00PM": [
+                "PINTURA AVE. ISABEL AGUIAR (Después de cruzar) PARADA OMSA"
+            ],
+            "La Romana 10:00PM": [
+                "Km. 9 Aut. Duarte (Parada del Metro María Montes)"
+            ],
+            "John F. Kennedy / San Vicente de Paul 1:00PM": [
+                "LOS TRES OJOS (Puente Peatonal)"
+            ],
+            "John F. Kennedy / San Vicente de Paul 6:00PM": [
+                "Km. 9 Aut. Duarte (Parada del Metro María Montes)"
+            ],
+            "Charles de Gaulle - Villa Mella 6:00PM": [
+                "Calle JOSE HAZIM AZAR (Frente al Supermercado JUMBO)"
+            ],
+            "Charles de Gaulle - Villa Mella 10:00PM": [
+                "PINTURA AVE. ISABEL AGUIAR (Después de cruzar) PARADA OMSA"
+            ],
+            "San Pedro 2:00PM": [
+                "LOS TRES OJOS (Puente Peatonal)"
+            ],
+            "San Pedro 10:00PM": [
+                "Calle JOSE HAZIM AZAR (Frente al Supermercado JUMBO)"
+            ],
+            "Juan Bosch-Marginal Las Américas 1:00PM": [
+                "LOS TRES OJOS (Puente Peatonal)"
+            ],
+            "Juan Bosch-Marginal Las Américas 10:00PM": []
+        }
+    }
+}
+
+
+SATURDAY_ROUTES = {
+    "arrival": {
+        "routes": [
+            "27 de febrero (Sábado) 9:00AM",
+            "27 de febrero (Sábado) 2:00PM",
+            "Charles de Gaulle-Villa Mella (Sábado) 2:00PM",
+            "San Pedro-Sábado 9:00AM",
+            "Juan Bosch-Marginal Las Américas (Sábados) 9:00AM",
+            "Charles de Gaulle-Villa Mella (Sábado) 9:00AM",
+            "La Romana (Sábados) 9:00AM",
+            "John F. Kennedy / San Vicente de Paul (Sabado) 2:00PM",
+            "John F. Kennedy / San Vicente de Paul (Sabado) 9:00AM",
+            "Independencia (Sabado) 9:00AM",
+            "Independencia (Sabado) 2:00PM"
+        ],
+        "stops_by_route": {
+            "27 de febrero (Sábado) 9:00AM": [
+                "PINTURA AVE. ISABEL AGUIAR (Después de cruzar) PARADA OMSA",
+                "SECRETARIA FUERZAS ARMADAS PARADA OMSA",
+                "AVE. CAONABO (Después de cruzar) PARADA OMSA",
+                "AVE. PRIVADA (Después de cruzar) PARADA OMSA",
+                "AVE. DR. ARTURO F. DEFILLÓ (Después de cruzar) PARADA OMSA",
+                "AVE. WINSTON CHURCHILL (Después de cruzar) PARADA OMSA",
+                "AVE. ABRAHAM LINCOLN (Después de cruzar) PARADA OMSA",
+                "AVE. TIRADENTE (Después de cruzar) PARADA OMSA",
+                "AVE. LEOPOLDO NAVARRO (Después de cruzar) PARADA OMSA",
+                "AVE. MÉXICO (Después de cruzar la Duarte) PARADA OMSA",
+                "AVE. MÁXIMO GÓMEZ (Después de cruzar) PARADA OMSA",
+                "AVE. NÚÑEZ DE CÁCERES (Después de cruzar) PARADA OMSA",
+                "AVE. VENEZUELA (Después de cruzar) PARADA OMSA",
+                "AVE. SABANA LARGA (Antes de Cruzar)",
+                "BOMBA SHELL – FRENTE AL DARÍO CONTRERAS",
+                "LOS TRES OJOS (Puente Peatonal)",
+                "PUENTE JUAN CARLOS (Después de cruzar) PARADA OMSA",
+                "AVE. DR. DELGADO DON BOSCO",
+                "AVE. MÉXICO ( SAN CARLOS- BOMBA SHELL)",
+                "Calle Real (Después de cruzar la 25 de Febrero) PARADA OMSA"
+            ],
+            "27 de febrero (Sábado) 2:00PM": [
+                "HNAS. MIRABAL ESQ. CHARLES G. (LA SIRENA, VILLA MELLA)",
+                "SABANA PERDIDA (FRENTE AL OLE) PARADA OMSA",
+                "CANSINO (FRENTE COLMADO COME Y BEBE)",
+                "CLUB LOS TRINITARIOS (FRENTE SUPER MERCADO SUPER-NACIONAL)",
+                "INVIVIENDA (FRENTE A CLARO) PRADA OMSA",
+                "VILLA CARMEN (PARADA OMSA)",
+                "SAN ISIDRO DESPUÉS DE CRUZAR (PARADA OMSA)",
+                "PARADA OMSA – FRENTE A LA PLANTA CREDIGAS (BRISA DEL ESTE)",
+                "PUENTE JUAN CARLOS (Después de cruzar) PARADA OMSA",
+                "MENDOZA (PARADA OMSA)",
+                "SUPERMERCADO BRAVO (ANTES DE LA CARRETERA MELLA)",
+                "CALLE TEODORO STANLEY (FRENTE AL TRIBUNAL LABORAL)"
+            ],
+            "Charles de Gaulle-Villa Mella (Sábado) 2:00PM": [
+                "PUENTE JUAN CARLOS",
+                "Los Frailes (frente a Corripio)",
+                "Los Frailes (Entrada del Olé)",
+                "Peatonal las Américas KM 11",
+                "Entrada del Burrito (Frente a la Bomba)",
+                "Barrio Nuevo",
+                "Kilómetro 11 de las Américas (Frente a Repuestos Lula)",
+                "Kilómetro 12 de las Américas (Puente Peatonal)",
+                "La llave de las Américas",
+                "Kilómetro 12 ½ de las Américas (Los Furgones)",
+                "Parque los Molinos (PARADA OMSA)",
+                "Km 14 (Almacenes Garrido)",
+                "Km 14 ½ (Aguas Locas)",
+                "Ciudad Juan Bosch (Super Olé)",
+                "Escuela Primaria Ciudad Juan Bosch",
+                "Sembrador 1ro, Ciudad Juan Bosch (Parada de la OMSA)",
+                "Residencial Camino Verde, Ciudad Juan Bosch",
+                "Control de la OMSA, Ciudad Juan Bosch",
+                "Escuela primaria Hermanas Mirabal",
+                "La Capilla"
+            ],
+            "San Pedro-Sábado 9:00AM": [
+                "Parada Inicio: Parque Central (Frente a Parroquia Santa Rosa)",
+                "Av. Pedro A Lluberes esq. C/ Dolores Tejada (Frente a BanJoven)",
+                "Av. Padre Abreu esq. C/ Héctor Quezada (Frente a Bomba Texaco)",
+                "Av. Profesor Juan Bosch (Frente Multiplaza)",
+                "Av. Profesor Juan Bosch (Frente a Yina Bambú Shop )",
+                "Final del Recorrido ITLA La Caleta"
+            ],
+            "Juan Bosch-Marginal Las Américas (Sábados) 9:00AM": [
+                "Km. 9 Aut. Duarte (Parada del Metro María Montes)",
+                "Av. Núñez de Cáceres (después de Cruzar Parada del Metro P. F. Bonó)",
+                "Av. Doctor Defilló (Viverde Rica) después de cruzar parada del Metro)",
+                "Av. Winston Churchill (Parada de motores debajo del Puente Peatonal)",
+                "Av. Abraham Lincoln (Parada OMSA Ágora Mall)",
+                "Av. López de Vega (Parada OMSA) después de cruzar Parada del Metro",
+                "Parada OMSA después de cruzar Av. Tiradentes",
+                "Parada OMSA después de cruzar Av. Ortega y Gasset",
+                "Parada OMSA después de cruzar Av. Máximo Gómez (Torre Popular)",
+                "Parada OMSA 1er. Puente Peatonal V Centenario",
+                "Parada OMSA 3er. Puente Peatonal V Centenario",
+                "Av. Padre Castellano esq. Josefa Brea (Parada Motores)",
+                "Av. Padre Castellano esq. C/ 10 (Frente a Funeraria La Milagrosa)",
+                "Puente Peatonal Gualey",
+                "Av. San Vicente de Paul (Después del Letreo Santo Domingo Este, parada de la OMSA)",
+                "Av. San Vicente de Paul esq. C/ Ñ (Frente a Claro)",
+                "Av. San Vicente de Paul esq. Fernando de Navarrete (Bomba de Los Minas)",
+                "Av. San Vicente de Paul esq. C/ Juan Pablo Duarte (Después de Cruzar Comedores Económicos del Estado)",
+                "Av. San Vicente de Paul esq. C/ 4 de Agosto (Frente a Electromuebles Kewrys)",
+                "Av. San Vicente de Paul después de Cruzar Carretera Mella (Restaurante Jardín Oriental)",
+                "Av. San Vicente de Paul esq. Carretera de Mendosa (Plaza Galerías del Este)",
+                "Av. San Vicente de Paul esq. Calle Costa Rica (Restaurant Adrián Tropical)",
+                "Av. San Vicente de Paul esq. Club de Leones (Plaza Alma Rosa)",
+                "Av. San Vicente esq. Nicolas Silfa Canario (Frente Colmado Super Pérez)",
+                "Terminal Santo Domingo Este (Extensión ITLA SDE)",
+                "Final del recorrido: Sede Central ITLA (ITLA Caleta)"
+            ],
+            "Charles de Gaulle-Villa Mella (Sábado) 9:00AM": [
+                "KM 12 Av. Independencia (Frente a Plaza Luperón)",
+                "KM 11 (Funeraria municipal)",
+                "KM 10 1/2 (Residencial Atlántida)",
+                "KM 10 (Parada OMSA Casa de España)",
+                "KM 10 (Frente a Farmacia Baik, INVI)",
+                "KM 9 1/2 (Frente al Supermercado Nacional).",
+                "KM 9 (Frente al colegio San Gabriel)",
+                "KM 8 1/2 (Plaza del pollo)",
+                "KM 8 (Farmacia GBC)",
+                "KM 7 1/2 (Frente a Supermercado Ole)",
+                "km 7 (Frente a PROMESECAL)",
+                "KM 6 1/2 (Frente a METALDOM)",
+                "KM 6 (Frente a la Cervecería Nacional)",
+                "Farmacia FarmaExtra (Sector 30 De mayo)",
+                "Asociación Popular (Sector El Cacique)",
+                "Av. Independencia (Frente a Clínica Independencia)",
+                "Av. Independencia Esq. Jiménez Moya (Frente a Energía y Minas)",
+                "Parada OMSA Av. Independencia Esq. Abraham Lincoln",
+                "Plaza Juan Varón (Frente a Obelisco Macho)",
+                "Calle Palo Hincado esq. George Washington, Zona colonial",
+                "C/ Palo Hincado antes de cruzar Av. Simón Bolívar",
+                "Parada Espress: Terminal del Este (ITLA SDE)",
+                "ITLA Sede Central (última parada)"
+            ],
+            "La Romana (Sábados) 9:00AM": [
+                "HNAS. MIRABAL ESQ. CHARLES G. (LA SIRENA, VILLA MELLA)",
+                "SABANA PERDIDA (FRENTE AL OLE) PARADA OMSA",
+                "CANSINO (FRENTE COLMADO COME Y BEBE)",
+                "CLUB LOS TRINITARIOS (FRENTE SUPER MERCADO SUPER-NACIONAL)",
+                "INVIVIENDA (FRENTE A CLARO) PRADA OMSA",
+                "VILLA CARMEN (PARADA OMSA)",
+                "SAN ISIDRO DESPUÉS DE CRUZAR (PARADA OMSA)",
+                "PARADA OMSA – FRENTE A LA PLANTA CREDIGAS (BRISA DEL ESTE)",
+                "PUENTE JUAN CARLOS (Después de cruzar) PARADA OMSA",
+                "MENDOZA (PARADA OMSA)",
+                "SUPERMERCADO BRAVO (ANTES DE LA CARRETERA MELLA)",
+                "CALLE TEODORO STANLEY (FRENTE AL TRIBUNAL LABORAL)"
+            ],
+            "John F. Kennedy / San Vicente de Paul (Sabado) 2:00PM": [
+                "Parada Inicio: Parque Central (Frente a Parroquia Santa Rosa)",
+                "Av. Pedro A Lluberes esq. C/ Dolores Tejada (Frente a BanJoven)",
+                "Av. Padre Abreu esq. C/ Héctor Quezada (Frente a Bomba Texaco)",
+                "Av. Profesor Juan Bosch (Frente Multiplaza)",
+                "Av. Profesor Juan Bosch (Frente a Yina Bambú Shop )",
+                "Final del Recorrido ITLA La Caleta"
+            ],
+            "John F. Kennedy / San Vicente de Paul (Sabado) 9:00AM": [
+                "KM 12 Av. Independencia (Frente a Plaza Luperón)",
+                "KM 11 (Funeraria municipal)",
+                "KM 10 1/2 (Residencial Atlántida)",
+                "KM 10 (Parada OMSA Casa de España)",
+                "KM 10 (Frente a Farmacia Baik, INVI)",
+                "KM 9 1/2 (Frente al Supermercado Nacional).",
+                "KM 9 (Frente al colegio San Gabriel)",
+                "KM 8 1/2 (Plaza del pollo)",
+                "KM 8 (Farmacia GBC)",
+                "KM 7 1/2 (Frente a Supermercado Ole)",
+                "km 7 (Frente a PROMESECAL)",
+                "KM 6 1/2 (Frente a METALDOM)",
+                "KM 6 (Frente a la Cervecería Nacional)",
+                "Farmacia FarmaExtra (Sector 30 De mayo)",
+                "Asociación Popular (Sector El Cacique)",
+                "Av. Independencia (Frente a Clínica Independencia)",
+                "Av. Independencia Esq. Jiménez Moya (Frente a Energía y Minas)",
+                "Parada OMSA Av. Independencia Esq. Abraham Lincoln",
+                "Plaza Juan Varón (Frente a Obelisco Macho)",
+                "Calle Palo Hincado esq. George Washington, Zona colonial",
+                "C/ Palo Hincado antes de cruzar Av. Simón Bolívar",
+                "Parada Espress: Terminal del Este (ITLA SDE)",
+                "ITLA Sede Central (última parada)"
+            ],
+            "Independencia (Sabado) 9:00AM": [
+                "Parada Inicio: Parque Central (Frente a Parroquia Santa Rosa)",
+                "Av. Pedro A Lluberes esq. C/ Dolores Tejada (Frente a BanJoven)",
+                "Av. Padre Abreu esq. C/ Héctor Quezada (Frente a Bomba Texaco)",
+                "Av. Profesor Juan Bosch (Frente Multiplaza)",
+                "Av. Profesor Juan Bosch (Frente a Yina Bambú Shop )",
+                "Final del Recorrido ITLA La Caleta"
+            ],
+            "Independencia (Sabado) 2:00PM": []
+        }
+    },
+    "departure": {
+        "routes": [
+            "San Pedro-Sábado 6:00PM",
+            "Juan Bosch-Marginal Las Américas (Sábados) 6:00PM",
+            "27 de febrero (Sábado) 1:00PM",
+            "27 de febrero (Sábado) 6:00PM",
+            "Charles de Gaulle-Villa Mella (Sábado) 1:00PM",
+            "Charles de Gaulle-Villa Mella (Sábado) 6:00PM",
+            "La Romana (Sábados) 6:00PM",
+            "John F. Kennedy / San Vicente de Paul (Sabado) 1:00PM",
+            "John F. Kennedy / San Vicente de Paul (Sabado) 6:00PM",
+            "Independencia (Sabado) 1:00PM",
+            "Independencia (Sabado) 6:00PM"
+        ],
+        "stops_by_route": {
+            "San Pedro-Sábado 6:00PM": [
+                "Calle JOSE HAZIM AZAR (Frente al Supermercado JUMBO)"
+            ],
+            "Juan Bosch-Marginal Las Américas (Sábados) 6:00PM": [
+                "PINTURA AVE. ISABEL AGUIAR (Después de cruzar) PARADA OMSA"
+            ],
+            "27 de febrero (Sábado) 1:00PM": [
+                "HNAS. MIRABAL ESQ. CHARLES G. (LA SIRENA, VILLA MELLA)"
+            ],
+            "27 de febrero (Sábado) 6:00PM": [
+                "Parque Central La Romana"
+            ],
+            "Charles de Gaulle-Villa Mella (Sábado) 1:00PM": [
+                "Km. 9 Aut. Duarte (Parada del Metro María Montes)"
+            ],
+            "Charles de Gaulle-Villa Mella (Sábado) 6:00PM": [
+                "KM 12 Av. Independencia (Frente a Plaza Luperón)"
+            ],
+            "La Romana (Sábados) 6:00PM": [
+                "PINTURA AVE. ISABEL AGUIAR (Después de cruzar) PARADA OMSA"
+            ],
+            "John F. Kennedy / San Vicente de Paul (Sabado) 1:00PM": [
+                "Parque Central La Romana"
+            ],
+            "John F. Kennedy / San Vicente de Paul (Sabado) 6:00PM": [
+                "KM 12 Av. Independencia (Frente a Plaza Luperón)"
+            ],
+            "Independencia (Sabado) 1:00PM": [
+                "Parque Central La Romana"
+            ],
+            "Independencia (Sabado) 6:00PM": []
+        }
+    }
+}
+
+ROUTES_DATA = {
+    "weekday": WEEKDAY_ROUTES,
+    "saturday": SATURDAY_ROUTES,
+}

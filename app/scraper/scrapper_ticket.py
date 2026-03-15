@@ -164,8 +164,8 @@ class ITLAScraper:
 
 if __name__ == "__main__":
     credentials = {
-        "email": "arammymussett@gmail.com",
-        "password": "2007344Itla#"
+        "email": "",
+        "password": ""
     }
 
     ticket = {

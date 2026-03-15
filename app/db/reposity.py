@@ -7,15 +7,15 @@ from models.purchase import Purchase
 class UserRepository:
     def __init__(self, session: Session):
         self.session = session
-
+    
     def create(
             self,
-            telegram_id: int,
+            discord_id: int,
             email: str,
             encrypted_password: str
         ) -> User:
         user = User(
-            telegram_id=telegram_id,
+            discord_id=discord_id,
             email=email,
             encrypted_password=encrypted_password
         )
@@ -24,10 +24,32 @@ class UserRepository:
         self.session.refresh(user)
         return user
 
-    def get_by_telegram_id(self, telegram_id: int) -> User | None:
+    def get_by_discord_id(self, discord_id: int) -> User | None:
         return self.session.query(User).filter_by(
-            telegram_id=telegram_id
+            discord_id=discord_id
         ).first()
+    
+    def get_users_with_day(self, session, day: str) -> list[dict]:
+
+        results = (
+            session.query(User, ScheduleDay)
+            .join(Schedule, Schedule.user_id == User.id)
+            .join(ScheduleDay, ScheduleDay.schedule_id == Schedule.id)
+            .filter(Schedule.active == True)  # noqa: E712
+            .filter(ScheduleDay.day == day)
+            .all()
+        )
+        return [
+            {
+                "discord_id": user.discord_id,
+                "day": schedule_day.day,
+                "arrival_route": schedule_day.arrival_route,
+                "pickup_stop": schedule_day.pickup_stop,
+                "departure_route": schedule_day.departure_route,
+                "dropoff_stop": schedule_day.dropoff_stop,
+            }
+            for user, schedule_day in results
+        ]
 
 
 class ScheduleRepository:
@@ -75,6 +97,7 @@ class ScheduleRepository:
             schedule_id=schedule_id,
             day=day
         ).first()
+    
 
 
 class PurchaseRepository:
