@@ -1,0 +1,115 @@
+import discord
+from ui.schedule.page_view import PagedView, ScheduleState
+from utils.schedule_utils import (
+    get_routes_for_day,
+    day_embed,
+    save_schedule,
+    DAYS_ES
+)
+
+class DepartureStopSelect(PagedView):
+    def __init__(self, state: ScheduleState, page: int = 0):
+        super().__init__(state, "Parada de bajada (salida)", page)
+
+    def get_items(self) -> list[str]:
+        day = self.state.selected_days[self.state.current_day_index]
+        route = self.state.days_data[day]["departure_route"]
+        routes_data = get_routes_for_day(day)["departure"]["stops_by_route"]
+        stops = routes_data.get(route, [])
+        return stops or ["Única parada"]
+
+    async def on_select(self, interaction: discord.Interaction, value: str):
+        day = self.state.selected_days[self.state.current_day_index]
+        self.state.days_data[day]["dropoff_stop"] = value
+        self.state.current_day_index += 1
+
+        if self.state.current_day_index < len(self.state.selected_days):
+            next_day = self.state.selected_days[self.state.current_day_index]
+            await interaction.response.edit_message(
+                embed=day_embed(
+                    next_day,
+                    self.state.current_day_index,
+                    len(self.state.selected_days),
+                ),
+                view=ArrivalRouteSelect(self.state),
+            )
+        else:
+            await save_schedule(interaction, self.state)
+
+
+class DepartureRouteSelect(PagedView):
+    def __init__(self, state: ScheduleState, page: int = 0):
+        super().__init__(state, "Ruta de salida (regreso)", page)
+
+    def get_items(self) -> list[str]:
+        day = self.state.selected_days[self.state.current_day_index]
+        return get_routes_for_day(day)["departure"]["routes"]
+
+    async def on_select(self, interaction: discord.Interaction, value: str):
+        day = self.state.selected_days[self.state.current_day_index]
+        self.state.days_data[day]["departure_route"] = value
+        await interaction.response.edit_message(
+            embed=discord.Embed(
+                title="Parada de bajada (salida)",
+                description=(
+                    f"**{DAYS_ES[day]}** "
+                    "— ¿En qué parada te bajas al regresar?"
+                ),
+                color=discord.Color.orange(),
+            ),
+            view=DepartureStopSelect(self.state),
+        )
+
+
+class ArrivalStopSelect(PagedView):
+    def __init__(self, state: ScheduleState, page: int = 0):
+        super().__init__(state, "Parada de subida (llegada)", page)
+
+    def get_items(self) -> list[str]:
+        day = self.state.selected_days[self.state.current_day_index]
+        route = self.state.days_data[day]["arrival_route"]
+        routes_data = get_routes_for_day(day)["arrival"]["stops_by_route"]
+        stops = routes_data.get(route, [])
+        return stops or ["Única parada"]
+
+    async def on_select(self, interaction: discord.Interaction, value: str):
+        day = self.state.selected_days[self.state.current_day_index]
+        self.state.days_data[day]["pickup_stop"] = value
+        await interaction.response.edit_message(
+            embed=discord.Embed(
+                title="Ruta de salida (regreso)",
+                description=(
+                    f"**{DAYS_ES[day]}** — ¿En qué ruta regresas a casa?"
+                ),
+                color=discord.Color.orange(),
+            ),
+            view=DepartureRouteSelect(self.state),
+        )
+
+
+class ArrivalRouteSelect(PagedView):
+    def __init__(self, state: ScheduleState, page: int = 0):
+        super().__init__(state, "Ruta de llegada al ITLA", page)
+
+    def get_items(self) -> list[str]:
+        day = self.state.selected_days[self.state.current_day_index]
+        return get_routes_for_day(day)["arrival"]["routes"]
+
+    async def on_select(self, interaction: discord.Interaction, value: str):
+        day = self.state.selected_days[self.state.current_day_index]
+        self.state.days_data[day] = {
+            "arrival_route": value,
+            "pickup_stop": None,
+            "departure_route": None,
+            "dropoff_stop": None,
+        }
+        await interaction.response.edit_message(
+            embed=discord.Embed(
+                title="🚏 Parada de subida (llegada)",
+                description=(
+                    f"**{DAYS_ES[day]}** — ¿En qué parada subes al bus?"
+                ),
+                color=discord.Color.blue(),
+            ),
+            view=ArrivalStopSelect(self.state),
+        )
