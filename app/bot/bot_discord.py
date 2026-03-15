@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from discord.ext import commands
 
 
-class BotClient(commands.Bot):
+class BotITLATicket(commands.Bot):
     def __init__(self):
         load_dotenv()
         self.token = os.getenv("TOKEN")

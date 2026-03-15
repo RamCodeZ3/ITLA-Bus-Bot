@@ -12,7 +12,8 @@ class Register(commands.Cog):
     
     @app_commands.command(
         name="register",
-        description="Comando para registrar el usuario con sus credenciales del campus ITLA"
+        description="Comando para registrar el usuario con" 
+        "sus credenciales del campus ITLA"
     )
     async def register_command(
         self,

@@ -9,7 +9,7 @@ class Schedule(commands.Cog):
         self.bot = bot
 
     @app_commands.command(
-        name="schedule",
+        name="set-schedule",
         description=(
             "Configura los días y rutas de transporte"
             " para el período académico"
