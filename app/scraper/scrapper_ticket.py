@@ -1,10 +1,14 @@
 import asyncio
 import unicodedata
 from playwright.async_api import async_playwright
+from dotenv import load_dotenv
+import os
 
 
 URL_CAMPUS = "https://campusvirtual.itla.edu.do"
+TICKET_PRICE = 30 # pesos
 
+load_dotenv()
 
 class ITLAScraper:
     def __init__(self, credentials: dict, ticket: dict):
@@ -13,7 +17,7 @@ class ITLAScraper:
 
     async def run(self):
         async with async_playwright() as p:
-            browser = await p.chromium.launch()
+            browser = await p.chromium.launch(headless=False)
             context = await browser.new_context()
             page = await context.new_page()
 
@@ -23,6 +27,12 @@ class ITLAScraper:
                 return
 
             await self.go_to_transport(page)
+            balance = await self.balance_verification(page)
+
+            if not balance:
+                await browser.close()
+                return
+
             await self.fill_form(page)
 
             print("\n⏸️  Review the browser. Press ENTER to confirm...")
@@ -39,17 +49,11 @@ class ITLAScraper:
 
         email_input = page.locator("#email")
         await email_input.click()
-        await email_input.press_sequentially(
-            self.credentials["email"],
-            delay=50
-        )
+        await email_input.fill(self.credentials["email"])
 
         password_input = page.locator("#password")
         await password_input.click()
-        await password_input.press_sequentially(
-            self.credentials["password"],
-            delay=50
-        )
+        await password_input.fill(self.credentials["password"])
 
         await page.get_by_role("button", name="Iniciar Sesión").click()
         await page.wait_for_timeout(3000)
@@ -82,7 +86,21 @@ class ITLAScraper:
         await page.wait_for_url("**/customers/home**", timeout=15000)
         await page.wait_for_load_state("domcontentloaded")
         await page.wait_for_timeout(2000)
-        print(f"✅ On transport page → {page.url}")
+        print(f"✅ Transportando a la siguiente pagina → {page.url}")
+
+    async def balance_verification(self, page):
+        try:
+            balance_text = await page.locator("span", has_text="DOP").inner_text()
+            balance = int(float(balance_text.replace("DOP", "").strip()))
+            
+            if TICKET_PRICE * 2 < balance:
+                print("✅ balance suficientes")
+                return True
+            else:
+                return False
+        
+        except Exception as e:
+            ValueError("Hubo un error consiguiendo el balance del usuario", e)
 
     async def fill_form(self, page):
         print("📝 Filling form...")
@@ -164,13 +182,13 @@ class ITLAScraper:
 
 if __name__ == "__main__":
     credentials = {
-        "email": "",
-        "password": ""
+        "email": os.getenv("EMAIL"),
+        "password": os.getenv("PASSWORD")
     }
 
     ticket = {
         "type": "EntradaySalida",  # "EntradaySalida" | "entrada" | "salida"
-        "date": "2026-03-10",
+        "date": "2026-03-27",
         "arrival_route": "John F. Kennedy / San Vicente de Paul 8:00AM",
         "pickup_stop": "Plaza Galerías del Este",
         "departure_route": "John F. Kennedy / San Vicente de Paul 6:00PM",
