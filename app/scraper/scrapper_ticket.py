@@ -3,6 +3,7 @@ import unicodedata
 from playwright.async_api import async_playwright
 from dotenv import load_dotenv
 import os
+from datetime import datetime
 
 
 URL_CAMPUS = "https://campusvirtual.itla.edu.do"
@@ -34,11 +35,10 @@ class ITLAScraper:
                 return
 
             await self.fill_form(page)
+            await self.confirm_reserve(page)
+            await self.go_to_reserve_page(page)
+            await self.confirm_buy(page)
 
-            print("\n⏸️  Review the browser. Press ENTER to confirm...")
-            input()
-
-            await self.confirm(page)
             await browser.close()
             print("\n🎉 Done.")
 
@@ -74,7 +74,7 @@ class ITLAScraper:
             error = page.locator(".alert-danger, .error-msg, .invalid-feedback, .text-danger")
             if await error.count() > 0:
                 print(f"  ❌ Error: {await error.first.inner_text()}")
-            print("❌ Login failed — check debug_login.png")
+            print("❌ fallo el login revisa las credenciales")
             return False
 
         print("✅ Login successful")
@@ -94,9 +94,10 @@ class ITLAScraper:
             balance = int(float(balance_text.replace("DOP", "").strip()))
             
             if TICKET_PRICE * 2 < balance:
-                print("✅ balance suficientes")
+                print("✅ Balance suficientes")
                 return True
             else:
+                print("❌ Balance insuficiente")
                 return False
         
         except Exception as e:
@@ -138,14 +139,42 @@ class ITLAScraper:
             "Dropoff stop"
         )
 
-        print("✅ Form completed")
+        print("✅ Formulario completado")
 
-    async def confirm(self, page):
-        print("🚀 Submitting reservation...")
+    async def confirm_reserve(self, page):
+        print("🎟️  Confirming reservation...")
         await page.get_by_role("button", name="Reservar").click()
-        await page.wait_for_load_state("networkidle")
-        await page.screenshot(path="confirmation.png")  # debug
-        print("✅ Done — screenshot saved to confirmation.png")
+        await page.wait_for_timeout(3000)
+        await page.screenshot(path="confirmation.png")
+        print("✅ El boleto fue reservado de manera exitosa")
+
+    async def go_to_reserve_page(self, page):
+        print("🔗 Navegando a Reservas...")
+        await page.locator("li#reservas_toggle a").click()
+        await page.wait_for_load_state("domcontentloaded")
+        print(f"✅ Navegó a → {page.url}")
+    
+    async def confirm_buy(self, page):
+        print("🎟️  Confirmando la compra...")
+
+        # Busca la fila con la fecha configurada en el ticket
+        fecha_formateada = datetime.strptime(
+            self.ticket["date"], "%Y-%m-%d"
+        ).strftime("%d-%m-%Y")
+
+        fila = page.locator("tr.datatable-row").filter(
+            has=page.locator(f"td:has-text('{fecha_formateada}')")
+        )
+        await fila.locator("a.btn-light-success").click()
+        print(f"  ✓ Click en confirmar para fecha: {fecha_formateada}")
+
+        await page.wait_for_selector(".swal2-popup", timeout=5000)
+        await page.locator("button.swal2-confirm").click()
+        print("  ✓ Modal confirmado")
+
+        await page.wait_for_timeout(2000)
+        await page.screenshot(path="confirmation.png")
+        print("✅ El boleto fue confirmado exitosamente")
 
     async def _ngx_select(self, page, field_id, search_text, field_name):
         await page.locator(f"ngx-select-dropdown#{field_id} .ngx-dropdown-button").click()
@@ -188,7 +217,7 @@ if __name__ == "__main__":
 
     ticket = {
         "type": "EntradaySalida",  # "EntradaySalida" | "entrada" | "salida"
-        "date": "2026-03-27",
+        "date": "2026-03-24",
         "arrival_route": "John F. Kennedy / San Vicente de Paul 8:00AM",
         "pickup_stop": "Plaza Galerías del Este",
         "departure_route": "John F. Kennedy / San Vicente de Paul 6:00PM",
