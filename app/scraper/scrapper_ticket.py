@@ -4,6 +4,7 @@ from playwright.async_api import async_playwright
 from dotenv import load_dotenv
 import os
 from datetime import datetime
+from ticket_dowloader import TicketDownloader
 
 
 URL_CAMPUS = "https://campusvirtual.itla.edu.do"
@@ -21,6 +22,7 @@ class ITLAScraper:
             browser = await p.chromium.launch(headless=False)
             context = await browser.new_context()
             page = await context.new_page()
+            ticket_dowloader = TicketDownloader()
 
             ok = await self.login(page)
             if not ok:
@@ -33,11 +35,12 @@ class ITLAScraper:
             if not balance:
                 await browser.close()
                 return
-
+            
             await self.fill_form(page)
             await self.confirm_reserve(page)
             await self.go_to_reserve_page(page)
             await self.confirm_buy(page)
+            await ticket_dowloader.download_tickets(page, self.ticket["date"])
 
             await browser.close()
             print("\n🎉 Done.")
