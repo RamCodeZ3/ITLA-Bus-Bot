@@ -1,20 +1,19 @@
-import asyncio
 import unicodedata
 from playwright.async_api import async_playwright
-from dotenv import load_dotenv
-import os
 from datetime import datetime
 from ticket_dowloader import TicketDownloader
+from db.database import get_session
+from db.reposity import UserRepository
+from models.ticket_model import TicketModel
 
 
 URL_CAMPUS = "https://campusvirtual.itla.edu.do"
 TICKET_PRICE = 30 # pesos
 
-load_dotenv()
 
 class ITLAScraper:
-    def __init__(self, credentials: dict, ticket: dict):
-        self.credentials = credentials
+    def __init__(self, discord_id: int, ticket: TicketModel):
+        self.discord_id = discord_id
         self.ticket = ticket
 
     async def run(self):
@@ -47,16 +46,20 @@ class ITLAScraper:
 
     async def login(self, page):
         print("🔐 Logging in...")
+        session = get_session()
+        reposity = UserRepository(session)
+        user = reposity.get_by_discord_id(self.discord_id)
+
         await page.goto(URL_CAMPUS)
         await page.wait_for_load_state("networkidle")
 
         email_input = page.locator("#email")
         await email_input.click()
-        await email_input.fill(self.credentials["email"])
+        await email_input.fill(user.email)
 
         password_input = page.locator("#password")
         await password_input.click()
-        await password_input.fill(self.credentials["password"])
+        await password_input.fill(user.password)
 
         await page.get_by_role("button", name="Iniciar Sesión").click()
         await page.wait_for_timeout(3000)
@@ -111,8 +114,8 @@ class ITLAScraper:
         await page.wait_for_selector("client-ticket-reserve", timeout=10000)
         await page.wait_for_selector("#reserve_date", timeout=10000)
 
-        await page.locator(f"#{self.ticket['type']}").check()
-        print(f"  ✓ Type: {self.ticket['type']}")
+        await page.locator("entrada y salida").check()
+        print(f"  ✓ Type: entrada y salida")
 
         await page.locator("#reserve_date").fill(self.ticket["date"])
         print(f"  ✓ Date: {self.ticket['date']}")
@@ -210,22 +213,3 @@ class ITLAScraper:
             "ascii",
             "ignore"
         ).decode().lower()
-
-
-if __name__ == "__main__":
-    credentials = {
-        "email": os.getenv("EMAIL"),
-        "password": os.getenv("PASSWORD")
-    }
-
-    ticket = {
-        "type": "EntradaySalida",  # "EntradaySalida" | "entrada" | "salida"
-        "date": "2026-03-24",
-        "arrival_route": "John F. Kennedy / San Vicente de Paul 8:00AM",
-        "pickup_stop": "Plaza Galerías del Este",
-        "departure_route": "John F. Kennedy / San Vicente de Paul 6:00PM",
-        "dropoff_stop": "Metro María Montes"
-    }
-
-    scraper = ITLAScraper(credentials, ticket)
-    asyncio.run(scraper.run())

@@ -1,6 +1,8 @@
 import discord
 from db.reposity import UserRepository, ScheduleRepository
 from db.database import get_session
+from data.routes_data import ROUTES_DATA
+from app.models.schedule_days_model import ScheduleDaysModel
 
 
 WEEKDAYS = [
@@ -23,7 +25,6 @@ DAYS_ES = {
 
 
 def get_routes_for_day(day: str) -> dict:
-    from data.routes_data import ROUTES_DATA
     if day == "saturday":
         return ROUTES_DATA["saturday"]
     return ROUTES_DATA["weekday"]
@@ -66,9 +67,8 @@ async def save_schedule(
         schedule = schedule_repo.create(user_id=user.id, term=state.term)
 
         for day, data in state.days_data.items():
-            from models.schedule_days import ScheduleDays
             schedule_repo.add_day(
-                ScheduleDays(
+                ScheduleDaysModel(
                     schedule_id=schedule.id,
                     day=day,
                     ticket_type="round_trip",
