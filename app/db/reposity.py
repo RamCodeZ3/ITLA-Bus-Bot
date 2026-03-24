@@ -12,12 +12,12 @@ class UserRepository:
             self,
             discord_id: int,
             email: str,
-            encrypted_password: str
+            password: str
         ) -> User:
         user = User(
             discord_id=discord_id,
             email=email,
-            encrypted_password=encrypted_password
+            password=password
         )
         self.session.add(user)
         self.session.commit()
@@ -97,7 +97,6 @@ class ScheduleRepository:
             schedule_id=schedule_id,
             day=day
         ).first()
-    
 
 
 class PurchaseRepository:
