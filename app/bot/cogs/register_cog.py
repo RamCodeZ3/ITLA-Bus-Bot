@@ -1,5 +1,4 @@
 import discord
-import bcrypt
 from discord.ext import commands
 from discord import app_commands
 from db.reposity import UserRepository
@@ -12,7 +11,7 @@ class Register(commands.Cog):
     
     @app_commands.command(
         name="register",
-        description="Comando para registrar el usuario con" 
+        description="Comando para registrar el usuario con"
         "sus credenciales del campus ITLA"
     )
     async def register_command(
@@ -23,15 +22,12 @@ class Register(commands.Cog):
     ):
         try:
             session = get_session()
-        
-            salt = bcrypt.gensalt()
-            hashed_password = bcrypt.hashpw(password.encode("utf-8"), salt)
             
             repository = UserRepository(session)
             repository.create(
                 email=email,
                 discord_id=interaction.user.id,
-                encrypted_password=hashed_password.decode("utf-8")
+                password=password  # directo sin encriptar
             )
 
             await interaction.response.send_message(

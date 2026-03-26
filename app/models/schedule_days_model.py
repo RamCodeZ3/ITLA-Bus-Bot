@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from typing import Optional
 
 
-class ScheduleDays(BaseModel):
+class ScheduleDaysModel(BaseModel):
     schedule_id: int
     day: str
     ticket_type: str

@@ -23,7 +23,7 @@ class User(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     discord_id = Column(BigInteger, unique=True, nullable=False)
     email = Column(String(255), nullable=False)
-    encrypted_password = Column(Text, nullable=False)
+    password = Column(Text, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
 
     schedules = relationship("Schedule", back_populates="user")

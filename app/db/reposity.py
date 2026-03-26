@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from db.models import Purchase, Schedule, ScheduleDay, User
-from models.schedule_days import ScheduleDays
-from models.purchase import Purchase
+from models.schedule_days_model import ScheduleDaysModel
+from models.purchase_model import Purchase
 
 
 class UserRepository:
@@ -12,12 +12,12 @@ class UserRepository:
             self,
             discord_id: int,
             email: str,
-            encrypted_password: str
+            password: str
         ) -> User:
         user = User(
             discord_id=discord_id,
             email=email,
-            encrypted_password=encrypted_password
+            password=password
         )
         self.session.add(user)
         self.session.commit()
@@ -72,7 +72,7 @@ class ScheduleRepository:
     def get_active(self, user_id: int) -> Schedule | None:
         return self.session.query(Schedule).filter_by(user_id=user_id, active=True).first()
 
-    def add_day(self, schedule_days: ScheduleDays) -> ScheduleDay:
+    def add_day(self, schedule_days: ScheduleDaysModel) -> ScheduleDay:
         schedule_day = ScheduleDay(
             schedule_id=schedule_days.schedule_id,
             day=schedule_days.day,
@@ -97,7 +97,6 @@ class ScheduleRepository:
             schedule_id=schedule_id,
             day=day
         ).first()
-    
 
 
 class PurchaseRepository:
