@@ -1,14 +1,22 @@
 import unicodedata
 from playwright.async_api import async_playwright
 from datetime import datetime
-from ticket_dowloader import TicketDownloader
+from .ticket_dowloader import TicketDownloader
 from db.database import get_session
 from db.reposity import UserRepository
 from models.ticket_model import TicketModel
 
 
 URL_CAMPUS = "https://campusvirtual.itla.edu.do"
-TICKET_PRICE = 30 # pesos
+TICKET_PRICE = 30  # pesos
+
+
+def ok(data=None):
+    return {"success": True, "data": data, "error": None}
+
+
+def error(message: str):
+    return {"success": False, "data": None, "error": message}
 
 
 class ITLAScraper:
@@ -21,176 +29,188 @@ class ITLAScraper:
             browser = await p.chromium.launch(headless=False)
             context = await browser.new_context()
             page = await context.new_page()
-            ticket_dowloader = TicketDownloader()
+            ticket_downloader = TicketDownloader()
 
-            ok = await self.login(page)
-            if not ok:
-                await browser.close()
-                return
+            steps = [
+                self.login(page),
+                self.go_to_transport(page),
+                self.balance_verification(page),
+                self.fill_form(page),
+                self.confirm_reserve(page),
+                self.go_to_reserve_page(page),
+                self.confirm_buy(page),
+            ]
 
-            await self.go_to_transport(page)
-            balance = await self.balance_verification(page)
+            for step in steps:
+                result = await step
+                if not result["success"]:
+                    await browser.close()
+                    return result
 
-            if not balance:
-                await browser.close()
-                return
-            
-            await self.fill_form(page)
-            await self.confirm_reserve(page)
-            await self.go_to_reserve_page(page)
-            await self.confirm_buy(page)
-            await ticket_dowloader.download_tickets(page, self.ticket["date"])
-
+            tickets = await ticket_downloader.download_tickets(
+                page, self.ticket["date"]
+            )
             await browser.close()
-            print("\n🎉 Done.")
+            return ok(tickets)
 
     async def login(self, page):
-        print("🔐 Logging in...")
-        session = get_session()
-        reposity = UserRepository(session)
-        user = reposity.get_by_discord_id(self.discord_id)
-
-        await page.goto(URL_CAMPUS)
-        await page.wait_for_load_state("networkidle")
-
-        email_input = page.locator("#email")
-        await email_input.click()
-        await email_input.fill(user.email)
-
-        password_input = page.locator("#password")
-        await password_input.click()
-        await password_input.fill(user.password)
-
-        await page.get_by_role("button", name="Iniciar Sesión").click()
-        await page.wait_for_timeout(3000)
-        await page.wait_for_load_state("networkidle")
-
+        print("🔐 Iniciando sesión...")
         try:
-            await page.wait_for_selector(
-                ".btn-logout, button:has-text('Salir')", 
-                timeout=5000
-            )
-            print("✅ Login successful")
-            return True
-        except Exception:
-            pass
+            session = get_session()
+            repo = UserRepository(session)
+            user = repo.get_by_discord_id(self.discord_id)
 
-        if await page.locator("#email").count() > 0:
-            await page.screenshot(path="debug_login.png")
-            error = page.locator(".alert-danger, .error-msg, .invalid-feedback, .text-danger")
-            if await error.count() > 0:
-                print(f"  ❌ Error: {await error.first.inner_text()}")
-            print("❌ fallo el login revisa las credenciales")
-            return False
+            if user is None:
+                return error(
+                    "Usuario no encontrado. Regístrate con /register"
+                    "antes de comprar un ticket."
+                )
 
-        print("✅ Login successful")
-        return True
+            await page.goto(URL_CAMPUS)
+            await page.wait_for_load_state("networkidle")
+
+            await page.locator("#email").fill(user.email)
+            await page.locator("#password").fill(user.password)
+            await page.get_by_role("button", name="Iniciar Sesión").click()
+            await page.wait_for_timeout(3000)
+            await page.wait_for_load_state("networkidle")
+
+            try:
+                await page.wait_for_selector(
+                    ".btn-logout, button:has-text('Salir')",
+                    timeout=5000
+                )
+                print("✅ Sesión iniciada")
+                return ok()
+            except Exception:
+                pass
+
+            if await page.locator("#email").count() > 0:
+                await page.screenshot(path="debug_login.png")
+                err = page.locator(
+                    ".alert-danger, .error-msg, .invalid-feedback, .text-danger"
+                )
+                if await err.count() > 0:
+                    msg = await err.first.inner_text()
+                    return error(f"Login fallido: {msg.strip()}")
+                return error("Login fallido. Verifica tu correo y contraseña.")
+
+            print("✅ Sesión iniciada")
+            return ok()
+
+        except Exception as e:
+            return error(f"Error inesperado en login: {e}")
 
     async def go_to_transport(self, page):
-        print("🚌 Navigating to Transport...")
-        await page.locator("li.pointer a", has_text="Transporte").click()
-        await page.wait_for_url("**/customers/home**", timeout=15000)
-        await page.wait_for_load_state("domcontentloaded")
-        await page.wait_for_timeout(2000)
-        print(f"✅ Transportando a la siguiente pagina → {page.url}")
+        print("🚌 Navegando a Transporte...")
+        try:
+            await page.locator("li.pointer a", has_text="Transporte").click()
+            await page.wait_for_url("**/customers/home**", timeout=15000)
+            await page.wait_for_load_state("domcontentloaded")
+            await page.wait_for_timeout(2000)
+            print(f"✅ En transporte → {page.url}")
+            return ok()
+        except:
+            return error(f"No se pudo acceder a Transporte")
 
     async def balance_verification(self, page):
         try:
-            balance_text = await page.locator("span", has_text="DOP").inner_text()
+            balance_text = await page.locator(
+                "span", has_text="DOP"
+            ).inner_text()
             balance = int(float(balance_text.replace("DOP", "").strip()))
-            
-            if TICKET_PRICE * 2 < balance:
-                print("✅ Balance suficientes")
-                return True
-            else:
-                print("❌ Balance insuficiente")
-                return False
-        
-        except Exception as e:
-            ValueError("Hubo un error consiguiendo el balance del usuario", e)
+
+            if balance >= TICKET_PRICE * 2:
+                print(f"✅ Balance suficiente: RD${balance}")
+                return ok(balance)
+
+            return error(
+                f"Balance insuficiente. Tienes RD${balance}, "
+                f"necesitas RD${TICKET_PRICE * 2}."
+            )
+        except:
+            return error(f"No se pudo verificar el balance")
 
     async def fill_form(self, page):
-        print("📝 Filling form...")
-        await page.wait_for_selector("client-ticket-reserve", timeout=10000)
-        await page.wait_for_selector("#reserve_date", timeout=10000)
+        print("📝 Llenando formulario...")
+        try:
+            await page.wait_for_selector("client-ticket-reserve", timeout=10000)
+            await page.wait_for_selector("#reserve_date", timeout=10000)
 
-        await page.locator("entrada y salida").check()
-        print(f"  ✓ Type: entrada y salida")
+            await page.locator("entrada y salida").check()
+            await page.locator("#reserve_date").fill(self.ticket["date"])
 
-        await page.locator("#reserve_date").fill(self.ticket["date"])
-        print(f"  ✓ Date: {self.ticket['date']}")
+            await self._ngx_select(
+                page, "time_in", self.ticket["arrival_route"], "Ruta de llegada"
+            )
+            await self._ngx_select(
+                page, "stop_in", self.ticket["pickup_stop"], "Parada de recogida"
+            )
+            await self._ngx_select(
+                page, "time_out", self.ticket["departure_route"], "Ruta de salida"
+            )
+            await self._ngx_select(
+                page, "stop_out", self.ticket["dropoff_stop"], "Parada de bajada"
+            )
 
-        await self._ngx_select(
-            page,
-            "time_in",
-            self.ticket["arrival_route"],
-            "Arrival route"
-        )
-        await self._ngx_select(
-            page,
-            "stop_in",
-            self.ticket["pickup_stop"],
-            "Pickup stop"
-        )
-        await self._ngx_select(
-            page,
-            "time_out",
-            self.ticket["departure_route"],
-            "Departure route"
-        )
-        await self._ngx_select(
-            page,
-            "stop_out",
-            self.ticket["dropoff_stop"],
-            "Dropoff stop"
-        )
-
-        print("✅ Formulario completado")
+            print("✅ Formulario completado")
+            return ok()
+        except:
+            return error(f"Error al llenar el formulario")
 
     async def confirm_reserve(self, page):
-        print("🎟️  Confirming reservation...")
-        await page.get_by_role("button", name="Reservar").click()
-        await page.wait_for_timeout(3000)
-        await page.screenshot(path="confirmation.png")
-        print("✅ El boleto fue reservado de manera exitosa")
+        print("🎟️ Confirmando reserva...")
+        try:
+            await page.get_by_role("button", name="Reservar").click()
+            await page.wait_for_timeout(3000)
+            await page.screenshot(path="confirmation.png")
+            print("✅ Reserva realizada")
+            return ok()
+        except:
+            return error(f"No se pudo reservar el ticket")
 
     async def go_to_reserve_page(self, page):
         print("🔗 Navegando a Reservas...")
-        await page.locator("li#reservas_toggle a").click()
-        await page.wait_for_load_state("domcontentloaded")
-        print(f"✅ Navegó a → {page.url}")
-    
+        try:
+            await page.locator("li#reservas_toggle a").click()
+            await page.wait_for_load_state("domcontentloaded")
+            print(f"✅ En reservas → {page.url}")
+            return ok()
+        except:
+            return error(f"No se pudo navegar a Reservas")
+
     async def confirm_buy(self, page):
-        print("🎟️  Confirmando la compra...")
+        print("💳 Confirmando compra...")
+        try:
+            fecha = datetime.strptime(
+                self.ticket["date"], "%Y-%m-%d"
+            ).strftime("%d-%m-%Y")
 
-        # Busca la fila con la fecha configurada en el ticket
-        fecha_formateada = datetime.strptime(
-            self.ticket["date"], "%Y-%m-%d"
-        ).strftime("%d-%m-%Y")
+            fila = page.locator("tr.datatable-row").filter(
+                has=page.locator(f"td:has-text('{fecha}')")
+            )
+            await fila.locator("a.btn-light-success").click()
 
-        fila = page.locator("tr.datatable-row").filter(
-            has=page.locator(f"td:has-text('{fecha_formateada}')")
-        )
-        await fila.locator("a.btn-light-success").click()
-        print(f"  ✓ Click en confirmar para fecha: {fecha_formateada}")
+            await page.wait_for_selector(".swal2-popup", timeout=5000)
+            await page.locator("button.swal2-confirm").click()
 
-        await page.wait_for_selector(".swal2-popup", timeout=5000)
-        await page.locator("button.swal2-confirm").click()
-        print("  ✓ Modal confirmado")
-
-        await page.wait_for_timeout(2000)
-        await page.screenshot(path="confirmation.png")
-        print("✅ El boleto fue confirmado exitosamente")
+            await page.wait_for_timeout(2000)
+            await page.screenshot(path="buy_confirmation.png")
+            print("✅ Compra confirmada")
+            return ok()
+        except:
+            return error(f"No se pudo confirmar la compra")
 
     async def _ngx_select(self, page, field_id, search_text, field_name):
-        await page.locator(f"ngx-select-dropdown#{field_id} .ngx-dropdown-button").click()
+        selector = f"ngx-select-dropdown#{field_id}"
+        await page.locator(f"{selector} .ngx-dropdown-button").click()
         await page.wait_for_timeout(1000)
 
-        options = page.locator(f"ngx-select-dropdown#{field_id} .available-item")
+        options = page.locator(f"{selector} .available-item")
         count = await options.count()
 
         if count == 0:
-            print(f"  ⚠️  Dropdown did not open: {field_name}")
+            print(f"  ⚠️ Dropdown no abrió: {field_name}")
             await page.keyboard.press("Escape")
             return
 
@@ -202,14 +222,16 @@ class ITLAScraper:
                 print(f"  ✓ {field_name}: {text.strip()}")
                 return
 
-        print(f"  ⚠️  '{search_text}' not found in {field_name}. Available options:")
+        print(f"  ⚠️ '{search_text}' no encontrado en {field_name}:")
         for i in range(min(count, 15)):
             print(f"      [{i}] {(await options.nth(i).inner_text()).strip()}")
         await page.keyboard.press("Escape")
 
     @staticmethod
     def _normalize(s):
-        return unicodedata.normalize("NFD", s).encode(
-            "ascii",
-            "ignore"
-        ).decode().lower()
+        return (
+            unicodedata.normalize("NFD", s)
+            .encode("ascii", "ignore")
+            .decode()
+            .lower()
+        )

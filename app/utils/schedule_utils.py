@@ -2,7 +2,7 @@ import discord
 from db.reposity import UserRepository, ScheduleRepository
 from db.database import get_session
 from data.routes_data import ROUTES_DATA
-from app.models.schedule_days_model import ScheduleDaysModel
+from models.schedule_days_model import ScheduleDaysModel
 
 
 WEEKDAYS = [
