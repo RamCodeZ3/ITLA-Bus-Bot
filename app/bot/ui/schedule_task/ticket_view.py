@@ -1,4 +1,6 @@
 import discord
+from infrastructure.database import get_session
+from infrastructure.reposity import StockHistory
 
 
 class TicketView(discord.ui.View):
@@ -20,7 +22,8 @@ class TicketView(discord.ui.View):
             content="✅ Procesando tu compra...",
             view=self,
         )
-        # TODO: lógica de compra de ticket
+        session = get_session()
+        stock_repo = StockHistory(session)
 
     @discord.ui.button(
         label="❌ No comprar",

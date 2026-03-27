@@ -1,7 +1,6 @@
 from sqlalchemy.orm import Session
-from .models import Purchase, Schedule, ScheduleDay, User
+from .models import Schedule, ScheduleDay, User, StockHistory
 from models.schedule_days_model import ScheduleDaysModel
-from models.purchase_model import Purchase
 
 
 class UserRepository:
@@ -29,19 +28,19 @@ class UserRepository:
             discord_id=discord_id
         ).first()
     
-    def get_users_with_day(self, session, day: str) -> list[dict]:
-
+    def get_users_with_day(self, day: str) -> list[dict]:
         results = (
-            session.query(User, ScheduleDay)
+            self.session.query(User, ScheduleDay)
             .join(Schedule, Schedule.user_id == User.id)
             .join(ScheduleDay, ScheduleDay.schedule_id == Schedule.id)
-            .filter(Schedule.active == True)  # noqa: E712
+            .filter(Schedule.active == True)
             .filter(ScheduleDay.day == day)
             .all()
         )
         return [
             {
                 "discord_id": user.discord_id,
+                "schedule_day_id": schedule_day.id,  # <-- añadido
                 "day": schedule_day.day,
                 "arrival_route": schedule_day.arrival_route,
                 "pickup_stop": schedule_day.pickup_stop,
@@ -57,7 +56,6 @@ class ScheduleRepository:
         self.session = session
 
     def create(self, user_id: int, term: str) -> Schedule:
-        # Deactivate previous schedules for this user
         self.session.query(Schedule).filter_by(
             user_id=user_id,
             active=True).update(
@@ -99,43 +97,60 @@ class ScheduleRepository:
         ).first()
 
 
-class PurchaseRepository:
+class StockHistoryRepository:
     def __init__(self, session: Session):
         self.session = session
 
-    def create(self, purchase: Purchase) -> Purchase:
-        purchase = Purchase(
-            user_id=purchase.user_id,
-            date=purchase.date,
-            ticket_type=purchase.ticket_type,
-            arrival_route=purchase.arrival_route,
-            pickup_stop=purchase.pickup_stop,
-            departure_route=purchase.departure_route,
-            dropoff_stop=purchase.dropoff_stop,
-        )
-        self.session.add(purchase)
-        self.session.commit()
-        self.session.refresh(purchase)
-        return purchase
-
-    def update_status(
+    def create(
             self,
-            purchase_id: int,
-            status: str,
-            pdf_path: str = None
-        ):
-        purchase = self.session.query(Purchase).filter_by(
-            id=purchase_id
-        ).first()
-        if purchase:
-            purchase.status = status
-            if pdf_path:
-                purchase.pdf_path = pdf_path
+            user_id: int,
+            schedule_day_id: int,
+            date,
+            status: str
+        ) -> StockHistory:
+        stock = StockHistory(
+            user_id=user_id,
+            schedule_day_id=schedule_day_id,
+            date=date,
+            status=status
+        )
+        self.session.add(stock)
+        self.session.commit()
+        self.session.refresh(stock)
+        return stock
+
+    def update_status(self, stock_id: int, status: str):
+        stock = self.session.query(StockHistory).filter_by(id=stock_id).first()
+        if stock:
+            stock.status = status
             self.session.commit()
 
-    def get_by_user(self, user_id: int) -> list[Purchase]:
-        return self.session.query(Purchase).filter_by(
+    def get_by_user(self, user_id: int) -> list[StockHistory]:
+        return self.session.query(StockHistory).filter_by(
             user_id=user_id
         ).order_by(
-            Purchase.purchased_at.desc()
+            StockHistory.created_at.desc()
+        ).all()
+
+    def get_by_user_and_date(self, user_id: int, date) -> list[StockHistory]:
+        return self.session.query(StockHistory).filter_by(
+            user_id=user_id,
+            date=date
+        ).all()
+
+    def get_by_schedule_day_and_date(
+            self,
+            schedule_day_id: int,
+            date
+        ) -> StockHistory | None:
+        return self.session.query(StockHistory).filter_by(
+            schedule_day_id=schedule_day_id,
+            date=date
+        ).first()
+
+    def get_pending(self) -> list[StockHistory]:
+        return self.session.query(StockHistory).filter_by(
+            status="pending"
+        ).order_by(
+            StockHistory.date.asc()
         ).all()
