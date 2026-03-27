@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from db.models import Purchase, Schedule, ScheduleDay, User
+from .models import Purchase, Schedule, ScheduleDay, User
 from models.schedule_days_model import ScheduleDaysModel
 from models.purchase_model import Purchase
 

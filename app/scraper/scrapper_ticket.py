@@ -2,8 +2,8 @@ import unicodedata
 from playwright.async_api import async_playwright
 from datetime import datetime
 from .ticket_dowloader import TicketDownloader
-from db.database import get_session
-from db.reposity import UserRepository
+from infrastructure.database import get_session
+from infrastructure.reposity import UserRepository
 from models.ticket_model import TicketModel
 
 

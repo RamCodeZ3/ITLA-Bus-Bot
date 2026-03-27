@@ -1,8 +1,8 @@
 import discord
 from discord.ext import commands, tasks
 from datetime import datetime
-from db.database import get_session
-from db.reposity import UserRepository
+from infrastructure.database import get_session
+from infrastructure.reposity import UserRepository
 from ui.schedule_task.ticket_view import TicketView
 
 
@@ -95,10 +95,10 @@ class SchedulerTask(commands.Cog):
 
     async def notify_users(self, day: str):
         session = get_session()
-        reposity = UserRepository
+        reposity = UserRepository(session)
         
         try:
-            users = reposity.get_users_with_day(session, day)
+            users = reposity.get_users_with_day(day)
             print(
                 f"[SchedulerTask] Notificando {len(users)} usuarios"
                 f" para mañana ({DAYS_ES[day]})"

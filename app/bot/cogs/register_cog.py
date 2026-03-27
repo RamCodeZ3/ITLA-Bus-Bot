@@ -1,8 +1,8 @@
 import discord
 from discord.ext import commands
 from discord import app_commands
-from db.reposity import UserRepository
-from db.database import get_session
+from infrastructure.reposity import UserRepository
+from infrastructure.database import get_session
 
 
 class Register(commands.Cog):
