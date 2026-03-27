@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from discord import app_commands
-from infrastructure.reposity import UserRepository
+from infrastructure.repository.user import UserRepository
 from infrastructure.database import get_session
 
 

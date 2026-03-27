@@ -1,0 +1,50 @@
+from sqlalchemy.orm import Session
+from models import User, Schedule, ScheduleDay
+
+
+class UserRepository:
+    def __init__(self, session: Session):
+        self.session = session
+    
+    def create(
+            self,
+            discord_id: int,
+            email: str,
+            password: str
+        ) -> User:
+        user = User(
+            discord_id=discord_id,
+            email=email,
+            password=password
+        )
+        self.session.add(user)
+        self.session.commit()
+        self.session.refresh(user)
+        return user
+
+    def get_by_discord_id(self, discord_id: int) -> User | None:
+        return self.session.query(User).filter_by(
+            discord_id=discord_id
+        ).first()
+    
+    def get_users_with_day(self, day: str) -> list[dict]:
+        results = (
+            self.session.query(User, ScheduleDay)
+            .join(Schedule, Schedule.user_id == User.id)
+            .join(ScheduleDay, ScheduleDay.schedule_id == Schedule.id)
+            .filter(Schedule.active == True)
+            .filter(ScheduleDay.day == day)
+            .all()
+        )
+        return [
+            {
+                "discord_id": user.discord_id,
+                "schedule_day_id": schedule_day.id,  # <-- añadido
+                "day": schedule_day.day,
+                "arrival_route": schedule_day.arrival_route,
+                "pickup_stop": schedule_day.pickup_stop,
+                "departure_route": schedule_day.departure_route,
+                "dropoff_stop": schedule_day.dropoff_stop,
+            }
+            for user, schedule_day in results
+        ]

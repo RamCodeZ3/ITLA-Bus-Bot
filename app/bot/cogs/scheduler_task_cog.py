@@ -2,7 +2,8 @@ import discord
 from discord.ext import commands, tasks
 from datetime import datetime
 from infrastructure.database import get_session
-from infrastructure.reposity import UserRepository, StockHistoryRepository
+from infrastructure.repository.user import UserRepository
+from infrastructure.repository.stock_history import StockHistoryRepository
 from ui.schedule_task.ticket_view import TicketView
 
 

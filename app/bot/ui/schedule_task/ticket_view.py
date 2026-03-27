@@ -1,6 +1,7 @@
 import discord
 from infrastructure.database import get_session
-from infrastructure.reposity import StockHistory
+from infrastructure.repository.stock_history import StockHistory
+from scraper.scrapper_ticket import ITLAScraper
 
 
 class TicketView(discord.ui.View):
@@ -24,6 +25,7 @@ class TicketView(discord.ui.View):
         )
         session = get_session()
         stock_repo = StockHistory(session)
+        itla_scraper = ITLAScraper()
 
     @discord.ui.button(
         label="❌ No comprar",

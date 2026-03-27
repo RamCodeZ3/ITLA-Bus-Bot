@@ -3,7 +3,7 @@ from playwright.async_api import async_playwright
 from datetime import datetime
 from .ticket_dowloader import TicketDownloader
 from infrastructure.database import get_session
-from infrastructure.reposity import UserRepository
+from infrastructure.repository.user import UserRepository
 from models.ticket_model import TicketModel
 
 

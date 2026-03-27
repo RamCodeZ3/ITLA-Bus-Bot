@@ -1,5 +1,6 @@
 import discord
-from infrastructure.reposity import UserRepository, ScheduleRepository
+from infrastructure.repository.user import UserRepository
+from infrastructure.repository.schedule import ScheduleRepository
 from infrastructure.database import get_session
 from data.routes_data import ROUTES_DATA
 from models.schedule_days_model import ScheduleDaysModel
