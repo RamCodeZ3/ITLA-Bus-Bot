@@ -25,8 +25,8 @@ class Register(commands.Cog):
             
             repository = UserRepository(session)
             repository.create(
-                email=email,
                 discord_id=interaction.user.id,
+                email=email,
                 password=password  # directo sin encriptar
             )
 

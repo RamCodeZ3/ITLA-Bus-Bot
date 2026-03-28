@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from models import Schedule, ScheduleDay
+from infrastructure.models import Schedule, ScheduleDay, User
 from models.schedule_days_model import ScheduleDaysModel
 
 
@@ -47,3 +47,31 @@ class ScheduleRepository:
             schedule_id=schedule_id,
             day=day
         ).first()
+    
+    def get_schedule_by_id_and_day(
+            self,
+            discord_id: int,
+            day: str
+        ) -> dict | None:
+        result = (
+            self.session.query(User, ScheduleDay)
+            .join(Schedule, Schedule.user_id == User.id)
+            .join(ScheduleDay, ScheduleDay.schedule_id == Schedule.id)
+            .filter(Schedule.active == True)
+            .filter(User.id == discord_id)
+            .filter(ScheduleDay.day == day)
+            .first()
+        )
+        
+        if not result:
+            return None
+        
+        schedule_day = result
+        return {
+            "schedule_day_id": schedule_day.id,
+            "day": schedule_day.day,
+            "arrival_route": schedule_day.arrival_route,
+            "pickup_stop": schedule_day.pickup_stop,
+            "departure_route": schedule_day.departure_route,
+            "dropoff_stop": schedule_day.dropoff_stop,
+        }

@@ -20,8 +20,7 @@ class Base(DeclarativeBase):
 class User(Base):
     __tablename__ = "users"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    discord_id = Column(BigInteger, unique=True, nullable=False)
+    id = Column(BigInteger, unique=True, nullable=False, primary_key=True)
     email = Column(String(255), nullable=False)
     password = Column(Text, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)

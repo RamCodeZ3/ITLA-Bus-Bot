@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from models import User, Schedule, ScheduleDay
+from ..models import User, Schedule, ScheduleDay
 
 
 class UserRepository:
@@ -13,7 +13,7 @@ class UserRepository:
             password: str
         ) -> User:
         user = User(
-            discord_id=discord_id,
+            id= discord_id,
             email=email,
             password=password
         )
@@ -24,7 +24,7 @@ class UserRepository:
 
     def get_by_discord_id(self, discord_id: int) -> User | None:
         return self.session.query(User).filter_by(
-            discord_id=discord_id
+            id=discord_id
         ).first()
     
     def get_users_with_day(self, day: str) -> list[dict]:
@@ -38,8 +38,8 @@ class UserRepository:
         )
         return [
             {
-                "discord_id": user.discord_id,
-                "schedule_day_id": schedule_day.id,  # <-- añadido
+                "discord_id": user.id,
+                "schedule_day_id": schedule_day.id,
                 "day": schedule_day.day,
                 "arrival_route": schedule_day.arrival_route,
                 "pickup_stop": schedule_day.pickup_stop,
