@@ -2,17 +2,18 @@ import discord
 from discord.ext import commands, tasks
 from datetime import datetime
 from infrastructure.database import get_session
-from infrastructure.reposity import UserRepository
+from infrastructure.repository.user import UserRepository
+from infrastructure.repository.stock_history import StockHistoryRepository
 from ui.schedule_task.ticket_view import TicketView
 
 
 NEXT_DAY_MAP = {
-    0: "tuesday", # lunes -> martes
-    1: "wednesday", # martes -> miércoles
-    2: "thursday", # miércoles -> jueves
-    3: "friday", # jueves -> viernes
-    4: "saturday", # viernes -> sábado
-    6: "monday", # domingo -> lunes
+    0: "tuesday",
+    1: "wednesday",
+    2: "thursday",
+    3: "friday",
+    4: "saturday",
+    6: "monday",
 }
 
 DAYS_ES = {
@@ -31,7 +32,6 @@ TASK_MINUTE = 0
 class SchedulerTask(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        self.notified_today = False
         self.last_notified_date = None
         self.daily_check.start()
 
@@ -43,15 +43,13 @@ class SchedulerTask(commands.Cog):
         now = datetime.now()
 
         if now.weekday() not in NEXT_DAY_MAP:
-            self.notified_today = False
             return
 
         if now.hour != TASK_HOUR or now.minute != TASK_MINUTE:
             if now.hour < TASK_HOUR:
-                self.notified_today = False
+                self.last_notified_date = None
             return
 
-        # Evitar reenvío: compara fecha exacta del día
         today = now.date()
         if self.last_notified_date == today:
             return
@@ -66,28 +64,21 @@ class SchedulerTask(commands.Cog):
         await self._catchup_check()
 
     async def _catchup_check(self):
-        """
-        Al arrancar el bot, verifica si ya paso la hora de notificacion
-        y todavia no se ha enviado el mensaje hoy.
-        """
         now = datetime.now()
         today = now.date()
 
-        # Solo aplica si hoy es un dia de notificacion
         if now.weekday() not in NEXT_DAY_MAP:
             return
 
-        # Solo aplica si ya paso la hora limite (3PM) y antes de 5PM
         if not (TASK_HOUR <= now.hour < 17):
             return
 
-        # Si ya se notifico hoy, no reenviar
         if self.last_notified_date == today:
             return
 
         print(
-            "[SchedulerTask] Bot reiniciado despues de las 3PM,"
-            " enviando notificaciones..."
+            "[SchedulerTask] Bot reiniciado despues de la hora de notificacion,"
+            " enviando notificaciones pendientes..."
         )
         self.last_notified_date = today
         tomorrow_day = NEXT_DAY_MAP[now.weekday()]
@@ -95,16 +86,34 @@ class SchedulerTask(commands.Cog):
 
     async def notify_users(self, day: str):
         session = get_session()
-        reposity = UserRepository(session)
-        
+        user_repo = UserRepository(session)
+        stock_repo = StockHistoryRepository(session)
+
         try:
-            users = reposity.get_users_with_day(day)
+            users = user_repo.get_users_with_day(day)
+            today = datetime.now().date()
+
             print(
                 f"[SchedulerTask] Notificando {len(users)} usuarios"
                 f" para mañana ({DAYS_ES[day]})"
             )
+
             for user_data in users:
+                # Verificar si ya existe un StockHistory para este
+                # schedule_day en la fecha de mañana
+                already_notified = stock_repo.get_by_schedule_day_and_date(
+                    schedule_day_id=user_data["schedule_day_id"],
+                    date=today
+                )
+                if already_notified:
+                    print(
+                        f"[SchedulerTask] Usuario {user_data['discord_id']}"
+                        f" ya fue notificado hoy, omitiendo."
+                    )
+                    continue
+
                 await self._send_dm(user_data, day)
+
         except Exception as e:
             print(f"[SchedulerTask] Error en notify_users: {e}")
         finally:
@@ -143,7 +152,7 @@ class SchedulerTask(commands.Cog):
             )
             embed.set_footer(text="ITLA Bot • Sistema de Tickets")
 
-            await user.send(embed=embed, view=TicketView(user_data))
+            await user.send(embed=embed, view=TicketView(user_data, self.bot))
 
         except discord.Forbidden:
             print(

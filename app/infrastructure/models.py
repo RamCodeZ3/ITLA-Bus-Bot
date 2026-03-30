@@ -20,14 +20,13 @@ class Base(DeclarativeBase):
 class User(Base):
     __tablename__ = "users"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    discord_id = Column(BigInteger, unique=True, nullable=False)
+    id = Column(BigInteger, unique=True, nullable=False, primary_key=True)
     email = Column(String(255), nullable=False)
     password = Column(Text, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
 
     schedules = relationship("Schedule", back_populates="user")
-    purchases = relationship("Purchase", back_populates="user")
+    stock_history = relationship("StockHistory", back_populates="user")
 
 
 class Schedule(Base):
@@ -56,21 +55,21 @@ class ScheduleDay(Base):
     dropoff_stop = Column(Text)
 
     schedule = relationship("Schedule", back_populates="days")
+    stock_history = relationship(
+        "StockHistory",
+        back_populates="schedule_day"
+    )
 
 
-class Purchase(Base):
-    __tablename__ = "purchases"
+class StockHistory(Base):
+    __tablename__ = "stock_histoy"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    schedule_day_id = Column(Integer, ForeignKey("schedule_days.id"), nullable=False)
     date = Column(Date, nullable=False)
-    ticket_type = Column(String(20))  # round_trip | arrival | departure
-    arrival_route = Column(Text)
-    pickup_stop = Column(Text)
-    departure_route = Column(Text)
-    dropoff_stop = Column(Text)
-    status = Column(String(20), default="pending")  # pending | success | failed
-    pdf_path = Column(Text)
-    purchased_at = Column(DateTime, default=datetime.utcnow)
+    status = Column(String(20), default="pending")  # pending | bought | refused
+    created_at = Column(DateTime, default=datetime.utcnow)
 
-    user = relationship("User", back_populates="purchases")
+    user = relationship("User", back_populates="stock_history")
+    schedule_day = relationship("ScheduleDay", back_populates="stock_history")

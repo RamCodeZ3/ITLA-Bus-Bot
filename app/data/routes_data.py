@@ -411,7 +411,7 @@ WEEKDAY_ROUTES = {
                 "LOS TRES OJOS (Puente Peatonal)"
             ],
             "John F. Kennedy / San Vicente de Paul 10:00PM": [
-                "Final de Recorrido: Parque Central La Romana"
+                "Km. 9 Aut. Duarte (Parada del Metro María Montes)"
             ],
             "Independencia 1:00PM": [
                 "Km. 9 Aut. Duarte (Parada del Metro María Montes)"
@@ -432,7 +432,7 @@ WEEKDAY_ROUTES = {
                 "Km. 9 Aut. Duarte (Parada del Metro María Montes)"
             ],
             "John F. Kennedy / San Vicente de Paul 1:00PM": [
-                "LOS TRES OJOS (Puente Peatonal)"
+                "Km. 9 Aut. Duarte (Parada del Metro María Montes)"
             ],
             "John F. Kennedy / San Vicente de Paul 6:00PM": [
                 "Km. 9 Aut. Duarte (Parada del Metro María Montes)"
@@ -688,10 +688,10 @@ SATURDAY_ROUTES = {
                 "PINTURA AVE. ISABEL AGUIAR (Después de cruzar) PARADA OMSA"
             ],
             "John F. Kennedy / San Vicente de Paul (Sabado) 1:00PM": [
-                "Parque Central La Romana"
+                "Km. 9 Aut. Duarte (Parada del Metro María Montes)"
             ],
             "John F. Kennedy / San Vicente de Paul (Sabado) 6:00PM": [
-                "KM 12 Av. Independencia (Frente a Plaza Luperón)"
+                "Km. 9 Aut. Duarte (Parada del Metro María Montes)"
             ],
             "Independencia (Sabado) 1:00PM": [
                 "Parque Central La Romana"

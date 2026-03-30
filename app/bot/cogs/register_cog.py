@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from discord import app_commands
-from infrastructure.reposity import UserRepository
+from infrastructure.repository.user import UserRepository
 from infrastructure.database import get_session
 
 
@@ -25,8 +25,8 @@ class Register(commands.Cog):
             
             repository = UserRepository(session)
             repository.create(
-                email=email,
                 discord_id=interaction.user.id,
+                email=email,
                 password=password  # directo sin encriptar
             )
 
