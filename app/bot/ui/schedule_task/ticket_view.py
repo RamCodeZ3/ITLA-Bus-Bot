@@ -8,9 +8,10 @@ from models.ticket_model import TicketModel
 
 
 class TicketView(discord.ui.View):
-    def __init__(self, user_data: dict):
+    def __init__(self, user_data: dict, bot):
         super().__init__(timeout=None)
         self.user_data = user_data
+        self.bot = bot
 
     @discord.ui.button(
         label="🎫 Comprar Ticket",
@@ -28,6 +29,7 @@ class TicketView(discord.ui.View):
         )
         tomorrow = datetime.now() + timedelta(days=1)
         day_name = tomorrow.strftime("%A").lower()
+        session = get_session()
 
         schedule_repo = ScheduleRepository(session)
         schedule = schedule_repo.get_schedule_by_id_and_day(
@@ -42,7 +44,7 @@ class TicketView(discord.ui.View):
         stock_repo.create(
             user_id=interaction.user.id,
             schedule_day_id=schedule["schedule_day_id"],
-            date= datetime.now().strftime("%Y-%m-%d"),
+            date= datetime.now().date(),
             status="bought",
         )
 
@@ -75,8 +77,8 @@ class TicketView(discord.ui.View):
         stock_repo.create(
             user_id=interaction.user.id,
             schedule_day_id=schedule["schedule_day_id"],
-            date= datetime.now().strftime("%Y-%m-%d"),
-            status="bought",
+            date= datetime.now().date(),
+            status="refused",
         )
 
     def disable_all(self):
@@ -85,8 +87,9 @@ class TicketView(discord.ui.View):
     
     async def _buy_tickets(self, discord_id: int, schedule_day: dict):
         tomorrow = (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d")
-
-        ticket = TicketModel(
+        print(schedule_day)
+        
+        tickets = TicketModel(
             date=tomorrow,
             arrival_route=schedule_day["arrival_route"],
             pickup_stop=schedule_day["pickup_stop"],
@@ -94,16 +97,19 @@ class TicketView(discord.ui.View):
             dropoff_stop=schedule_day["dropoff_stop"]
         )
 
-        scraper = ITLAScraper(discord_id, ticket)
+        try:
+            user = await self.bot.fetch_user(discord_id)
+        except discord.NotFound:
+            print(f"Usuario {discord_id} no encontrado")
+            return
+
+        scraper = ITLAScraper(discord_id, tickets)
         result = await scraper.run()
 
-        user = self.bot.get_user(discord_id)
-        if user is None:
-            return
 
         if not result["success"]:
             await user.send(
-                f"❌ No se pudo comprar los boletos de mañana **{tomorrow}**.\n"
+                f"❌ No se pudo comprar los boletos de mañana **{tomorrow}**. "
                 f" {result['error']}"
             )
             return

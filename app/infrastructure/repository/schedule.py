@@ -48,25 +48,20 @@ class ScheduleRepository:
             day=day
         ).first()
     
-    def get_schedule_by_id_and_day(
-            self,
-            discord_id: int,
-            day: str
-        ) -> dict | None:
-        result = (
-            self.session.query(User, ScheduleDay)
-            .join(Schedule, Schedule.user_id == User.id)
-            .join(ScheduleDay, ScheduleDay.schedule_id == Schedule.id)
+    def get_schedule_by_id_and_day(self, discord_id: int, day: str) -> dict | None:
+        schedule_day = (
+            self.session.query(ScheduleDay)
+            .join(Schedule, Schedule.id == ScheduleDay.schedule_id)
+            .join(User, User.id == Schedule.user_id)
             .filter(Schedule.active == True)
             .filter(User.id == discord_id)
             .filter(ScheduleDay.day == day)
             .first()
         )
-        
-        if not result:
+
+        if not schedule_day:
             return None
-        
-        schedule_day = result
+
         return {
             "schedule_day_id": schedule_day.id,
             "day": schedule_day.day,

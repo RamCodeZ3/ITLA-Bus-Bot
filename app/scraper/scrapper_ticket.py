@@ -48,7 +48,7 @@ class ITLAScraper:
                     return result
 
             tickets = await ticket_downloader.download_tickets(
-                page, self.ticket["date"]
+                page, self.ticket.date
             )
             await browser.close()
             return ok(tickets)
@@ -86,7 +86,6 @@ class ITLAScraper:
                 pass
 
             if await page.locator("#email").count() > 0:
-                await page.screenshot(path="debug_login.png")
                 err = page.locator(
                     ".alert-danger, .error-msg, .invalid-feedback, .text-danger"
                 )
@@ -137,20 +136,20 @@ class ITLAScraper:
             await page.wait_for_selector("client-ticket-reserve", timeout=10000)
             await page.wait_for_selector("#reserve_date", timeout=10000)
 
-            await page.locator("entrada y salida").check()
-            await page.locator("#reserve_date").fill(self.ticket["date"])
+            await page.locator("#EntradaySalida").check()
+            await page.locator("#reserve_date").fill(self.ticket.date)
 
             await self._ngx_select(
-                page, "time_in", self.ticket["arrival_route"], "Ruta de llegada"
+                page, "time_in", self.ticket.arrival_route, "Ruta de llegada"
             )
             await self._ngx_select(
-                page, "stop_in", self.ticket["pickup_stop"], "Parada de recogida"
+                page, "stop_in", self.ticket.pickup_stop, "Parada de recogida"
             )
             await self._ngx_select(
-                page, "time_out", self.ticket["departure_route"], "Ruta de salida"
+                page, "time_out", self.ticket.departure_route, "Ruta de salida"
             )
             await self._ngx_select(
-                page, "stop_out", self.ticket["dropoff_stop"], "Parada de bajada"
+                page, "stop_out", self.ticket.dropoff_stop, "Parada de bajada"
             )
 
             print("✅ Formulario completado")
@@ -163,7 +162,6 @@ class ITLAScraper:
         try:
             await page.get_by_role("button", name="Reservar").click()
             await page.wait_for_timeout(3000)
-            await page.screenshot(path="confirmation.png")
             print("✅ Reserva realizada")
             return ok()
         except:
@@ -183,7 +181,7 @@ class ITLAScraper:
         print("💳 Confirmando compra...")
         try:
             fecha = datetime.strptime(
-                self.ticket["date"], "%Y-%m-%d"
+                self.ticket.date, "%Y-%m-%d"
             ).strftime("%d-%m-%Y")
 
             fila = page.locator("tr.datatable-row").filter(
@@ -195,7 +193,6 @@ class ITLAScraper:
             await page.locator("button.swal2-confirm").click()
 
             await page.wait_for_timeout(2000)
-            await page.screenshot(path="buy_confirmation.png")
             print("✅ Compra confirmada")
             return ok()
         except:

@@ -25,7 +25,7 @@ DAYS_ES = {
     "saturday": "sábado",
 }
 
-TASK_HOUR = 15
+TASK_HOUR = 10
 TASK_MINUTE = 0
 
 
@@ -152,7 +152,7 @@ class SchedulerTask(commands.Cog):
             )
             embed.set_footer(text="ITLA Bot • Sistema de Tickets")
 
-            await user.send(embed=embed, view=TicketView(user_data))
+            await user.send(embed=embed, view=TicketView(user_data, self.bot))
 
         except discord.Forbidden:
             print(
