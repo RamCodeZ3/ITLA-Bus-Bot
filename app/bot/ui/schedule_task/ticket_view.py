@@ -87,7 +87,6 @@ class TicketView(discord.ui.View):
     
     async def _buy_tickets(self, discord_id: int, schedule_day: dict):
         tomorrow = (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d")
-        print(schedule_day)
         
         tickets = TicketModel(
             date=tomorrow,
