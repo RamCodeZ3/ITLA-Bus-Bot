@@ -38,7 +38,7 @@ class ITLAScraper:
                 self.fill_form(page),
                 self.confirm_reserve(page),
                 self.go_to_reserve_page(page),
-                self.confirm_buy(page),
+                # self.confirm_buy(page),
             ]
 
             for step in steps:
@@ -46,7 +46,8 @@ class ITLAScraper:
                 if not result["success"]:
                     await browser.close()
                     return result
-
+            
+            input()
             tickets = await ticket_downloader.download_tickets(
                 page, self.ticket.date
             )
@@ -140,16 +141,16 @@ class ITLAScraper:
             await page.locator("#reserve_date").fill(self.ticket.date)
 
             await self._ngx_select(
-                page, "time_in", self.ticket.arrival_route, "Ruta de llegada"
+                page, "time_in", "Ruta de llegada", self.ticket.arrival_route 
             )
             await self._ngx_select(
-                page, "stop_in", self.ticket.pickup_stop, "Parada de recogida"
+                page, "stop_in", "Parada de recogida", self.ticket.pickup_stop
             )
             await self._ngx_select(
-                page, "time_out", self.ticket.departure_route, "Ruta de salida"
+                page, "time_out", "Ruta de salida", self.ticket.departure_route
             )
             await self._ngx_select(
-                page, "stop_out", self.ticket.dropoff_stop, "Parada de bajada"
+                page, "stop_out", "Parada de bajada"
             )
 
             print("✅ Formulario completado")
@@ -170,9 +171,7 @@ class ITLAScraper:
     async def go_to_reserve_page(self, page):
         print("🔗 Navegando a Reservas...")
         try:
-            await page.locator("li#reservas_toggle a").click()
-            await page.wait_for_load_state("domcontentloaded")
-            print(f"✅ En reservas → {page.url}")
+            await page.goto("https://transporte.itla.edu.do/customers/reservas")
             return ok()
         except:
             return error(f"No se pudo navegar a Reservas")
@@ -198,7 +197,7 @@ class ITLAScraper:
         except:
             return error(f"No se pudo confirmar la compra")
 
-    async def _ngx_select(self, page, field_id, search_text, field_name):
+    async def _ngx_select(self, page, field_id, field_name, search_text=None):
         selector = f"ngx-select-dropdown#{field_id}"
         await page.locator(f"{selector} .ngx-dropdown-button").click()
         await page.wait_for_timeout(1000)
@@ -209,6 +208,11 @@ class ITLAScraper:
         if count == 0:
             print(f"  ⚠️ Dropdown no abrió: {field_name}")
             await page.keyboard.press("Escape")
+            return
+        
+        if count == 1:
+            text = await options.first.inner_text()
+            await options.first.click()
             return
 
         query = self._normalize(search_text)

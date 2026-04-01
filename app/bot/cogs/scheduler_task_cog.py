@@ -146,7 +146,6 @@ class SchedulerTask(commands.Cog):
                 name="🔴 Salida",
                 value=(
                     f"**Ruta:** {user_data['departure_route']}\n"
-                    f"**Parada:** {user_data['dropoff_stop']}"
                 ),
                 inline=False,
             )

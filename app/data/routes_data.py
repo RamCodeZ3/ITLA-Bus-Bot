@@ -391,69 +391,6 @@ WEEKDAY_ROUTES = {
             "Juan Bosch-Marginal Las Américas 1:00PM",
             "Juan Bosch-Marginal Las Américas 10:00PM"
         ],
-        "stops_by_route": {
-            "27 de Febrero 1:00PM": [
-                "PINTURA AVE. ISABEL AGUIAR (Después de cruzar) PARADA OMSA"
-            ],
-            "27 de Febrero 4:00PM": [
-                "PINTURA AVE. ISABEL AGUIAR (Después de cruzar) PARADA OMSA"
-            ],
-            "27 de Febrero 6:00PM": [
-                "PINTURA AVE. ISABEL AGUIAR (Después de cruzar) PARADA OMSA"
-            ],
-            "27 de Febrero 8:30PM": [
-                "Km. 9 Aut. Duarte (Parada del Metro María Montes)"
-            ],
-            "27 de Febrero 10:00PM": [
-                "KM 12 Av. Independencia (Frente a Plaza Luperón)"
-            ],
-            "Charles de Gaulle - Villa Mella 1:00PM": [
-                "LOS TRES OJOS (Puente Peatonal)"
-            ],
-            "John F. Kennedy / San Vicente de Paul 10:00PM": [
-                "Km. 9 Aut. Duarte (Parada del Metro María Montes)"
-            ],
-            "Independencia 1:00PM": [
-                "Km. 9 Aut. Duarte (Parada del Metro María Montes)"
-            ],
-            "Independencia 10:00PM": [
-                "HNAS. MIRABAL ESQ. CHARLES G. (LA SIRENA, VILLA MELLA)"
-            ],
-            "Alimentadora SDE-Sede Central 7:45AM": [
-                "Calle JOSE HAZIM AZAR (Frente al Supermercado JUMBO)"
-            ],
-            "Alimentadora SDE-Sede Central 11:30AM": [
-                "PUENTE JUAN CARLOS (Después de cruzar) PARADA OMSA"
-            ],
-            "La Romana 2:00PM": [
-                "PINTURA AVE. ISABEL AGUIAR (Después de cruzar) PARADA OMSA"
-            ],
-            "La Romana 10:00PM": [
-                "Km. 9 Aut. Duarte (Parada del Metro María Montes)"
-            ],
-            "John F. Kennedy / San Vicente de Paul 1:00PM": [
-                "Km. 9 Aut. Duarte (Parada del Metro María Montes)"
-            ],
-            "John F. Kennedy / San Vicente de Paul 6:00PM": [
-                "Km. 9 Aut. Duarte (Parada del Metro María Montes)"
-            ],
-            "Charles de Gaulle - Villa Mella 6:00PM": [
-                "Calle JOSE HAZIM AZAR (Frente al Supermercado JUMBO)"
-            ],
-            "Charles de Gaulle - Villa Mella 10:00PM": [
-                "PINTURA AVE. ISABEL AGUIAR (Después de cruzar) PARADA OMSA"
-            ],
-            "San Pedro 2:00PM": [
-                "LOS TRES OJOS (Puente Peatonal)"
-            ],
-            "San Pedro 10:00PM": [
-                "Calle JOSE HAZIM AZAR (Frente al Supermercado JUMBO)"
-            ],
-            "Juan Bosch-Marginal Las Américas 1:00PM": [
-                "LOS TRES OJOS (Puente Peatonal)"
-            ],
-            "Juan Bosch-Marginal Las Américas 10:00PM": []
-        }
     }
 }
 
@@ -665,39 +602,6 @@ SATURDAY_ROUTES = {
             "Independencia (Sabado) 1:00PM",
             "Independencia (Sabado) 6:00PM"
         ],
-        "stops_by_route": {
-            "San Pedro-Sábado 6:00PM": [
-                "Calle JOSE HAZIM AZAR (Frente al Supermercado JUMBO)"
-            ],
-            "Juan Bosch-Marginal Las Américas (Sábados) 6:00PM": [
-                "PINTURA AVE. ISABEL AGUIAR (Después de cruzar) PARADA OMSA"
-            ],
-            "27 de febrero (Sábado) 1:00PM": [
-                "HNAS. MIRABAL ESQ. CHARLES G. (LA SIRENA, VILLA MELLA)"
-            ],
-            "27 de febrero (Sábado) 6:00PM": [
-                "Parque Central La Romana"
-            ],
-            "Charles de Gaulle-Villa Mella (Sábado) 1:00PM": [
-                "Km. 9 Aut. Duarte (Parada del Metro María Montes)"
-            ],
-            "Charles de Gaulle-Villa Mella (Sábado) 6:00PM": [
-                "KM 12 Av. Independencia (Frente a Plaza Luperón)"
-            ],
-            "La Romana (Sábados) 6:00PM": [
-                "PINTURA AVE. ISABEL AGUIAR (Después de cruzar) PARADA OMSA"
-            ],
-            "John F. Kennedy / San Vicente de Paul (Sabado) 1:00PM": [
-                "Km. 9 Aut. Duarte (Parada del Metro María Montes)"
-            ],
-            "John F. Kennedy / San Vicente de Paul (Sabado) 6:00PM": [
-                "Km. 9 Aut. Duarte (Parada del Metro María Montes)"
-            ],
-            "Independencia (Sabado) 1:00PM": [
-                "Parque Central La Romana"
-            ],
-            "Independencia (Sabado) 6:00PM": []
-        }
     }
 }
 

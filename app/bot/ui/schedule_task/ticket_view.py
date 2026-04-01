@@ -93,7 +93,6 @@ class TicketView(discord.ui.View):
             arrival_route=schedule_day["arrival_route"],
             pickup_stop=schedule_day["pickup_stop"],
             departure_route=schedule_day["departure_route"],
-            dropoff_stop=schedule_day["dropoff_stop"]
         )
 
         try:

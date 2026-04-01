@@ -76,7 +76,6 @@ async def save_schedule(
                     arrival_route=data["arrival_route"],
                     pickup_stop=data["pickup_stop"],
                     departure_route=data["departure_route"],
-                    dropoff_stop=data["dropoff_stop"],
                 )
             )
 
