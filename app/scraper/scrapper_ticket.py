@@ -38,7 +38,7 @@ class ITLAScraper:
                 self.fill_form(page),
                 self.confirm_reserve(page),
                 self.go_to_reserve_page(page),
-                # self.confirm_buy(page),
+                self.confirm_buy(page),
             ]
 
             for step in steps:
@@ -47,7 +47,6 @@ class ITLAScraper:
                     await browser.close()
                     return result
             
-            input()
             tickets = await ticket_downloader.download_tickets(
                 page, self.ticket.date
             )
@@ -55,7 +54,6 @@ class ITLAScraper:
             return ok(tickets)
 
     async def login(self, page):
-        print("🔐 Iniciando sesión...")
         try:
             session = get_session()
             repo = UserRepository(session)
@@ -64,7 +62,7 @@ class ITLAScraper:
             if user is None:
                 return error(
                     "Usuario no encontrado. Regístrate con /register"
-                    "antes de comprar un ticket."
+                    "antes de comprar los boletos."
                 )
 
             await page.goto(URL_CAMPUS)
@@ -81,7 +79,6 @@ class ITLAScraper:
                     ".btn-logout, button:has-text('Salir')",
                     timeout=5000
                 )
-                print("✅ Sesión iniciada")
                 return ok()
             except Exception:
                 pass
@@ -95,20 +92,17 @@ class ITLAScraper:
                     return error(f"Login fallido: {msg.strip()}")
                 return error("Login fallido. Verifica tu correo y contraseña.")
 
-            print("✅ Sesión iniciada")
             return ok()
 
         except Exception as e:
             return error(f"Error inesperado en login: {e}")
 
     async def go_to_transport(self, page):
-        print("🚌 Navegando a Transporte...")
         try:
             await page.locator("li.pointer a", has_text="Transporte").click()
             await page.wait_for_url("**/customers/home**", timeout=15000)
             await page.wait_for_load_state("domcontentloaded")
             await page.wait_for_timeout(2000)
-            print(f"✅ En transporte → {page.url}")
             return ok()
         except:
             return error(f"No se pudo acceder a Transporte")
@@ -132,7 +126,6 @@ class ITLAScraper:
             return error(f"No se pudo verificar el balance")
 
     async def fill_form(self, page):
-        print("📝 Llenando formulario...")
         try:
             await page.wait_for_selector("client-ticket-reserve", timeout=10000)
             await page.wait_for_selector("#reserve_date", timeout=10000)
@@ -153,23 +146,19 @@ class ITLAScraper:
                 page, "stop_out", "Parada de bajada"
             )
 
-            print("✅ Formulario completado")
             return ok()
         except:
             return error(f"Error al llenar el formulario")
 
     async def confirm_reserve(self, page):
-        print("🎟️ Confirmando reserva...")
         try:
             await page.get_by_role("button", name="Reservar").click()
             await page.wait_for_timeout(3000)
-            print("✅ Reserva realizada")
             return ok()
         except:
             return error(f"No se pudo reservar el ticket")
 
     async def go_to_reserve_page(self, page):
-        print("🔗 Navegando a Reservas...")
         try:
             await page.goto("https://transporte.itla.edu.do/customers/reservas")
             return ok()
@@ -177,7 +166,6 @@ class ITLAScraper:
             return error(f"No se pudo navegar a Reservas")
 
     async def confirm_buy(self, page):
-        print("💳 Confirmando compra...")
         try:
             fecha = datetime.strptime(
                 self.ticket.date, "%Y-%m-%d"
@@ -192,7 +180,6 @@ class ITLAScraper:
             await page.locator("button.swal2-confirm").click()
 
             await page.wait_for_timeout(2000)
-            print("✅ Compra confirmada")
             return ok()
         except:
             return error(f"No se pudo confirmar la compra")
@@ -206,7 +193,6 @@ class ITLAScraper:
         count = await options.count()
 
         if count == 0:
-            print(f"  ⚠️ Dropdown no abrió: {field_name}")
             await page.keyboard.press("Escape")
             return
         
@@ -220,12 +206,8 @@ class ITLAScraper:
             text = await options.nth(i).inner_text()
             if query in self._normalize(text):
                 await options.nth(i).click()
-                print(f"  ✓ {field_name}: {text.strip()}")
                 return
 
-        print(f"  ⚠️ '{search_text}' no encontrado en {field_name}:")
-        for i in range(min(count, 15)):
-            print(f"      [{i}] {(await options.nth(i).inner_text()).strip()}")
         await page.keyboard.press("Escape")
 
     @staticmethod

@@ -16,7 +16,7 @@ class Help(commands.Cog):
         embed = discord.Embed(
             title="📜 Lista de comandos",
             description="Comandos que le permitira interactuar con el bot.",
-            color=0xFFFFFF
+            color=discord.Color.darker_gray()
         )
 
         embed.add_field(

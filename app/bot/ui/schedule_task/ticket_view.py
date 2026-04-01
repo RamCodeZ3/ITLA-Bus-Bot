@@ -14,7 +14,7 @@ class TicketView(discord.ui.View):
         self.bot = bot
 
     @discord.ui.button(
-        label="🎫 Comprar Ticket",
+        label="🎫 Comprar boletos",
         style=discord.ButtonStyle.success,
     )
     async def buy(
@@ -65,6 +65,7 @@ class TicketView(discord.ui.View):
         )
         tomorrow = datetime.now() + timedelta(days=1)
         day_name = tomorrow.strftime("%A").lower()
+        session = get_session()
 
         schedule_repo = ScheduleRepository(session)
         schedule = schedule_repo.get_schedule_by_id_and_day(
@@ -72,7 +73,6 @@ class TicketView(discord.ui.View):
             day_name
         )
 
-        session = get_session()
         stock_repo = StockHistoryRepository(session)
         stock_repo.create(
             user_id=interaction.user.id,

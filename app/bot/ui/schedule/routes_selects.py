@@ -10,7 +10,7 @@ from utils.schedule_utils import (
 
 class DepartureRouteSelect(PagedView):
     def __init__(self, state: ScheduleState, page: int = 0):
-        super().__init__(state, "Ruta de salida (regreso)", page)
+        super().__init__(state, "Hora de Salida del ITLA", page)
 
     def get_items(self) -> list[str]:
         day = self.state.selected_days[self.state.current_day_index]
@@ -37,7 +37,7 @@ class DepartureRouteSelect(PagedView):
 
 class ArrivalStopSelect(PagedView):
     def __init__(self, state: ScheduleState, page: int = 0):
-        super().__init__(state, "Parada de subida (llegada)", page)
+        super().__init__(state, "Parada de subida al bus", page)
 
     def get_items(self) -> list[str]:
         day = self.state.selected_days[self.state.current_day_index]
@@ -55,7 +55,7 @@ class ArrivalStopSelect(PagedView):
                 description=(
                     f"**{DAYS_ES[day]}** — ¿En qué ruta regresas a casa?"
                 ),
-                color=discord.Color.orange(),
+                color=discord.Color.darker_gray(),
             ),
             view=DepartureRouteSelect(self.state),
         )
@@ -63,7 +63,7 @@ class ArrivalStopSelect(PagedView):
 
 class ArrivalRouteSelect(PagedView):
     def __init__(self, state: ScheduleState, page: int = 0):
-        super().__init__(state, "Ruta de llegada al ITLA", page)
+        super().__init__(state, "Hora de Llegada al ITLA", page)
 
     def get_items(self) -> list[str]:
         day = self.state.selected_days[self.state.current_day_index]
@@ -78,11 +78,11 @@ class ArrivalRouteSelect(PagedView):
         }
         await interaction.response.edit_message(
             embed=discord.Embed(
-                title="🚏 Parada de subida (llegada)",
+                title="Parada de subida al bus",
                 description=(
                     f"**{DAYS_ES[day]}** — ¿En qué parada subes al bus?"
                 ),
-                color=discord.Color.blue(),
+                color=discord.Color.darker_gray(),
             ),
             view=ArrivalStopSelect(self.state),
         )
