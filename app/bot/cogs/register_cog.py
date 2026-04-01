@@ -39,7 +39,6 @@ class Register(commands.Cog):
                 "Ocurrió un error al registrarte",
                 ephemeral=True
             )
-            print(f"Error en register: {e}")
         finally:
             session.close()
 

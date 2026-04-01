@@ -98,7 +98,6 @@ class TicketView(discord.ui.View):
         try:
             user = await self.bot.fetch_user(discord_id)
         except discord.NotFound:
-            print(f"Usuario {discord_id} no encontrado")
             return
 
         scraper = ITLAScraper(discord_id, tickets)

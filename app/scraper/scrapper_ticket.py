@@ -115,7 +115,6 @@ class ITLAScraper:
             balance = int(float(balance_text.replace("DOP", "").strip()))
 
             if balance >= TICKET_PRICE * 2:
-                print(f"✅ Balance suficiente: RD${balance}")
                 return ok(balance)
 
             return error(

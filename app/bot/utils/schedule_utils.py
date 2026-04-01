@@ -93,7 +93,6 @@ async def save_schedule(
             view=None,
         )
     except Exception as e:
-        print(f"Error guardando horario: {e}")
         await interaction.response.edit_message(
             content="❌ Ocurrió un error al guardar tu horario.",
             embed=None,
