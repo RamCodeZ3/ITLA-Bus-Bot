@@ -129,6 +129,10 @@ class DaysSelectView(discord.ui.View):
                 "Selecciona los días y presiona **Confirmar**.\n\n"
                 f"**Seleccionados:** {selected_text}"
             ),
-            color=discord.Color.blurple(),
+            color=discord.Color.darker_gray(),
         )
-        await interaction.response.edit_message(embed=embed, view=self)
+        await interaction.response.defer()
+        await interaction.edit_original_response(
+            embed=embed,
+            view=self,
+        )

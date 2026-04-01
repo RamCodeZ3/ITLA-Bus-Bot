@@ -9,4 +9,3 @@ class ScheduleDaysModel(BaseModel):
     arrival_route: Optional[str] = None
     pickup_stop: Optional[str] = None
     departure_route: Optional[str] = None
-    dropoff_stop: Optional[str] = None

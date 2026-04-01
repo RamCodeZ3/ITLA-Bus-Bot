@@ -52,7 +52,6 @@ class ScheduleDay(Base):
     arrival_route = Column(Text)
     pickup_stop = Column(Text)
     departure_route = Column(Text)
-    dropoff_stop = Column(Text)
 
     schedule = relationship("Schedule", back_populates="days")
     stock_history = relationship(

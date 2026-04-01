@@ -6,4 +6,3 @@ class TicketModel(BaseModel):
     arrival_route: str
     pickup_stop: str
     departure_route: str
-    dropoff_stop: str
