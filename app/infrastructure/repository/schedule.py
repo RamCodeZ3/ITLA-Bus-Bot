@@ -30,7 +30,6 @@ class ScheduleRepository:
             arrival_route=schedule_days.arrival_route,
             pickup_stop=schedule_days.pickup_stop,
             departure_route=schedule_days.departure_route,
-            dropoff_stop=schedule_days.dropoff_stop,
         )
         self.session.add(schedule_day)
         self.session.commit()
@@ -68,5 +67,4 @@ class ScheduleRepository:
             "arrival_route": schedule_day.arrival_route,
             "pickup_stop": schedule_day.pickup_stop,
             "departure_route": schedule_day.departure_route,
-            "dropoff_stop": schedule_day.dropoff_stop,
         }

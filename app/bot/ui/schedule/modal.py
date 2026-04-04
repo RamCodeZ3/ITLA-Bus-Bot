@@ -19,7 +19,7 @@ class TermModal(discord.ui.Modal, title="Configurar Horario"):
                 "Selecciona los días y presiona **Confirmar**.\n\n"
                 "**Seleccionados:** Ninguno"
             ),
-            color=discord.Color.blurple(),
+            color=discord.Color.darker_gray(),
         )
         await interaction.response.send_message(
             embed=embed,

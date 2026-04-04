@@ -43,7 +43,7 @@ def day_embed(day: str, index: int, total: int) -> discord.Embed:
             f"Día {index + 1} de {total} ({tipo})\n\n"
             "¿En qué ruta llegas al ITLA?"
         ),
-        color=discord.Color.blue(),
+        color=discord.Color.darker_gray(),
     )
 
 
@@ -76,7 +76,6 @@ async def save_schedule(
                     arrival_route=data["arrival_route"],
                     pickup_stop=data["pickup_stop"],
                     departure_route=data["departure_route"],
-                    dropoff_stop=data["dropoff_stop"],
                 )
             )
 
@@ -89,12 +88,11 @@ async def save_schedule(
             embed=discord.Embed(
                 title="✅ Horario configurado",
                 description=f"**Período:** {state.term}\n\n{days_list}",
-                color=discord.Color.green(),
+                color=discord.Color.darker_gray(),
             ),
             view=None,
         )
     except Exception as e:
-        print(f"Error guardando horario: {e}")
         await interaction.response.edit_message(
             content="❌ Ocurrió un error al guardar tu horario.",
             embed=None,

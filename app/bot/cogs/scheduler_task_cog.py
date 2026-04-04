@@ -76,10 +76,6 @@ class SchedulerTask(commands.Cog):
         if self.last_notified_date == today:
             return
 
-        print(
-            "[SchedulerTask] Bot reiniciado despues de la hora de notificacion,"
-            " enviando notificaciones pendientes..."
-        )
         self.last_notified_date = today
         tomorrow_day = NEXT_DAY_MAP[now.weekday()]
         await self.notify_users(tomorrow_day)
@@ -93,11 +89,6 @@ class SchedulerTask(commands.Cog):
             users = user_repo.get_users_with_day(day)
             today = datetime.now().date()
 
-            print(
-                f"[SchedulerTask] Notificando {len(users)} usuarios"
-                f" para mañana ({DAYS_ES[day]})"
-            )
-
             for user_data in users:
                 # Verificar si ya existe un StockHistory para este
                 # schedule_day en la fecha de mañana
@@ -106,10 +97,6 @@ class SchedulerTask(commands.Cog):
                     date=today
                 )
                 if already_notified:
-                    print(
-                        f"[SchedulerTask] Usuario {user_data['discord_id']}"
-                        f" ya fue notificado hoy, omitiendo."
-                    )
                     continue
 
                 await self._send_dm(user_data, day)
@@ -130,9 +117,9 @@ class SchedulerTask(commands.Cog):
                 title=f"🚌 Recordatorio — Mañana es {day_name}",
                 description=(
                     "Tienes clases mañana. "
-                    "¿Deseas comprar tu ticket de transporte?"
+                    "¿Deseas comprar tus boletos de transporte?"
                 ),
-                color=discord.Color.blue(),
+                color=discord.Color.darker_gray(),
             )
             embed.add_field(
                 name="🟢 Llegada",
@@ -146,11 +133,10 @@ class SchedulerTask(commands.Cog):
                 name="🔴 Salida",
                 value=(
                     f"**Ruta:** {user_data['departure_route']}\n"
-                    f"**Parada:** {user_data['dropoff_stop']}"
                 ),
                 inline=False,
             )
-            embed.set_footer(text="ITLA Bot • Sistema de Tickets")
+            embed.set_footer(text="ITLA Bot • Sistema de Boletos")
 
             await user.send(embed=embed, view=TicketView(user_data, self.bot))
 

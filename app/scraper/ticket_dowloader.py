@@ -5,15 +5,13 @@ from playwright.async_api import Page, Download
 
 class TicketDownloader:
 
-    RADIO_VALUE_ENTRY = "1"   # Descargar ticket de entrada
-    RADIO_VALUE_EXIT  = "0"   # Descargar ticket de salida
+    RADIO_VALUE_ENTRY = "1" # Descargar ticket de entrada
+    RADIO_VALUE_EXIT  = "0" # Descargar ticket de salida
 
     async def download_tickets(self, page: Page, ticket_date: str) -> list[dict]:
 
         date_label = datetime.strptime(ticket_date, "%Y-%m-%d").strftime("%d-%m-%Y")
         downloaded: list[dict] = []
-
-        print(f"📥  Descargando boletos para la fecha: {date_label}")
 
         entry_result = await self._download_one(
             page=page,
@@ -33,10 +31,6 @@ class TicketDownloader:
         )
         downloaded.append(exit_result)
 
-        print("✅  Descarga completada:")
-        for result in downloaded:
-            print(f"    • {result['filename']} ({result['buffer'].getbuffer().nbytes} bytes)")
-
         return downloaded
 
     async def _download_one(
@@ -47,7 +41,6 @@ class TicketDownloader:
         ticket_type: str,
         filename: str,
     ) -> dict:
-        print(f"\n  ── Descargando boleto de {ticket_type.upper()} ──")
 
         await self._click_qr_button(page, date_label)
         await self._wait_for_modal(page)
@@ -66,7 +59,6 @@ class TicketDownloader:
         )
         await row.wait_for(state="visible", timeout=8000)
         await row.locator("plantilla-qr a.btn-light-primary").click()
-        print(f"  ✓ Botón QR presionado para la fecha: {date_label}")
 
     async def _wait_for_modal(self, page: Page) -> None:
         await page.wait_for_selector(
@@ -74,7 +66,6 @@ class TicketDownloader:
             state="visible",
             timeout=8000,
         )
-        print("  ✓ Modal de descarga visible")
 
     async def _select_radio(
         self, page: Page, radio_value: str, ticket_type: str
@@ -83,13 +74,11 @@ class TicketDownloader:
             f"div.swal2-radio input[name='swal2-radio'][value='{radio_value}']"
         )
         await radio.check()
-        print(f"  ✓ Opción seleccionada: {ticket_type} (value={radio_value})")
 
     async def _click_ok_and_load(self, page: Page, filename: str) -> io.BytesIO:
 
         async with page.expect_download(timeout=15000) as download_info:
             await page.locator("button.swal2-confirm").click()
-            print(f"  ✓ OK presionado — esperando descarga de '{filename}'...")
 
         download: Download = await download_info.value
 
@@ -99,6 +88,5 @@ class TicketDownloader:
             buffer = io.BytesIO(f.read())
 
         buffer.seek(0)
-        print(f"  ✓ Archivo cargado en memoria: '{filename}'")
 
         return buffer
