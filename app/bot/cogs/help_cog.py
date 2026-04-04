@@ -39,7 +39,6 @@ class Help(commands.Cog):
                 "\u20031. 🕐 Hora de llegada al ITLA\n"
                 "\u20032. 🚌 Parada de recogida\n"
                 "\u20033. 🕓 Hora de salida del ITLA\n"
-                "\u20034. 🏁 Parada final de la ruta"
             ),
             inline=False
         )

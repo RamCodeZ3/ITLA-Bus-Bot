@@ -25,7 +25,7 @@ DAYS_ES = {
     "saturday": "sábado",
 }
 
-TASK_HOUR = 10
+TASK_HOUR = 11
 TASK_MINUTE = 0
 
 

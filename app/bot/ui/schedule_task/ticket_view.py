@@ -59,7 +59,7 @@ class TicketView(discord.ui.View):
     ):
         self.disable_all()
         await interaction.response.edit_message(
-            content="👍 Entendido, no se comprará ticket.",
+            content="👍 Entendido, no se comprará los boletos de mañana.",
             embed=None,
             view=self,
         )
