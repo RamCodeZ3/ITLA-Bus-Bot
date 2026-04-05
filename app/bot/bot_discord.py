@@ -8,7 +8,7 @@ from discord.ext import commands
 class BotITLATicket(commands.Bot):
     def __init__(self):
         load_dotenv()
-        self.token = os.getenv("TOKEN")
+        self.token = os.getenv("DISCORD_TOKEN")
         self.cogs_dir = os.path.join(os.path.dirname(__file__), "cogs")
 
         intents = discord.Intents.default()
