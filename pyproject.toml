@@ -1,7 +1,7 @@
 [project]
-name = "bot-ticket-itla"
-version = "0.1.0"
-description = "Add your description here"
+name = "itla-bus-bot"
+version = "1.0.0"
+description = "Bot de Discord para reserva automática de boletos del sistema de transporte del ITLA"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
