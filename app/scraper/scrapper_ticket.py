@@ -27,7 +27,7 @@ class ITLAScraper:
     async def run(self):
         async with async_playwright() as p:
             browser = await p.chromium.launch(
-                headless=False,
+                headless=True,
                 args=[
                     "--no-sandbox",
                     "--disable-dev-shm-usage",
@@ -58,8 +58,6 @@ class ITLAScraper:
                 self.balance_verification(page),
                 self.fill_form(page),
                 self.confirm_reserve(page),
-                self.go_to_reserve_page(page),
-                self.confirm_buy(page),
             ]
 
             for step in steps:
@@ -69,6 +67,9 @@ class ITLAScraper:
                     return result
             
             await context.unroute("**/*")
+            await self.go_to_reserve_page(page)
+            await self.confirm_buy(page)
+            
             tickets = await ticket_downloader.download_tickets(
                 page, self.ticket.date
             )
