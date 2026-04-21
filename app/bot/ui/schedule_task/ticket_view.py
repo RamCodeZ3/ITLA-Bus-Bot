@@ -106,6 +106,40 @@ class TicketView(discord.ui.View):
             status="refused",
         )
         session.close()
+    
+    @discord.ui.button(
+        label="⏱️ Preguntar más tarde",
+        style=discord.ButtonStyle.gray,
+    )
+    async def later(
+        self,
+        interaction: discord.Interaction,
+        button: discord.ui.Button,
+    ):
+        self.disable_all()
+        await interaction.response.edit_message(
+            content="Se le recordada más tarde para comprar los boletos",
+            embed=None,
+            view=self,
+        )
+
+        tomorrow = datetime.now() + timedelta(days=1)
+        day_name = tomorrow.strftime("%A").lower()
+
+        session = get_session()
+        schedule_repo = ScheduleRepository(session)
+        schedule = schedule_repo.get_schedule_by_id_and_day(
+            interaction.user.id,
+            day_name
+        )
+        stock_repo = StockHistoryRepository(session)
+        stock_repo.create(
+            user_id=interaction.user.id,
+            schedule_day_id=schedule["schedule_day_id"],
+            date=datetime.now().date(),
+            status="pending",
+        )
+        session.close()
 
     def disable_all(self):
         for item in self.children:
