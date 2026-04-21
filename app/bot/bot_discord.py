@@ -19,16 +19,15 @@ class BotITLATicket(commands.Bot):
         super().__init__(command_prefix="/", intents=intents)
 
     async def setup_hook(self):
-        """Se ejecuta automáticamente antes de conectarse al gateway."""
         await self.load_cogs()
-
-    async def on_ready(self):
-        print(f"Bot conectado y funcionando: {self.user}")
         try:
             synced = await self.tree.sync()
-            print(f"{len(synced)} Slash Commands sincronizados")
+            print(f"[Bot] {len(synced)} slash commands sincronizados")
         except Exception as e:
-            print(f"Error al sincronizar comandos: {e}")
+            print(f"[Bot] Error al sincronizar comandos: {e}")
+
+    async def on_ready(self):
+        print(f"[Bot] Conectado como {self.user}")
 
     async def load_cogs(self):
         bot_dir = os.path.dirname(__file__)
@@ -40,8 +39,9 @@ class BotITLATicket(commands.Bot):
                 cog_name = f"cogs.{filename[:-3]}"
                 try:
                     await self.load_extension(cog_name)
+                    print(f"[Bot] Cog cargado: {cog_name}")
                 except Exception as e:
-                    print(f"Error cargando {cog_name}: {e}")
-    
+                    print(f"[Bot] Error cargando {cog_name}: {e}")
+
     def run_bot(self):
         self.run(self.token)

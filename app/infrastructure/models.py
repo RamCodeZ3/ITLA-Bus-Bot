@@ -69,6 +69,7 @@ class StockHistory(Base):
     date = Column(Date, nullable=False)
     status = Column(String(20), default="pending")  # pending | bought | refused
     created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
 
     user = relationship("User", back_populates="stock_history")
     schedule_day = relationship("ScheduleDay", back_populates="stock_history")

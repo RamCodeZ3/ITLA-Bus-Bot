@@ -47,3 +47,23 @@ class UserRepository:
             }
             for user, schedule_day in results
         ]
+    
+    def get_user_data_by_schedule_day_id(self, schedule_day_id: int) -> dict | None:
+        result = (
+            self.session.query(User, ScheduleDay)
+            .join(Schedule, Schedule.user_id == User.id)
+            .join(ScheduleDay, ScheduleDay.schedule_id == Schedule.id)
+            .filter(ScheduleDay.id == schedule_day_id)
+            .first()
+        )
+        if result is None:
+            return None
+        user, schedule_day = result
+        return {
+            "discord_id": user.id,
+            "schedule_day_id": schedule_day.id,
+            "day": schedule_day.day,
+            "arrival_route": schedule_day.arrival_route,
+            "pickup_stop": schedule_day.pickup_stop,
+            "departure_route": schedule_day.departure_route,
+        }
