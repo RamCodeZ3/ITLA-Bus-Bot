@@ -65,11 +65,16 @@ class ITLAScraper:
                 if not result["success"]:
                     await browser.close()
                     return result
-            
+
             await context.unroute("**/*")
+
             await self.go_to_reserve_page(page)
-            await self.confirm_buy(page)
-            
+
+            confirm_result = await self.confirm_buy(page)
+            if not confirm_result["success"]:
+                await browser.close()
+                return confirm_result
+
             tickets = await ticket_downloader.download_tickets(
                 page, self.ticket.date
             )
@@ -179,7 +184,11 @@ class ITLAScraper:
 
     async def go_to_reserve_page(self, page):
         try:
-            await page.goto("https://transporte.itla.edu.do/customers/reservas")
+            await page.goto(
+                "https://transporte.itla.edu.do/customers/reservas",
+                wait_until="domcontentloaded",
+            )
+            await page.wait_for_selector("tr.datatable-row", timeout=10000)
             return ok()
         except:
             return error(f"No se pudo navegar a Reservas")
@@ -198,11 +207,7 @@ class ITLAScraper:
             await page.wait_for_selector(".swal2-popup", timeout=5000)
             await page.locator("button.swal2-confirm").click()
 
-            await page.wait_for_selector(
-                ".swal2-popup",
-                state="hidden",
-                timeout=5000
-            )
+            await page.wait_for_timeout(2000)
             return ok()
         except:
             return error(f"No se pudo confirmar la compra")
