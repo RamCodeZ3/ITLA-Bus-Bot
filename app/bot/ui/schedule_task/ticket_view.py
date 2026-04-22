@@ -208,7 +208,7 @@ class RetryView(discord.ui.View):
 
     @discord.ui.button(
         label="🔄 Intentar de nuevo",
-        style=discord.ButtonStyle.primary,
+        style=discord.ButtonStyle.success,
     )
     async def retry(
         self,
@@ -251,7 +251,7 @@ class RetryView(discord.ui.View):
                 pass
 
     @discord.ui.button(
-        label="🚫 Cancelar",
+        label="❌ Cancelar",
         style=discord.ButtonStyle.danger,
     )
     async def cancel(
