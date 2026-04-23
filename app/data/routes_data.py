@@ -50,7 +50,6 @@ WEEKDAY_ROUTES = {
                 "PINTURA AVE. ISABEL AGUIAR (Después de cruzar) PARADA OMSA",
                 "SECRETARIA FUERZAS ARMADAS PARADA OMSA",
                 "AVE. CAONABO (Después de cruzar) PARADA OMSA",
-                "AVE. PRIVADA (Después de cruzar) PARADA OMSA",
                 "AVE. NÚÑEZ DE CÁCERES (Después de cruzar) PARADA OMSA",
                 "AVE. DR. ARTURO F. DEFILLÓ (Después de cruzar) PARADA OMSA",
                 "AVE. WINSTON CHURCHILL (Después de cruzar) PARADA OMSA",
@@ -58,15 +57,16 @@ WEEKDAY_ROUTES = {
                 "AVE. TIRADENTE (Después de cruzar) PARADA OMSA",
                 "AVE. MÁXIMO GÓMEZ (Después de cruzar) PARADA OMSA",
                 "AVE. LEOPOLDO NAVARRO (Después de cruzar) PARADA OMSA",
+                "AVE. MÉXICO (Después de cruzar la Duarte) PARADA OMSA",
                 "AVE. VENEZUELA (Después de cruzar) PARADA OMSA",
                 "AVE. SABANA LARGA (Antes de Cruzar)",
-                "BOMBA SHELL – FRENTE AL DARÍO CONTRERAS",
                 "LOS TRES OJOS (Puente Peatonal)",
                 "PUENTE JUAN CARLOS (Después de cruzar) PARADA OMSA",
                 "ITLA Sede Central (última parada)",
                 "AVE. MÉXICO ( Club San Carlos) PARADA DE LA OMSA",
-                "AVE. MÉXICO (Después de cruzar la Duarte) PARADA OMSA",
-                "Calle Real (Después de cruzar la 25 de Febrero) PARADA OMSA"
+                "AVE. DR. DELGADO DON BOSCO",
+                "Calle Real (Después de cruzar la 25 de Febrero) PARADA OMSA",
+                "AVE. MÉXICO ( SAN CARLOS- BOMBA SHELL)"
             ],
             "27 de Febrero 2:00PM": [
                 "HNAS. MIRABAL ESQ. CHARLES G. (LA SIRENA, VILLA MELLA)",
