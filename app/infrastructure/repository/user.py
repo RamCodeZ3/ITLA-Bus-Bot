@@ -21,6 +21,25 @@ class UserRepository:
         self.session.commit()
         self.session.refresh(user)
         return user
+    
+    def update(
+            self,
+            discord_id,
+            email,
+            password,
+        ):
+        user = self.session.query(User).filter_by(id=discord_id).first()
+
+        if user is None:
+            return None
+        
+        user.email = email
+        user.password = password
+
+        self.session.commit()
+        self.session.refresh(user)
+
+        return user
 
     def get_by_discord_id(self, discord_id: int) -> User | None:
         return self.session.query(User).filter_by(
