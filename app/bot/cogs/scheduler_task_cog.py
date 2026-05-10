@@ -96,7 +96,7 @@ class SchedulerTask(commands.Cog):
                     schedule_day_id=user_data["schedule_day_id"],
                     date=today
                 )
-                if already_notified:
+                if already_notified and already_notified.status != "failed":
                     continue
 
                 await self._send_dm(user_data, day)

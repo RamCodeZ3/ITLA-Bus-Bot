@@ -19,6 +19,13 @@ def error(message: str):
     return {"success": False, "data": None, "error": message}
 
 
+async def _block_resources(route):
+    if route.request.resource_type in ["stylesheet", "font", "media"]:
+        await route.abort()
+    else:
+        await route.continue_()
+
+
 class ITLAScraper:
     def __init__(self, discord_id: int, ticket: TicketModel):
         self.discord_id = discord_id
@@ -32,23 +39,12 @@ class ITLAScraper:
                     "--no-sandbox",
                     "--disable-dev-shm-usage",
                     "--disable-gpu",
-                    "--disable-images",
-                    "--blink-settings=imagesEnabled=false",
                 ]
             )
             context = await browser.new_context()
 
-            await context.route(
-                "**/*",
-                lambda route: route.abort()
-                if route.request.resource_type in [
-                    "image",
-                    "stylesheet",
-                    "font",
-                    "media"
-                ]
-                else route.continue_()
-            )
+            await context.route("**/*", _block_resources)
+
             page = await context.new_page()
             ticket_downloader = TicketDownloader()
 
@@ -65,11 +61,16 @@ class ITLAScraper:
                 if not result["success"]:
                     await browser.close()
                     return result
-            
-            await context.unroute("**/*")
+
+            await context.unroute("**/*", _block_resources)
+
             await self.go_to_reserve_page(page)
-            await self.confirm_buy(page)
-            
+
+            confirm_result = await self.confirm_buy(page)
+            if not confirm_result["success"]:
+                await browser.close()
+                return confirm_result
+
             tickets = await ticket_downloader.download_tickets(
                 page, self.ticket.date
             )
@@ -154,7 +155,7 @@ class ITLAScraper:
             await page.locator("#reserve_date").fill(self.ticket.date)
 
             await self._ngx_select(
-                page, "time_in", "Ruta de llegada", self.ticket.arrival_route 
+                page, "time_in", "Ruta de llegada", self.ticket.arrival_route
             )
             await self._ngx_select(
                 page, "stop_in", "Parada de recogida", self.ticket.pickup_stop
@@ -179,7 +180,11 @@ class ITLAScraper:
 
     async def go_to_reserve_page(self, page):
         try:
-            await page.goto("https://transporte.itla.edu.do/customers/reservas")
+            await page.goto(
+                "https://transporte.itla.edu.do/customers/reservas",
+                wait_until="domcontentloaded",
+            )
+            await page.wait_for_selector("tr.datatable-row", timeout=10000)
             return ok()
         except:
             return error(f"No se pudo navegar a Reservas")
@@ -198,11 +203,7 @@ class ITLAScraper:
             await page.wait_for_selector(".swal2-popup", timeout=5000)
             await page.locator("button.swal2-confirm").click()
 
-            await page.wait_for_selector(
-                ".swal2-popup",
-                state="hidden",
-                timeout=5000
-            )
+            await page.wait_for_timeout(2000)
             return ok()
         except:
             return error(f"No se pudo confirmar la compra")
@@ -218,7 +219,7 @@ class ITLAScraper:
         if count == 0:
             await page.keyboard.press("Escape")
             return
-        
+
         if count == 1:
             text = await options.first.inner_text()
             await options.first.click()
