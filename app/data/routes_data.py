@@ -554,6 +554,7 @@ SATURDAY_ROUTES = {
                 "Final del Recorrido ITLA La Caleta"
             ],
             "John F. Kennedy / San Vicente de Paul (Sabado) 9:00AM": [
+                "Av. San Vicente de Paul esq. Carretera de Mendosa (Plaza Galerías del Este)",
                 "KM 12 Av. Independencia (Frente a Plaza Luperón)",
                 "KM 11 (Funeraria municipal)",
                 "KM 10 1/2 (Residencial Atlántida)",

@@ -19,6 +19,13 @@ def error(message: str):
     return {"success": False, "data": None, "error": message}
 
 
+async def _block_resources(route):
+    if route.request.resource_type in ["stylesheet", "font", "media"]:
+        await route.abort()
+    else:
+        await route.continue_()
+
+
 class ITLAScraper:
     def __init__(self, discord_id: int, ticket: TicketModel):
         self.discord_id = discord_id
@@ -32,23 +39,12 @@ class ITLAScraper:
                     "--no-sandbox",
                     "--disable-dev-shm-usage",
                     "--disable-gpu",
-                    "--disable-images",
-                    "--blink-settings=imagesEnabled=false",
                 ]
             )
             context = await browser.new_context()
 
-            await context.route(
-                "**/*",
-                lambda route: route.abort()
-                if route.request.resource_type in [
-                    "image",
-                    "stylesheet",
-                    "font",
-                    "media"
-                ]
-                else route.continue_()
-            )
+            await context.route("**/*", _block_resources)
+
             page = await context.new_page()
             ticket_downloader = TicketDownloader()
 
@@ -66,7 +62,7 @@ class ITLAScraper:
                     await browser.close()
                     return result
 
-            await context.unroute("**/*")
+            await context.unroute("**/*", _block_resources)
 
             await self.go_to_reserve_page(page)
 
@@ -159,7 +155,7 @@ class ITLAScraper:
             await page.locator("#reserve_date").fill(self.ticket.date)
 
             await self._ngx_select(
-                page, "time_in", "Ruta de llegada", self.ticket.arrival_route 
+                page, "time_in", "Ruta de llegada", self.ticket.arrival_route
             )
             await self._ngx_select(
                 page, "stop_in", "Parada de recogida", self.ticket.pickup_stop
@@ -223,7 +219,7 @@ class ITLAScraper:
         if count == 0:
             await page.keyboard.press("Escape")
             return
-        
+
         if count == 1:
             text = await options.first.inner_text()
             await options.first.click()
