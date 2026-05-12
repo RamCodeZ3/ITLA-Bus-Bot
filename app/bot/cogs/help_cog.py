@@ -23,7 +23,8 @@ class Help(commands.Cog):
             name= "**/register**",
             value=(
                 "El comando **/register** se utiliza para registrate con tus \n"
-                "crendeciales (correo y contraseña) del campus virtual."
+                "crendeciales (correo y contraseña) del campus virtual, tambien "
+                "lo puedes utiliza para actualizar las crendeciales"
             )
         )
 
