@@ -111,7 +111,7 @@ uv run python app/main.py
 
 Registra tu cuenta con las credenciales del **campus virtual del ITLA**.
 
-- Abre un modal donde ingresarás tu **correo** y **contraseña**.
+- Utilizara los parametros del comando para agregar tu **correo** y **contraseña**.
 - Las credenciales se almacenan de forma segura para realizar las reservas automáticas.
 
 ---
@@ -144,7 +144,7 @@ Usuario                          Bot
   │                               │
   ├──/set-schedule───────────────►│  Configura horario del cuatrimestre
   │                               │
-  │     (11:00 PM, día anterior)  │
+  │     (11:00 AM, día anterior)  │
   │◄── "¿Deseas comprar tus  ─────┤  Notificación automática
   │     boletos para mañana?"     │
   │                               │
