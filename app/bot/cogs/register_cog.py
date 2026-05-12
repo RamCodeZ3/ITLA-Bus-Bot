@@ -25,14 +25,37 @@ class Register(commands.Cog):
         session = get_session()
         try:
             repository = UserRepository(session)
-            repository.create(
-                discord_id=interaction.user.id,
-                email=email,
-                password=password, # Directo sin encriptar
-            )
-            await interaction.followup.send(
-                "✅ Te registraste de manera exitosa.", ephemeral=True
-            )
+            user = repository.get_by_discord_id(interaction.user.id)
+
+            if user is None:
+                repository.create(
+                    discord_id=interaction.user.id,
+                    email=email,
+                    password=password, # Directo sin encriptar
+                )
+                embed = discord.Embed(
+                    title="✅ Registro Exitoso",
+                    description="Te registraste de manera exitosa. Aquí están tus credenciales:",
+                    color=discord.Color.darker_gray()
+                )
+                embed.add_field(name="Email", value=email, inline=False)
+                embed.add_field(name="Contraseña", value=password, inline=False)
+                await interaction.followup.send(embed=embed, ephemeral=True)
+            else:
+                repository.update(
+                    discord_id=interaction.user.id,
+                    email=email,
+                    password=password
+                )
+                embed = discord.Embed(
+                    title="✅ Credenciales Actualizadas",
+                    description="Se actualizaron tus credenciales de manera exitosa. Aquí están tus nuevas credenciales:",
+                    color=discord.Color.darker_gray()
+                )
+                embed.add_field(name="Email", value=email, inline=False)
+                embed.add_field(name="Contraseña", value=password, inline=False)
+                await interaction.followup.send(embed=embed, ephemeral=True)
+            
         except Exception as e:
             await interaction.followup.send(
                 "❌ Ocurrió un error al registrarte.", ephemeral=True
