@@ -3,7 +3,6 @@ from discord.ext import commands, tasks
 from datetime import datetime, timedelta
 from infrastructure.database import get_session
 from infrastructure.repository.stock_history import StockHistoryRepository
-from infrastructure.repository.schedule import ScheduleRepository
 from infrastructure.repository.user import UserRepository
 from ui.schedule_task.ticket_view import TicketView
 
@@ -79,8 +78,6 @@ class ReminderTask(commands.Cog):
             )
             embed.set_footer(text="ITLA Bot • Sistema de Boletos")
 
-            # Reutiliza el mismo TicketView — si vuelve a poner pendiente
-            # updated_at se actualiza y en 1 hora el loop pregunta de nuevo
             await user.send(embed=embed, view=TicketView(user_data, self.bot))
 
         except discord.Forbidden:

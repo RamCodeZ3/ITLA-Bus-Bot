@@ -76,5 +76,5 @@ class StockHistoryRepository:
         stock = self.session.query(StockHistory).filter_by(id=stock_id).first()
         if stock:
             stock.status = status
-            stock.updated_at = datetime.now()  # ← importante para reiniciar el timer
+            stock.updated_at = datetime.now()
             self.session.commit()
