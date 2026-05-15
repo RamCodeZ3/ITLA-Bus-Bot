@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 
-class TicketModel(BaseModel):
+class TicketSchema(BaseModel):
     date: str
     arrival_route: str
     pickup_stop: str

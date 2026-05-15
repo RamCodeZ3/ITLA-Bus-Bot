@@ -4,7 +4,7 @@ from infrastructure.database import get_session
 from infrastructure.repository.stock_history import StockHistoryRepository
 from infrastructure.repository.schedule import ScheduleRepository
 from scraper.scrapper_ticket import ITLAScraper
-from models.ticket_model import TicketModel
+from schemas.ticket_schema import TicketSchema
 
 
 class TicketView(discord.ui.View):
@@ -165,7 +165,7 @@ class TicketView(discord.ui.View):
     async def _buy_tickets(self, discord_id: int, schedule_day: dict):
         tomorrow = (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d")
 
-        ticket = TicketModel(
+        ticket = TicketSchema(
             date=tomorrow,
             arrival_route=schedule_day["arrival_route"],
             pickup_stop=schedule_day["pickup_stop"],

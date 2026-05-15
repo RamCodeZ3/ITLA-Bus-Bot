@@ -4,7 +4,7 @@ from datetime import datetime
 from .ticket_dowloader import TicketDownloader
 from infrastructure.database import get_session
 from infrastructure.repository.user import UserRepository
-from models.ticket_model import TicketModel
+from schemas.ticket_schema import TicketSchema
 
 
 URL_CAMPUS = "https://campusvirtual.itla.edu.do"
@@ -27,7 +27,7 @@ async def _block_resources(route):
 
 
 class ITLAScraper:
-    def __init__(self, discord_id: int, ticket: TicketModel):
+    def __init__(self, discord_id: int, ticket: TicketSchema):
         self.discord_id = discord_id
         self.ticket = ticket
 
@@ -148,7 +148,10 @@ class ITLAScraper:
 
     async def fill_form(self, page):
         try:
-            await page.wait_for_selector("client-ticket-reserve", timeout=10000)
+            await page.wait_for_selector(
+                "client-ticket-reserve",
+                timeout=10000
+            )
             await page.wait_for_selector("#reserve_date", timeout=10000)
 
             await page.locator("#EntradaySalida").check()
@@ -211,7 +214,10 @@ class ITLAScraper:
     async def _ngx_select(self, page, field_id, field_name, search_text=None):
         selector = f"ngx-select-dropdown#{field_id}"
         await page.locator(f"{selector} .ngx-dropdown-button").click()
-        await page.wait_for_selector(f"{selector} .available-item", timeout=5000)
+        await page.wait_for_selector(
+            f"{selector} .available-item",
+            timeout=5000
+        )
 
         options = page.locator(f"{selector} .available-item")
         count = await options.count()

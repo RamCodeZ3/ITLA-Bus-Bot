@@ -67,7 +67,10 @@ class UserRepository:
             for user, schedule_day in results
         ]
     
-    def get_user_data_by_schedule_day_id(self, schedule_day_id: int) -> dict | None:
+    def get_user_data_by_schedule_day_id(
+        self,
+        schedule_day_id: int
+        ) -> dict | None:
         result = (
             self.session.query(User, ScheduleDay)
             .join(Schedule, Schedule.user_id == User.id)

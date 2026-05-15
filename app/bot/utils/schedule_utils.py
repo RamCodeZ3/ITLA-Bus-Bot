@@ -3,7 +3,7 @@ from infrastructure.repository.user import UserRepository
 from infrastructure.repository.schedule import ScheduleRepository
 from infrastructure.database import get_session
 from data.routes_data import ROUTES_DATA
-from models.schedule_days_model import ScheduleDaysModel
+from schemas.schedule_days_schema import ScheduleDaysSchema
 
 
 WEEKDAYS = [
@@ -69,7 +69,7 @@ async def save_schedule(
 
         for day, data in state.days_data.items():
             schedule_repo.add_day(
-                ScheduleDaysModel(
+                ScheduleDaysSchema(
                     schedule_id=schedule.id,
                     day=day,
                     ticket_type="round_trip",
