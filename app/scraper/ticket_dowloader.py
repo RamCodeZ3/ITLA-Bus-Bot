@@ -8,9 +8,16 @@ class TicketDownloader:
     RADIO_VALUE_ENTRY = "1" # Descargar ticket de entrada
     RADIO_VALUE_EXIT  = "0" # Descargar ticket de salida
 
-    async def download_tickets(self, page: Page, ticket_date: str) -> list[dict]:
+    async def download_tickets(
+        self,
+        page: Page,
+        ticket_date: str
+        ) -> list[dict]:
 
-        date_label = datetime.strptime(ticket_date, "%Y-%m-%d").strftime("%d-%m-%Y")
+        date_label = datetime.strptime(
+            ticket_date,
+            "%Y-%m-%d"
+        ).strftime("%d-%m-%Y")
         downloaded: list[dict] = []
 
         entry_result = await self._download_one(
@@ -49,7 +56,11 @@ class TicketDownloader:
 
         await page.wait_for_timeout(1500)
 
-        return {"filename": filename, "ticket_type": ticket_type, "buffer": buffer}
+        return {
+            "filename": filename,
+            "ticket_type": ticket_type,
+            "buffer": buffer
+        }
 
     async def _click_qr_button(self, page: Page, date_label: str) -> None:
         row = page.locator("tr.datatable-row").filter(
@@ -75,7 +86,11 @@ class TicketDownloader:
         )
         await radio.check()
 
-    async def _click_ok_and_load(self, page: Page, filename: str) -> io.BytesIO:
+    async def _click_ok_and_load(
+        self,
+        page: Page,
+        filename: str
+    ) -> io.BytesIO:
 
         async with page.expect_download(timeout=15000) as download_info:
             await page.locator("button.swal2-confirm").click()

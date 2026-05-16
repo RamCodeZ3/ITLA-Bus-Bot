@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from infrastructure.models import Schedule, ScheduleDay, User
-from models.schedule_days_model import ScheduleDaysModel
+from schemas.schedule_days_schema import ScheduleDaysSchema
 
 
 class ScheduleRepository:
@@ -20,9 +20,12 @@ class ScheduleRepository:
         return schedule
 
     def get_active(self, user_id: int) -> Schedule | None:
-        return self.session.query(Schedule).filter_by(user_id=user_id, active=True).first()
+        return self.session.query(Schedule).filter_by(
+            user_id=user_id,
+            active=True
+        ).first()
 
-    def add_day(self, schedule_days: ScheduleDaysModel) -> ScheduleDay:
+    def add_day(self, schedule_days: ScheduleDaysSchema) -> ScheduleDay:
         schedule_day = ScheduleDay(
             schedule_id=schedule_days.schedule_id,
             day=schedule_days.day,
@@ -47,7 +50,11 @@ class ScheduleRepository:
             day=day
         ).first()
     
-    def get_schedule_by_id_and_day(self, discord_id: int, day: str) -> dict | None:
+    def get_schedule_by_id_and_day(
+            self,
+            discord_id: int,
+            day: str
+        ) -> dict | None:
         schedule_day = (
             self.session.query(ScheduleDay)
             .join(Schedule, Schedule.id == ScheduleDay.schedule_id)
