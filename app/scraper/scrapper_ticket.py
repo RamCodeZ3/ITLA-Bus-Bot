@@ -49,15 +49,20 @@ class ITLAScraper:
             ticket_downloader = TicketDownloader()
 
             steps = [
-                self.login(page),
-                self.go_to_transport(page),
-                self.balance_verification(page),
-                self.fill_form(page),
-                self.confirm_reserve(page),
+                ("login", self.login(page)),
+                ("go_to_transport", self.go_to_transport(page)),
+                ("balance_verification", self.balance_verification(page)),
+                ("fill_form", self.fill_form(page)),
+                ("confirm_reserve", self.confirm_reserve(page)),
             ]
 
-            for step in steps:
+            balance_result = 0
+            
+            for name, step in steps:
                 result = await step
+                if name == "balance_verification":
+                    balance_result = result["data"]
+                
                 if not result["success"]:
                     await browser.close()
                     return result
@@ -75,7 +80,8 @@ class ITLAScraper:
                 page, self.ticket.date
             )
             await browser.close()
-            return ok(tickets)
+            balance_result -= 60
+            return ok({"tickets":tickets, "balance": balance_result})
 
     async def login(self, page):
         try:
