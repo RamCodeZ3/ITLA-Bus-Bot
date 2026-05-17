@@ -1,6 +1,6 @@
-from sqlalchemy.orm import Session
 from infrastructure.models import Schedule, ScheduleDay, User
 from schemas.schedule_days_schema import ScheduleDaysSchema
+from sqlalchemy.orm import Session
 
 
 class ScheduleRepository:
@@ -9,10 +9,8 @@ class ScheduleRepository:
 
     def create(self, user_id: int, term: str) -> Schedule:
         self.session.query(Schedule).filter_by(
-            user_id=user_id,
-            active=True).update(
-                {"active": False}
-            )
+            user_id=user_id, active=True
+        ).update({"active": False})
         schedule = Schedule(user_id=user_id, term=term, active=True)
         self.session.add(schedule)
         self.session.commit()
@@ -20,10 +18,11 @@ class ScheduleRepository:
         return schedule
 
     def get_active(self, user_id: int) -> Schedule | None:
-        return self.session.query(Schedule).filter_by(
-            user_id=user_id,
-            active=True
-        ).first()
+        return (
+            self.session.query(Schedule)
+            .filter_by(user_id=user_id, active=True)
+            .first()
+        )
 
     def add_day(self, schedule_days: ScheduleDaysSchema) -> ScheduleDay:
         schedule_day = ScheduleDay(
@@ -40,26 +39,27 @@ class ScheduleRepository:
         return schedule_day
 
     def get_days(self, schedule_id: int) -> list[ScheduleDay]:
-        return self.session.query(ScheduleDay).filter_by(
-            schedule_id=schedule_id
-        ).all()
+        return (
+            self.session.query(ScheduleDay)
+            .filter_by(schedule_id=schedule_id)
+            .all()
+        )
 
     def get_day(self, schedule_id: int, day: str) -> ScheduleDay | None:
-        return self.session.query(ScheduleDay).filter_by(
-            schedule_id=schedule_id,
-            day=day
-        ).first()
-    
+        return (
+            self.session.query(ScheduleDay)
+            .filter_by(schedule_id=schedule_id, day=day)
+            .first()
+        )
+
     def get_schedule_by_id_and_day(
-            self,
-            discord_id: int,
-            day: str
-        ) -> dict | None:
+        self, discord_id: int, day: str
+    ) -> dict | None:
         schedule_day = (
             self.session.query(ScheduleDay)
             .join(Schedule, Schedule.id == ScheduleDay.schedule_id)
             .join(User, User.id == Schedule.user_id)
-            .filter(Schedule.active == True)
+            .filter(Schedule.active)
             .filter(User.id == discord_id)
             .filter(ScheduleDay.day == day)
             .first()

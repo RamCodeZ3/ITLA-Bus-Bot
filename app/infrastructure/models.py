@@ -1,5 +1,7 @@
 from datetime import datetime
+
 from sqlalchemy import (
+    BigInteger,
     Boolean,
     Column,
     Date,
@@ -8,7 +10,6 @@ from sqlalchemy import (
     Integer,
     String,
     Text,
-    BigInteger
 )
 from sqlalchemy.orm import DeclarativeBase, relationship
 
@@ -48,16 +49,15 @@ class ScheduleDay(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     schedule_id = Column(Integer, ForeignKey("schedules.id"), nullable=False)
     day = Column(String(10), nullable=False)  # monday | tuesday | ... | friday
-    ticket_type = Column(String(20), nullable=False)  # round_trip | arrival | departure
+    ticket_type = Column(
+        String(20), nullable=False
+    )  # round_trip | arrival | departure
     arrival_route = Column(Text)
     pickup_stop = Column(Text)
     departure_route = Column(Text)
 
     schedule = relationship("Schedule", back_populates="days")
-    stock_history = relationship(
-        "StockHistory",
-        back_populates="schedule_day"
-    )
+    stock_history = relationship("StockHistory", back_populates="schedule_day")
 
 
 class StockHistory(Base):
@@ -65,9 +65,13 @@ class StockHistory(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    schedule_day_id = Column(Integer, ForeignKey("schedule_days.id"), nullable=False)
+    schedule_day_id = Column(
+        Integer, ForeignKey("schedule_days.id"), nullable=False
+    )
     date = Column(Date, nullable=False)
-    status = Column(String(20), default="pending")  # pending | bought | refused
+    status = Column(
+        String(20), default="pending"
+    )  # pending | bought | refused
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
 

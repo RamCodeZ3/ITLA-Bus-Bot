@@ -9,5 +9,6 @@ dependencies = [
     "dotenv>=0.9.9",
     "playwright>=1.58.0",
     "pydantic>=2.12.5",
+    "ruff>=0.15.13",
     "sqlalchemy>=2.0.48",
 ]

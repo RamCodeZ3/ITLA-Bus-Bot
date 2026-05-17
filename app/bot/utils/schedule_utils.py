@@ -1,18 +1,11 @@
 import discord
-from infrastructure.repository.user import UserRepository
-from infrastructure.repository.schedule import ScheduleRepository
-from infrastructure.database import get_session
 from data.routes_data import ROUTES_DATA
+from infrastructure.database import get_session
+from infrastructure.repository.schedule import ScheduleRepository
+from infrastructure.repository.user import UserRepository
 from schemas.schedule_days_schema import ScheduleDaysSchema
 
-
-WEEKDAYS = [
-    "monday",
-    "tuesday",
-    "wednesday",
-    "thursday",
-    "friday"
-]
+WEEKDAYS = ["monday", "tuesday", "wednesday", "thursday", "friday"]
 ALL_DAYS = WEEKDAYS + ["saturday"]
 
 DAYS_ES = {
@@ -40,8 +33,7 @@ def day_embed(day: str, index: int, total: int) -> discord.Embed:
     return discord.Embed(
         title=f"🚌 Ruta de llegada — {DAYS_ES[day]}",
         description=(
-            f"Día {index + 1} de {total} ({tipo})\n\n"
-            "¿En qué ruta llegas al ITLA?"
+            f"Día {index + 1} de {total} ({tipo})\n\n¿En qué ruta llegas al ITLA?"
         ),
         color=discord.Color.darker_gray(),
     )
@@ -80,8 +72,7 @@ async def save_schedule(
             )
 
         days_list = "\n".join(
-            f"• **{DAYS_ES[d]}** — "
-            f"🟢 {v['arrival_route']} → 🔴 {v['departure_route']}"
+            f"• **{DAYS_ES[d]}** — 🟢 {v['arrival_route']} → 🔴 {v['departure_route']}"
             for d, v in state.days_data.items()
         )
         await interaction.response.edit_message(
@@ -92,7 +83,7 @@ async def save_schedule(
             ),
             view=None,
         )
-    except Exception as e:
+    except Exception:
         await interaction.response.edit_message(
             content="❌ Ocurrió un error al guardar tu horario.",
             embed=None,

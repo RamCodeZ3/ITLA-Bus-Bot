@@ -1,8 +1,9 @@
-import discord
 import os
 import sys
-from dotenv import load_dotenv
+
+import discord
 from discord.ext import commands
+from dotenv import load_dotenv
 
 
 class BotITLATicket(commands.Bot):

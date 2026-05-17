@@ -1,11 +1,11 @@
+from datetime import datetime, timedelta
+
 import discord
 from discord.ext import commands, tasks
-from datetime import datetime, timedelta
 from infrastructure.database import get_session
 from infrastructure.repository.stock_history import StockHistoryRepository
 from infrastructure.repository.user import UserRepository
 from ui.schedule_task.ticket_view import TicketView
-
 
 REMINDER_DELAY_HOURS = 1
 
@@ -81,9 +81,13 @@ class ReminderTask(commands.Cog):
             await user.send(embed=embed, view=TicketView(user_data, self.bot))
 
         except discord.Forbidden:
-            print(f"[ReminderTask] DMs cerrados para {user_data['discord_id']}")
+            print(
+                f"[ReminderTask] DMs cerrados para {user_data['discord_id']}"
+            )
         except Exception as e:
-            print(f"[ReminderTask] Error enviando reminder a {user_data['discord_id']}: {e}")
+            print(
+                f"[ReminderTask] Error enviando reminder a {user_data['discord_id']}: {e}"
+            )
 
 
 async def setup(bot: commands.Bot):
