@@ -53,7 +53,6 @@ class TicketView(discord.ui.View):
             )
             session.close()
         elif result and not result["success"]:
-            # Guardar el intento fallido
             session = get_session()
             stock_repo = StockHistoryRepository(session)
             stock_repo.create(
@@ -64,7 +63,6 @@ class TicketView(discord.ui.View):
             )
             session.close()
 
-            # Enviar embed de error con botones de reintento
             try:
                 user = await self.bot.fetch_user(interaction.user.id)
                 error_embed = self._build_error_embed(result["error"])
@@ -183,7 +181,8 @@ class TicketView(discord.ui.View):
         if not result["success"]:
             return result
 
-        tickets: list[dict] = result["data"]
+        tickets: list[dict] = result["data"]["tickets"]
+        balance: int = result["data"]["balance"]
         files = [
             discord.File(fp=t["buffer"], filename=t["filename"])
             for t in tickets
@@ -192,7 +191,8 @@ class TicketView(discord.ui.View):
             content=(
                 f"✅ ¡Boletos comprados para mañana **{tomorrow}**!\n"
                 f"🟢 Ruta de llegada: **{schedule_day['arrival_route']}**\n"
-                f"🔴 Ruta de salida: **{schedule_day['departure_route']}**"
+                f"🔴 Ruta de salida: **{schedule_day['departure_route']}**\n"
+                f"💰 Tu balance actual es de: **RD${balance}**"
             ),
             files=files,
         )
@@ -222,7 +222,6 @@ class RetryView(discord.ui.View):
             view=self,
         )
 
-        # Reutilizamos la lógica de compra desde TicketView
         ticket_view = TicketView(self.user_data, self.bot)
         result = await ticket_view._buy_tickets(
             interaction.user.id, self.schedule
@@ -239,7 +238,6 @@ class RetryView(discord.ui.View):
             )
             session.close()
         elif result and not result["success"]:
-            # Si falla de nuevo, vuelve a enviar el embed de error
             try:
                 user = await self.bot.fetch_user(interaction.user.id)
                 error_embed = ticket_view._build_error_embed(result["error"])
