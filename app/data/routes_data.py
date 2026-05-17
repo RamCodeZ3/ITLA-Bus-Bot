@@ -1,3 +1,4 @@
+# ruff: noqa: E501
 WEEKDAY_ROUTES = {
     "arrival": {
         "routes": [
@@ -21,7 +22,7 @@ WEEKDAY_ROUTES = {
             "Alimentadora SDE-Sede Central 3:20PM",
             "San Pedro 8:00AM",
             "San Pedro 4:00PM",
-            "Juan Bosch-Marginal Las Américas 8:00AM"
+            "Juan Bosch-Marginal Las Américas 8:00AM",
         ],
         "stops_by_route": {
             "27 de Febrero 8:00AM": [
@@ -44,7 +45,7 @@ WEEKDAY_ROUTES = {
                 "AVE. MÉXICO ( Club San Carlos) PARADA DE LA OMSA",
                 "AVE. DR. DELGADO DON BOSCO",
                 "Calle Real (Después de cruzar la 25 de Febrero) PARADA OMSA",
-                "AVE. MÉXICO ( SAN CARLOS- BOMBA SHELL)"
+                "AVE. MÉXICO ( SAN CARLOS- BOMBA SHELL)",
             ],
             "27 de Febrero 10:00AM": [
                 "PINTURA AVE. ISABEL AGUIAR (Después de cruzar) PARADA OMSA",
@@ -65,7 +66,7 @@ WEEKDAY_ROUTES = {
                 "ITLA Sede Central (última parada)",
                 "Calle Real (Después de cruzar la 25 de Febrero) PARADA OMSA",
                 "AVE. SABANA LARGA (Antes de Cruzar)",
-                "AVE. MÉXICO ( SAN CARLOS- BOMBA SHELL)"
+                "AVE. MÉXICO ( SAN CARLOS- BOMBA SHELL)",
             ],
             "27 de Febrero 2:00PM": [
                 "PINTURA AVE. ISABEL AGUIAR (Después de cruzar) PARADA OMSA",
@@ -87,7 +88,7 @@ WEEKDAY_ROUTES = {
                 "ITLA Sede Central (última parada)",
                 "AVE. MÉXICO ( Club San Carlos) PARADA DE LA OMSA",
                 "AVE. MÉXICO (Después de cruzar la Duarte) PARADA OMSA",
-                "Calle Real (Después de cruzar la 25 de Febrero) PARADA OMSA"
+                "Calle Real (Después de cruzar la 25 de Febrero) PARADA OMSA",
             ],
             "27 de Febrero 6:00PM": [
                 "PINTURA AVE. ISABEL AGUIAR (Después de cruzar) PARADA OMSA",
@@ -106,7 +107,7 @@ WEEKDAY_ROUTES = {
                 "AVE. SABANA LARGA (Antes de Cruzar)",
                 "BOMBA SHELL – FRENTE AL DARÍO CONTRERAS",
                 "LOS TRES OJOS (Puente Peatonal)",
-                "PUENTE JUAN CARLOS (Después de cruzar) PARADA OMSA"
+                "PUENTE JUAN CARLOS (Después de cruzar) PARADA OMSA",
             ],
             "Charles de Gaulle - Villa Mella 8:00AM": [
                 "HNAS. MIRABAL ESQ. CHARLES G. (LA SIRENA, VILLA MELLA)",
@@ -123,7 +124,7 @@ WEEKDAY_ROUTES = {
                 "CANSINO (FRENTE COLMADO COME Y BEBE)",
                 "MENDOZA (PARADA OMSA)",
                 "SUPERMERCADO BRAVO (ANTES DE LA CARRETERA MELLA)",
-                "CALLE TEODORO STANLEY (FRENTE AL TRIBUNAL LABORAL)"
+                "CALLE TEODORO STANLEY (FRENTE AL TRIBUNAL LABORAL)",
             ],
             "Charles de Gaulle - Villa Mella 2:00PM": [
                 "HNAS. MIRABAL ESQ. CHARLES G. (LA SIRENA, VILLA MELLA)",
@@ -138,7 +139,7 @@ WEEKDAY_ROUTES = {
                 "MENDOZA (PARADA OMSA)",
                 "SUPERMERCADO BRAVO (ANTES DE LA CARRETERA MELLA)",
                 "CALLE TEODORO STANLEY (FRENTE AL TRIBUNAL LABORAL)",
-                "CANSINO (FRENTE COLMADO COME Y BEBE)"
+                "CANSINO (FRENTE COLMADO COME Y BEBE)",
             ],
             "John F. Kennedy / San Vicente de Paul 2:00PM": [
                 "Km. 9 Aut. Duarte (Parada del Metro María Montes)",
@@ -166,7 +167,7 @@ WEEKDAY_ROUTES = {
                 "Av. San Vicente de Paul esq. Club de Leones (Plaza Alma Rosa)",
                 "Av. San Vicente esq. Nicolas Silfa Canario (Frente Colmado Super Pérez)",
                 "Terminal Santo Domingo Este (Extensión ITLA SDE)",
-                "Final del recorrido: Sede Central ITLA (ITLA Caleta)"
+                "Final del recorrido: Sede Central ITLA (ITLA Caleta)",
             ],
             "John F. Kennedy / San Vicente de Paul 6:00PM": [
                 "Km. 9 Aut. Duarte (Parada del Metro María Montes)",
@@ -194,7 +195,7 @@ WEEKDAY_ROUTES = {
                 "Av. San Vicente de Paul esq. Club de Leones (Plaza Alma Rosa)",
                 "Av. San Vicente esq. Nicolas Silfa Canario (Frente Colmado Super Pérez)",
                 "Terminal Santo Domingo Este (Extensión ITLA SDE)",
-                "Final del recorrido: Sede Central ITLA (ITLA Caleta)"
+                "Final del recorrido: Sede Central ITLA (ITLA Caleta)",
             ],
             "Charles de Gaulle - Villa Mella 10:00AM": [
                 "HNAS. MIRABAL ESQ. CHARLES G. (LA SIRENA, VILLA MELLA)",
@@ -208,7 +209,7 @@ WEEKDAY_ROUTES = {
                 "MENDOZA (PARADA OMSA)",
                 "SAN ISIDRO DESPUÉS DE CRUZAR (PARADA OMSA)",
                 "PARADA OMSA – FRENTE A LA PLANTA CREDIGAS (BRISA DEL ESTE)",
-                "PUENTE JUAN CARLOS"
+                "PUENTE JUAN CARLOS",
             ],
             "Juan Bosch-Marginal Las Américas 4:00PM": [
                 "PUENTE JUAN CARLOS (Después de cruzar) PARADA OMSA",
@@ -232,7 +233,7 @@ WEEKDAY_ROUTES = {
                 "Control de la OMSA, Ciudad Juan Bosch",
                 "Escuela primaria Hermanas Mirabal",
                 "La Capilla",
-                "ITLA Sede Central (última parada)"
+                "ITLA Sede Central (última parada)",
             ],
             "La Romana 8:00AM": [
                 "Parada Inicio: Parque Central (Frente a Parroquia Santa Rosa)",
@@ -240,7 +241,7 @@ WEEKDAY_ROUTES = {
                 "Av. Padre Abreu esq. C/ Héctor Quezada (Frente a Bomba Texaco)",
                 "Av. Profesor Juan Bosch (Frente Multiplaza)",
                 "Av. Profesor Juan Bosch (Frente a Yina Bambú Shop )",
-                "Final del Recorrido ITLA La Caleta"
+                "Final del Recorrido ITLA La Caleta",
             ],
             "La Romana 6:00PM": [
                 "Parada Inicio: Parque Central (Frente a Parroquia Santa Rosa)",
@@ -248,7 +249,7 @@ WEEKDAY_ROUTES = {
                 "Av. Padre Abreu esq. C/ Héctor Quezada (Frente a Bomba Texaco)",
                 "Av. Profesor Juan Bosch (Frente Multiplaza)",
                 "Av. Profesor Juan Bosch (Frente a Yina Bambú Shop )",
-                "Final del Recorrido ITLA La Caleta"
+                "Final del Recorrido ITLA La Caleta",
             ],
             "Independencia 8:00AM": [
                 "KM 12 Av. Independencia (Frente a Plaza Luperón)",
@@ -273,7 +274,7 @@ WEEKDAY_ROUTES = {
                 "Calle Palo Hincado esq. George Washington, Zona colonial",
                 "C/ Palo Hincado antes de cruzar Av. Simón Bolívar",
                 "Parada Espress: Terminal del Este (ITLA SDE)",
-                "ITLA Sede Central (última parada)"
+                "ITLA Sede Central (última parada)",
             ],
             "Independencia 4:00PM": [
                 "KM 12 Av. Independencia (Frente a Plaza Luperón)",
@@ -298,7 +299,7 @@ WEEKDAY_ROUTES = {
                 "Calle Palo Hincado esq. George Washington, Zona colonial",
                 "C/ Palo Hincado antes de cruzar Av. Simón Bolívar",
                 "Parada Espress: Terminal del Este (ITLA SDE)",
-                "ITLA Sede Central (última parada)"
+                "ITLA Sede Central (última parada)",
             ],
             "John F. Kennedy / San Vicente de Paul 8:00AM": [
                 "Km. 9 Aut. Duarte (Parada del Metro María Montes)",
@@ -326,7 +327,7 @@ WEEKDAY_ROUTES = {
                 "Av. San Vicente de Paul esq. Club de Leones (Plaza Alma Rosa)",
                 "Av. San Vicente esq. Nicolas Silfa Canario (Frente Colmado Super Pérez)",
                 "Terminal Santo Domingo Este (Extensión ITLA SDE)",
-                "Final del recorrido: Sede Central ITLA (ITLA Caleta)"
+                "Final del recorrido: Sede Central ITLA (ITLA Caleta)",
             ],
             "Charles de Gaulle - Villa Mella 6:00PM": [
                 "HNAS. MIRABAL ESQ. CHARLES G. (LA SIRENA, VILLA MELLA)",
@@ -343,7 +344,7 @@ WEEKDAY_ROUTES = {
                 "CANSINO (FRENTE COLMADO COME Y BEBE)",
                 "MENDOZA (PARADA OMSA)",
                 "SUPERMERCADO BRAVO (ANTES DE LA CARRETERA MELLA)",
-                "CALLE TEODORO STANLEY (FRENTE AL TRIBUNAL LABORAL)"
+                "CALLE TEODORO STANLEY (FRENTE AL TRIBUNAL LABORAL)",
             ],
             "Alimentadora SDE-Sede Central 12:00PM": [
                 "ITLA Sede Central (última parada)"
@@ -358,7 +359,7 @@ WEEKDAY_ROUTES = {
                 "AUTOPISTA LAS AMERICAS (Vistas de Caucedo, debajo del elevado.)",
                 "ITLA Sede Central (última parada)",
                 "AVE. INDEPENDENCIA (después de cruzar frente a McDonald)",
-                "AUTOPISTA LAS AMERICAS (Puente Peatonal frente a Claro)"
+                "AUTOPISTA LAS AMERICAS (Puente Peatonal frente a Claro)",
             ],
             "San Pedro 4:00PM": [
                 "Calle JOSE HAZIM AZAR (Frente al Supermercado JUMBO)",
@@ -367,7 +368,7 @@ WEEKDAY_ROUTES = {
                 "AUTOPISTA LAS AMERICAS (Frente a la parada de Boca Chica)",
                 "AUTOPISTA LAS AMERICAS (Puente Peatonal frente a Claro)",
                 "AUTOPISTA LAS AMERICAS (Vistas de Caucedo, debajo del elevado.)",
-                "ITLA Sede Central (última parada)"
+                "ITLA Sede Central (última parada)",
             ],
             "Juan Bosch-Marginal Las Américas 8:00AM": [
                 "PUENTE JUAN CARLOS (Después de cruzar) PARADA OMSA",
@@ -389,9 +390,9 @@ WEEKDAY_ROUTES = {
                 "Residencial Camino Verde, Ciudad Juan Bosch",
                 "Control de la OMSA, Ciudad Juan Bosch",
                 "La Capilla",
-                "Entrada de Cancela (planta de gas)"
-            ]
-        }
+                "Entrada de Cancela (planta de gas)",
+            ],
+        },
     },
     "departure": {
         "routes": [
@@ -415,9 +416,9 @@ WEEKDAY_ROUTES = {
             "San Pedro 2:00PM",
             "San Pedro 10:00PM",
             "Juan Bosch-Marginal Las Américas 1:00PM",
-            "Juan Bosch-Marginal Las Américas 10:00PM"
+            "Juan Bosch-Marginal Las Américas 10:00PM",
         ],
-    }
+    },
 }
 
 
@@ -434,7 +435,7 @@ SATURDAY_ROUTES = {
             "John F. Kennedy / San Vicente de Paul (Sabado) 2:00PM",
             "John F. Kennedy / San Vicente de Paul (Sabado) 9:00AM",
             "Independencia (Sabado) 9:00AM",
-            "Independencia (Sabado) 2:00PM"
+            "Independencia (Sabado) 2:00PM",
         ],
         "stops_by_route": {
             "27 de febrero (Sábado) 9:00AM": [
@@ -457,7 +458,7 @@ SATURDAY_ROUTES = {
                 "PUENTE JUAN CARLOS (Después de cruzar) PARADA OMSA",
                 "AVE. DR. DELGADO DON BOSCO",
                 "AVE. MÉXICO ( SAN CARLOS- BOMBA SHELL)",
-                "Calle Real (Después de cruzar la 25 de Febrero) PARADA OMSA"
+                "Calle Real (Después de cruzar la 25 de Febrero) PARADA OMSA",
             ],
             "27 de febrero (Sábado) 2:00PM": [
                 "AVE. NÚÑEZ DE CÁCERES (Después de cruzar) PARADA OMSA",
@@ -479,7 +480,7 @@ SATURDAY_ROUTES = {
                 "PUENTE JUAN CARLOS (Después de cruzar) PARADA OMSA",
                 "AVE. DR. DELGADO DON BOSCO",
                 "AVE. MÉXICO ( SAN CARLOS- BOMBA SHELL)",
-                "Calle Real (Después de cruzar la 25 de Febrero) PARADA OMSA"
+                "Calle Real (Después de cruzar la 25 de Febrero) PARADA OMSA",
             ],
             "Charles de Gaulle-Villa Mella (Sábado) 2:00PM": [
                 "HNAS. MIRABAL ESQ. CHARLES G. (LA SIRENA, VILLA MELLA)",
@@ -493,7 +494,7 @@ SATURDAY_ROUTES = {
                 "PUENTE JUAN CARLOS (Después de cruzar) PARADA OMSA",
                 "MENDOZA (PARADA OMSA)",
                 "SUPERMERCADO BRAVO (ANTES DE LA CARRETERA MELLA)",
-                "CALLE TEODORO STANLEY (FRENTE AL TRIBUNAL LABORAL)"
+                "CALLE TEODORO STANLEY (FRENTE AL TRIBUNAL LABORAL)",
             ],
             "San Pedro-Sábado 9:00AM": [
                 "Calle JOSE HAZIM AZAR (Frente al Supermercado JUMBO)",
@@ -509,7 +510,7 @@ SATURDAY_ROUTES = {
                 "AUTOPISTA LAS AMERICAS (Boca Chica, frente a los Bomberos)",
                 "AUTOPISTA LAS AMERICAS (Frente a la parada de Boca Chica)",
                 "AUTOPISTA LAS AMERICAS (Puente Peatonal frente a Claro)",
-                "AUTOPISTA LAS AMERICAS (Vistas de Caucedo, debajo del elevado.)"
+                "AUTOPISTA LAS AMERICAS (Vistas de Caucedo, debajo del elevado.)",
             ],
             "Juan Bosch-Marginal Las Américas (Sábados) 9:00AM": [
                 "PUENTE JUAN CARLOS",
@@ -531,7 +532,7 @@ SATURDAY_ROUTES = {
                 "Residencial Camino Verde, Ciudad Juan Bosch",
                 "Control de la OMSA, Ciudad Juan Bosch",
                 "Escuela primaria Hermanas Mirabal",
-                "La Capilla"
+                "La Capilla",
             ],
             "Charles de Gaulle-Villa Mella (Sábado) 9:00AM": [
                 "HNAS. MIRABAL ESQ. CHARLES G. (LA SIRENA, VILLA MELLA)",
@@ -545,7 +546,7 @@ SATURDAY_ROUTES = {
                 "PUENTE JUAN CARLOS (Después de cruzar) PARADA OMSA",
                 "SUPERMERCADO BRAVO (ANTES DE LA CARRETERA MELLA)",
                 "CALLE TEODORO STANLEY (FRENTE AL TRIBUNAL LABORAL)",
-                "CANSINO (FRENTE COLMADO COME Y BEBE)"
+                "CANSINO (FRENTE COLMADO COME Y BEBE)",
             ],
             "La Romana (Sábados) 9:00AM": [
                 "Parada Inicio: Parque Central (Frente a Parroquia Santa Rosa)",
@@ -553,7 +554,7 @@ SATURDAY_ROUTES = {
                 "Av. Padre Abreu esq. C/ Héctor Quezada (Frente a Bomba Texaco)",
                 "Av. Profesor Juan Bosch (Frente Multiplaza)",
                 "Av. Profesor Juan Bosch (Frente a Yina Bambú Shop )",
-                "Final del Recorrido ITLA La Caleta"
+                "Final del Recorrido ITLA La Caleta",
             ],
             "John F. Kennedy / San Vicente de Paul (Sabado) 2:00PM": [
                 "Km. 9 Aut. Duarte (Parada del Metro María Montes)",
@@ -581,7 +582,7 @@ SATURDAY_ROUTES = {
                 "Av. San Vicente de Paul esq. Club de Leones (Plaza Alma Rosa)",
                 "Av. San Vicente esq. Nicolas Silfa Canario (Frente Colmado Super Pérez)",
                 "Parada Espress: Terminal del Este (ITLA SDE)",
-                "Final del recorrido: Sede Central ITLA (ITLA Caleta)"
+                "Final del recorrido: Sede Central ITLA (ITLA Caleta)",
             ],
             "John F. Kennedy / San Vicente de Paul (Sabado) 9:00AM": [
                 "Km. 9 Aut. Duarte (Parada del Metro María Montes)",
@@ -609,7 +610,7 @@ SATURDAY_ROUTES = {
                 "Av. San Vicente de Paul esq. Club de Leones (Plaza Alma Rosa)",
                 "Av. San Vicente esq. Nicolas Silfa Canario (Frente Colmado Super Pérez)",
                 "Terminal Santo Domingo Este (Extensión ITLA SDE)",
-                "Final del recorrido: Sede Central ITLA (ITLA Caleta)"
+                "Final del recorrido: Sede Central ITLA (ITLA Caleta)",
             ],
             "Independencia (Sabado) 9:00AM": [
                 "KM 12 Av. Independencia (Frente a Plaza Luperón)",
@@ -634,7 +635,7 @@ SATURDAY_ROUTES = {
                 "Calle Palo Hincado esq. George Washington, Zona colonial",
                 "C/ Palo Hincado antes de cruzar Av. Simón Bolívar",
                 "Parada Espress: Terminal del Este (ITLA SDE)",
-                "ITLA Sede Central (última parada)"
+                "ITLA Sede Central (última parada)",
             ],
             "Independencia (Sabado) 2:00PM": [
                 "KM 12 Av. Independencia (Frente a Plaza Luperón)",
@@ -659,9 +660,9 @@ SATURDAY_ROUTES = {
                 "Calle Palo Hincado esq. George Washington, Zona colonial",
                 "C/ Palo Hincado antes de cruzar Av. Simón Bolívar",
                 "Parada Espress: Terminal del Este (ITLA SDE)",
-                "ITLA Sede Central (última parada)"
-            ]
-        }
+                "ITLA Sede Central (última parada)",
+            ],
+        },
     },
     "departure": {
         "routes": [
@@ -675,13 +676,12 @@ SATURDAY_ROUTES = {
             "John F. Kennedy / San Vicente de Paul (Sabado) 1:00PM",
             "John F. Kennedy / San Vicente de Paul (Sabado) 6:00PM",
             "Independencia (Sabado) 1:00PM",
-            "Independencia (Sabado) 6:00PM"
+            "Independencia (Sabado) 6:00PM",
         ],
-    }
+    },
 }
 
 ROUTES_DATA = {
     "weekday": WEEKDAY_ROUTES,
     "saturday": SATURDAY_ROUTES,
 }
-

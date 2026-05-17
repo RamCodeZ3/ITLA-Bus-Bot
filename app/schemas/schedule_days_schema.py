@@ -1,11 +1,10 @@
 from pydantic import BaseModel
-from typing import Optional
 
 
 class ScheduleDaysSchema(BaseModel):
     schedule_id: int
     day: str
     ticket_type: str
-    arrival_route: Optional[str] = None
-    pickup_stop: Optional[str] = None
-    departure_route: Optional[str] = None
+    arrival_route: str | None = None
+    pickup_stop: str | None = None
+    departure_route: str | None = None

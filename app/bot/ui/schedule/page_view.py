@@ -1,7 +1,6 @@
 import discord
 from utils.schedule_utils import truncate
 
-
 MAX_OPTIONS = 25
 
 
@@ -18,11 +17,11 @@ def total_pages(items: list) -> int:
 
 
 def build_options(items: list[str], page: int) -> list[discord.SelectOption]:
-    
+
     start = page * MAX_OPTIONS
     return [
         discord.SelectOption(label=truncate(item), value=truncate(item, 100))
-        for item in items[start: start + MAX_OPTIONS]
+        for item in items[start : start + MAX_OPTIONS]
     ]
 
 

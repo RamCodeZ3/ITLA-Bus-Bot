@@ -1,8 +1,8 @@
 import discord
-from discord.ext import commands
 from discord import app_commands
-from infrastructure.repository.user import UserRepository
+from discord.ext import commands
 from infrastructure.database import get_session
+from infrastructure.repository.user import UserRepository
 
 
 class Register(commands.Cog):
@@ -31,36 +31,46 @@ class Register(commands.Cog):
                 repository.create(
                     discord_id=interaction.user.id,
                     email=email,
-                    password=password, # Directo sin encriptar
+                    password=password,  # Directo sin encriptar
                 )
                 embed = discord.Embed(
                     title="✅ Registro Exitoso",
-                    description="Te registraste de manera exitosa. Aquí están tus credenciales:",
-                    color=discord.Color.darker_gray()
+                    description=(
+                        "Te registraste de manera exitosa."
+                        "Aquí están tus credenciales:"
+                    ),
+                    color=discord.Color.darker_gray(),
                 )
                 embed.add_field(name="Email", value=email, inline=False)
-                embed.add_field(name="Contraseña", value=password, inline=False)
+                embed.add_field(
+                    name="Contraseña", value=password, inline=False
+                )
                 await interaction.followup.send(embed=embed, ephemeral=True)
             else:
                 repository.update(
                     discord_id=interaction.user.id,
                     email=email,
-                    password=password
+                    password=password,
                 )
                 embed = discord.Embed(
                     title="✅ Credenciales Actualizadas",
-                    description="Se actualizaron tus credenciales de manera exitosa. Aquí están tus nuevas credenciales:",
-                    color=discord.Color.darker_gray()
+                    description=(
+                        "Se actualizaron tus credenciales de manera exitosa."
+                        "Aquí están tus nuevas credenciales:"
+                    ),
+                    color=discord.Color.darker_gray(),
                 )
                 embed.add_field(name="Email", value=email, inline=False)
-                embed.add_field(name="Contraseña", value=password, inline=False)
+                embed.add_field(
+                    name="Contraseña", value=password, inline=False
+                )
                 await interaction.followup.send(embed=embed, ephemeral=True)
-            
+
         except Exception as e:
             await interaction.followup.send(
                 "❌ Ocurrió un error al registrarte.", ephemeral=True
             )
-            print(f"[Register] Error: {e}")
+            raise ValueError(f"[Register] Error: {e}")
         finally:
             session.close()
 

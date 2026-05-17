@@ -1,10 +1,11 @@
-import discord
 from datetime import datetime, timedelta
+
+import discord
 from infrastructure.database import get_session
-from infrastructure.repository.stock_history import StockHistoryRepository
 from infrastructure.repository.schedule import ScheduleRepository
-from scraper.scrapper_ticket import ITLAScraper
+from infrastructure.repository.stock_history import StockHistoryRepository
 from schemas.ticket_schema import TicketSchema
+from scraper.scrapper_ticket import ITLAScraper
 
 
 class TicketView(discord.ui.View):
@@ -35,8 +36,7 @@ class TicketView(discord.ui.View):
         session = get_session()
         schedule_repo = ScheduleRepository(session)
         schedule = schedule_repo.get_schedule_by_id_and_day(
-            interaction.user.id,
-            day_name
+            interaction.user.id, day_name
         )
         session.close()
 
@@ -93,8 +93,7 @@ class TicketView(discord.ui.View):
         session = get_session()
         schedule_repo = ScheduleRepository(session)
         schedule = schedule_repo.get_schedule_by_id_and_day(
-            interaction.user.id,
-            day_name
+            interaction.user.id, day_name
         )
         stock_repo = StockHistoryRepository(session)
         stock_repo.create(
@@ -104,7 +103,7 @@ class TicketView(discord.ui.View):
             status="refused",
         )
         session.close()
-    
+
     @discord.ui.button(
         label="⏱️ Preguntar más tarde",
         style=discord.ButtonStyle.gray,
@@ -127,8 +126,7 @@ class TicketView(discord.ui.View):
         session = get_session()
         schedule_repo = ScheduleRepository(session)
         schedule = schedule_repo.get_schedule_by_id_and_day(
-            interaction.user.id,
-            day_name
+            interaction.user.id, day_name
         )
         stock_repo = StockHistoryRepository(session)
         stock_repo.create(
