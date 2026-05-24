@@ -1,11 +1,11 @@
+from datetime import datetime
+
 import discord
 from discord.ext import commands, tasks
-from datetime import datetime
 from infrastructure.database import get_session
-from infrastructure.repository.user import UserRepository
 from infrastructure.repository.stock_history import StockHistoryRepository
+from infrastructure.repository.user import UserRepository
 from ui.schedule_task.ticket_view import TicketView
-
 
 NEXT_DAY_MAP = {
     0: "tuesday",
@@ -93,8 +93,7 @@ class SchedulerTask(commands.Cog):
                 # Verificar si ya existe un StockHistory para este
                 # schedule_day en la fecha de mañana
                 already_notified = stock_repo.get_by_schedule_day_and_date(
-                    schedule_day_id=user_data["schedule_day_id"],
-                    date=today
+                    schedule_day_id=user_data["schedule_day_id"], date=today
                 )
                 if already_notified and already_notified.status != "failed":
                     continue
@@ -116,8 +115,7 @@ class SchedulerTask(commands.Cog):
             embed = discord.Embed(
                 title=f"🚌 Recordatorio — Mañana es {day_name}",
                 description=(
-                    "Tienes clases mañana. "
-                    "¿Deseas comprar tus boletos de transporte?"
+                    "Tienes clases mañana. ¿Deseas comprar tus boletos de transporte?"
                 ),
                 color=discord.Color.darker_gray(),
             )
@@ -131,9 +129,7 @@ class SchedulerTask(commands.Cog):
             )
             embed.add_field(
                 name="🔴 Salida",
-                value=(
-                    f"**Ruta:** {user_data['departure_route']}\n"
-                ),
+                value=(f"**Ruta:** {user_data['departure_route']}\n"),
                 inline=False,
             )
             embed.set_footer(text="ITLA Bot • Sistema de Boletos")
@@ -147,8 +143,7 @@ class SchedulerTask(commands.Cog):
             )
         except Exception as e:
             print(
-                f"[SchedulerTask] Error enviando DM"
-                f" a {user_data['discord_id']}: {e}"
+                f"[SchedulerTask] Error enviando DM a {user_data['discord_id']}: {e}"
             )
 
 

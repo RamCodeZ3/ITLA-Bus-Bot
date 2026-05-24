@@ -1,10 +1,11 @@
-import discord
 from datetime import datetime, timedelta
+
+import discord
 from infrastructure.database import get_session
-from infrastructure.repository.stock_history import StockHistoryRepository
 from infrastructure.repository.schedule import ScheduleRepository
-from scraper.scrapper_ticket import ITLAScraper
+from infrastructure.repository.stock_history import StockHistoryRepository
 from schemas.ticket_schema import TicketSchema
+from scraper.scrapper_ticket import ITLAScraper
 
 
 class TicketView(discord.ui.View):
@@ -35,8 +36,7 @@ class TicketView(discord.ui.View):
         session = get_session()
         schedule_repo = ScheduleRepository(session)
         schedule = schedule_repo.get_schedule_by_id_and_day(
-            interaction.user.id,
-            day_name
+            interaction.user.id, day_name
         )
         session.close()
 
@@ -53,7 +53,6 @@ class TicketView(discord.ui.View):
             )
             session.close()
         elif result and not result["success"]:
-            # Guardar el intento fallido
             session = get_session()
             stock_repo = StockHistoryRepository(session)
             stock_repo.create(
@@ -64,7 +63,6 @@ class TicketView(discord.ui.View):
             )
             session.close()
 
-            # Enviar embed de error con botones de reintento
             try:
                 user = await self.bot.fetch_user(interaction.user.id)
                 error_embed = self._build_error_embed(result["error"])
@@ -95,8 +93,7 @@ class TicketView(discord.ui.View):
         session = get_session()
         schedule_repo = ScheduleRepository(session)
         schedule = schedule_repo.get_schedule_by_id_and_day(
-            interaction.user.id,
-            day_name
+            interaction.user.id, day_name
         )
         stock_repo = StockHistoryRepository(session)
         stock_repo.create(
@@ -106,7 +103,7 @@ class TicketView(discord.ui.View):
             status="refused",
         )
         session.close()
-    
+
     @discord.ui.button(
         label="⏱️ Preguntar más tarde",
         style=discord.ButtonStyle.gray,
@@ -129,8 +126,7 @@ class TicketView(discord.ui.View):
         session = get_session()
         schedule_repo = ScheduleRepository(session)
         schedule = schedule_repo.get_schedule_by_id_and_day(
-            interaction.user.id,
-            day_name
+            interaction.user.id, day_name
         )
         stock_repo = StockHistoryRepository(session)
         stock_repo.create(
@@ -183,7 +179,8 @@ class TicketView(discord.ui.View):
         if not result["success"]:
             return result
 
-        tickets: list[dict] = result["data"]
+        tickets: list[dict] = result["data"]["tickets"]
+        balance: int = result["data"]["balance"]
         files = [
             discord.File(fp=t["buffer"], filename=t["filename"])
             for t in tickets
@@ -192,7 +189,8 @@ class TicketView(discord.ui.View):
             content=(
                 f"✅ ¡Boletos comprados para mañana **{tomorrow}**!\n"
                 f"🟢 Ruta de llegada: **{schedule_day['arrival_route']}**\n"
-                f"🔴 Ruta de salida: **{schedule_day['departure_route']}**"
+                f"🔴 Ruta de salida: **{schedule_day['departure_route']}**\n"
+                f"💰 Tu balance actual es de: **RD${balance}**"
             ),
             files=files,
         )
@@ -222,7 +220,6 @@ class RetryView(discord.ui.View):
             view=self,
         )
 
-        # Reutilizamos la lógica de compra desde TicketView
         ticket_view = TicketView(self.user_data, self.bot)
         result = await ticket_view._buy_tickets(
             interaction.user.id, self.schedule
@@ -239,7 +236,6 @@ class RetryView(discord.ui.View):
             )
             session.close()
         elif result and not result["success"]:
-            # Si falla de nuevo, vuelve a enviar el embed de error
             try:
                 user = await self.bot.fetch_user(interaction.user.id)
                 error_embed = ticket_view._build_error_embed(result["error"])

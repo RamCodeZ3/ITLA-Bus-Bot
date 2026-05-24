@@ -1,6 +1,6 @@
 import discord
-from ui.schedule.page_view import ScheduleState
 from ui.schedule.days_selects import DaysSelectView
+from ui.schedule.page_view import ScheduleState
 
 
 class TermModal(discord.ui.Modal, title="Configurar Horario"):

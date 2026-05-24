@@ -1,6 +1,6 @@
 [project]
 name = "itla-bus-bot"
-version = "1.1.0"
+version = "1.1.1"
 description = "Bot de Discord para reserva automática de boletos del sistema de transporte del ITLA"
 readme = "README.md"
 requires-python = ">=3.12"
@@ -9,5 +9,6 @@ dependencies = [
     "dotenv>=0.9.9",
     "playwright>=1.58.0",
     "pydantic>=2.12.5",
+    "ruff>=0.15.13",
     "sqlalchemy>=2.0.48",
 ]

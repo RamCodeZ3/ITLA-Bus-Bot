@@ -1,11 +1,12 @@
 import unicodedata
-from playwright.async_api import async_playwright
 from datetime import datetime
-from .ticket_dowloader import TicketDownloader
+
 from infrastructure.database import get_session
 from infrastructure.repository.user import UserRepository
+from playwright.async_api import TimeoutError, async_playwright
 from schemas.ticket_schema import TicketSchema
 
+from .ticket_dowloader import TicketDownloader
 
 URL_CAMPUS = "https://campusvirtual.itla.edu.do"
 TICKET_PRICE = 30  # pesos
@@ -39,7 +40,7 @@ class ITLAScraper:
                     "--no-sandbox",
                     "--disable-dev-shm-usage",
                     "--disable-gpu",
-                ]
+                ],
             )
             context = await browser.new_context()
 
@@ -49,15 +50,20 @@ class ITLAScraper:
             ticket_downloader = TicketDownloader()
 
             steps = [
-                self.login(page),
-                self.go_to_transport(page),
-                self.balance_verification(page),
-                self.fill_form(page),
-                self.confirm_reserve(page),
+                ("login", self.login(page)),
+                ("go_to_transport", self.go_to_transport(page)),
+                ("balance_verification", self.balance_verification(page)),
+                ("fill_form", self.fill_form(page)),
+                ("confirm_reserve", self.confirm_reserve(page)),
             ]
 
-            for step in steps:
+            balance_result = 0
+
+            for name, step in steps:
                 result = await step
+                if name == "balance_verification":
+                    balance_result = result["data"]
+
                 if not result["success"]:
                     await browser.close()
                     return result
@@ -75,7 +81,8 @@ class ITLAScraper:
                 page, self.ticket.date
             )
             await browser.close()
-            return ok(tickets)
+            balance_result -= 60
+            return ok({"tickets": tickets, "balance": balance_result})
 
     async def login(self, page):
         try:
@@ -99,8 +106,7 @@ class ITLAScraper:
 
             try:
                 await page.wait_for_selector(
-                    ".btn-logout, button:has-text('Salir')",
-                    timeout=5000
+                    ".btn-logout, button:has-text('Salir')", timeout=5000
                 )
                 return ok()
             except Exception:
@@ -126,8 +132,8 @@ class ITLAScraper:
             await page.wait_for_url("**/customers/home**", timeout=15000)
             await page.wait_for_load_state("domcontentloaded")
             return ok()
-        except:
-            return error(f"No se pudo acceder a Transporte")
+        except TimeoutError:
+            return error("No se pudo acceder a Transporte")
 
     async def balance_verification(self, page):
         try:
@@ -143,14 +149,13 @@ class ITLAScraper:
                 f"Balance insuficiente. Tienes RD${balance}, "
                 f"necesitas RD${TICKET_PRICE * 2}."
             )
-        except:
-            return error(f"No se pudo verificar el balance")
+        except TimeoutError:
+            return error("No se pudo verificar el balance")
 
     async def fill_form(self, page):
         try:
             await page.wait_for_selector(
-                "client-ticket-reserve",
-                timeout=10000
+                "client-ticket-reserve", timeout=10000
             )
             await page.wait_for_selector("#reserve_date", timeout=10000)
 
@@ -166,20 +171,20 @@ class ITLAScraper:
             await self._ngx_select(
                 page, "time_out", "Ruta de salida", self.ticket.departure_route
             )
-            await self._ngx_select(
-                page, "stop_out", "Parada de bajada"
-            )
+            await self._ngx_select(page, "stop_out", "Parada de bajada")
 
             return ok()
-        except:
-            return error(f"Error al llenar el formulario")
+
+        except TimeoutError:
+            return error("Error al llenar el formulario")
 
     async def confirm_reserve(self, page):
         try:
             await page.get_by_role("button", name="Reservar").click()
             return ok()
-        except:
-            return error(f"No se pudo reservar el ticket")
+
+        except TimeoutError:
+            return error("No se pudo reservar el ticket")
 
     async def go_to_reserve_page(self, page):
         try:
@@ -189,14 +194,15 @@ class ITLAScraper:
             )
             await page.wait_for_selector("tr.datatable-row", timeout=10000)
             return ok()
-        except:
-            return error(f"No se pudo navegar a Reservas")
+
+        except TimeoutError:
+            return error("No se pudo navegar a Reservas")
 
     async def confirm_buy(self, page):
         try:
-            fecha = datetime.strptime(
-                self.ticket.date, "%Y-%m-%d"
-            ).strftime("%d-%m-%Y")
+            fecha = datetime.strptime(self.ticket.date, "%Y-%m-%d").strftime(
+                "%d-%m-%Y"
+            )
 
             fila = page.locator("tr.datatable-row").filter(
                 has=page.locator(f"td:has-text('{fecha}')")
@@ -208,15 +214,14 @@ class ITLAScraper:
 
             await page.wait_for_timeout(2000)
             return ok()
-        except:
-            return error(f"No se pudo confirmar la compra")
+        except TimeoutError:
+            return error("No se pudo confirmar la compra")
 
     async def _ngx_select(self, page, field_id, field_name, search_text=None):
         selector = f"ngx-select-dropdown#{field_id}"
         await page.locator(f"{selector} .ngx-dropdown-button").click()
         await page.wait_for_selector(
-            f"{selector} .available-item",
-            timeout=5000
+            f"{selector} .available-item", timeout=5000
         )
 
         options = page.locator(f"{selector} .available-item")

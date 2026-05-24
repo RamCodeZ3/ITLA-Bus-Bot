@@ -1,6 +1,6 @@
 import discord
-from discord.ext import commands
 from discord import app_commands
+from discord.ext import commands
 from ui.schedule.modal import TermModal
 
 
@@ -11,8 +11,7 @@ class Schedule(commands.Cog):
     @app_commands.command(
         name="set-schedule",
         description=(
-            "Configura los días y rutas de transporte"
-            " para el período académico"
+            "Configura los días y rutas de transporte para el período académico"
         ),
     )
     async def setting_shedule(self, interaction: discord.Interaction):
