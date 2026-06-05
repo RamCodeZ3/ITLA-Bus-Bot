@@ -140,14 +140,18 @@ class ITLAScraper:
             balance_text = await page.locator(
                 "span", has_text="DOP"
             ).inner_text()
-            balance = int(float(balance_text.replace("DOP", "").strip()))
+            balance = int(float(balance_text.replace(
+                "DOP",
+                ""
+            ).replace(",", "").strip()))
 
             if balance >= TICKET_PRICE * 2:
                 return ok(balance)
 
             return error(
                 f"Balance insuficiente. Tienes RD${balance}, "
-                f"necesitas RD${TICKET_PRICE * 2}."
+                f"necesitas RD${TICKET_PRICE * 2}. para realizar la compra\n"
+                f"Realizar recarga en el campus virtual: {URL_CAMPUS}"
             )
         except TimeoutError:
             return error("No se pudo verificar el balance")
