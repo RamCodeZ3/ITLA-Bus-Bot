@@ -1,11 +1,8 @@
-from datetime import datetime, timedelta
-
 import discord
 from discord.ext import commands, tasks
-from infrastructure.database import get_session
-from infrastructure.repository.stock_history import StockHistoryRepository
-from infrastructure.repository.user import UserRepository
+
 from ui.schedule_task.ticket_view import TicketView
+from services.remider_task import reminder_check
 
 REMINDER_DELAY_HOURS = 1
 
@@ -13,37 +10,16 @@ REMINDER_DELAY_HOURS = 1
 class ReminderTask(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        self.reminder_check.start()
+        self.reminder_check_cog.start()
 
     def cog_unload(self):
-        self.reminder_check.cancel()
+        self.reminder_check_cog.cancel()
 
     @tasks.loop(minutes=1)
-    async def reminder_check(self):
-        session = get_session()
-        stock_repo = StockHistoryRepository(session)
-        user_repo = UserRepository(session)
-
-        try:
-            now = datetime.now()
-            pending = stock_repo.get_expired_pending(
-                before=now - timedelta(hours=REMINDER_DELAY_HOURS)
-            )
-
-            for record in pending:
-                user_data = user_repo.get_user_data_by_schedule_day_id(
-                    record.schedule_day_id
-                )
-                if user_data is None:
-                    continue
-
-                stock_repo.update_status(record.id, "reminded")
-                await self._send_reminder(user_data)
-
-        except Exception as e:
-            print(f"[ReminderTask] Error: {e}")
-        finally:
-            session.close()
+    async def redmider_check_cog(self):
+        users_data = await reminder_check()
+        for user_data in users_data:
+            await self._send_reminder(user_data)
 
     @reminder_check.before_loop
     async def before_reminder_check(self):

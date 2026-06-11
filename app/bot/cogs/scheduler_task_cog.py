@@ -1,20 +1,9 @@
-from datetime import datetime
-
 import discord
 from discord.ext import commands, tasks
-from infrastructure.database import get_session
-from infrastructure.repository.stock_history import StockHistoryRepository
-from infrastructure.repository.user import UserRepository
+
+from services.scheduler_task import SchedulerTask
 from ui.schedule_task.ticket_view import TicketView
 
-NEXT_DAY_MAP = {
-    0: "tuesday",
-    1: "wednesday",
-    2: "thursday",
-    3: "friday",
-    4: "saturday",
-    6: "monday",
-}
 
 DAYS_ES = {
     "monday": "lunes",
@@ -25,11 +14,10 @@ DAYS_ES = {
     "saturday": "sábado",
 }
 
-TASK_HOUR = 11
-TASK_MINUTE = 0
+scheduler_task = SchedulerTask()
 
 
-class SchedulerTask(commands.Cog):
+class SchedulerTaskCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.last_notified_date = None
@@ -39,72 +27,29 @@ class SchedulerTask(commands.Cog):
         self.daily_check.cancel()
 
     @tasks.loop(minutes=1)
-    async def daily_check(self):
-        now = datetime.now()
+    async def _daily_check(self):
+        tomorrow_day = await scheduler_task.daily_check()
+        await self.notify_users(str(tomorrow_day))
 
-        if now.weekday() not in NEXT_DAY_MAP:
-            return
-
-        if now.hour != TASK_HOUR or now.minute != TASK_MINUTE:
-            if now.hour < TASK_HOUR:
-                self.last_notified_date = None
-            return
-
-        today = now.date()
-        if self.last_notified_date == today:
-            return
-
-        self.last_notified_date = today
-        tomorrow_day = NEXT_DAY_MAP[now.weekday()]
-        await self.notify_users(tomorrow_day)
-
-    @daily_check.before_loop
+    @_daily_check.before_loop
     async def before_daily_check(self):
         await self.bot.wait_until_ready()
         await self._catchup_check()
 
     async def _catchup_check(self):
-        now = datetime.now()
-        today = now.date()
-
-        if now.weekday() not in NEXT_DAY_MAP:
-            return
-
-        if not (TASK_HOUR <= now.hour < 17):
-            return
-
-        if self.last_notified_date == today:
-            return
-
-        self.last_notified_date = today
-        tomorrow_day = NEXT_DAY_MAP[now.weekday()]
-        await self.notify_users(tomorrow_day)
+        tomorrow_day = await scheduler_task.catchup_check()
+        await self.notify_users(str(tomorrow_day))
 
     async def notify_users(self, day: str):
-        session = get_session()
-        user_repo = UserRepository(session)
-        stock_repo = StockHistoryRepository(session)
-
         try:
-            users = user_repo.get_users_with_day(day)
-            today = datetime.now().date()
+            users = await scheduler_task.notify_users(day)
 
-            for user_data in users:
-                # Verificar si ya existe un StockHistory para este
-                # schedule_day en la fecha de mañana
-                already_notified = stock_repo.get_by_schedule_day_and_date(
-                    schedule_day_id=user_data["schedule_day_id"], date=today
-                )
-                if already_notified and already_notified.status != "failed":
-                    continue
-
-                await self._send_dm(user_data, day)
+            for user in users:
+                await self._send_dm(user, day)
 
         except Exception as e:
             print(f"[SchedulerTask] Error en notify_users: {e}")
-        finally:
-            session.close()
-
+       
     async def _send_dm(self, user_data: dict, day: str):
         try:
             user = await self.bot.fetch_user(user_data["discord_id"])
