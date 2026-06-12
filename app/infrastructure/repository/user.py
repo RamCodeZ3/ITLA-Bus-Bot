@@ -7,14 +7,14 @@ class UserRepository:
     def __init__(self, session: Session):
         self.session = session
 
-    def create(self, discord_id: int, email: str, password: str) -> User:
+    async def create(self, discord_id: int, email: str, password: str) -> User:
         user = User(id=discord_id, email=email, password=password)
         self.session.add(user)
         self.session.commit()
         self.session.refresh(user)
         return user
 
-    def update(
+    async def update(
         self,
         discord_id,
         email,
@@ -33,7 +33,7 @@ class UserRepository:
 
         return user
 
-    def get_by_discord_id(self, discord_id: int) -> User | None:
+    async def get_by_discord_id(self, discord_id: int) -> User | None:
         return self.session.query(User).filter_by(id=discord_id).first()
 
     def get_users_with_day(self, day: str) -> list[dict]:

@@ -30,7 +30,7 @@ TASK_MINUTE = 0
 class SchedulerTask:
 
     def __init__(self) -> None:
-        pass
+        self.last_notified_date = None
     
     async def daily_check(self):
         now = datetime.now()

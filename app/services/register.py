@@ -12,10 +12,10 @@ async def register_user(
     
     try:
         user_repo = UserRepository(session)
-        user = user_repo.get_by_discord_id(discord_id)
+        user = await user_repo.get_by_discord_id(discord_id)
     
         if user is None:
-            user_repo.create(
+            await user_repo.create(
                 discord_id,
                 email,
                 password # directo sin encriptar
@@ -23,7 +23,7 @@ async def register_user(
             return True
 
         else:
-            user_repo.update(
+            await user_repo.update(
                 discord_id,
                 email,
                 password,

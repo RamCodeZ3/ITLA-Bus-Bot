@@ -21,10 +21,10 @@ class SchedulerTaskCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.last_notified_date = None
-        self.daily_check.start()
+        self._daily_check.start()
 
     def cog_unload(self):
-        self.daily_check.cancel()
+        self._daily_check.cancel()
 
     @tasks.loop(minutes=1)
     async def _daily_check(self):
@@ -93,4 +93,4 @@ class SchedulerTaskCog(commands.Cog):
 
 
 async def setup(bot: commands.Bot):
-    await bot.add_cog(SchedulerTask(bot))
+    await bot.add_cog(SchedulerTaskCog(bot))
