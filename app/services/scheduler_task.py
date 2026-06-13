@@ -4,7 +4,6 @@ from infrastructure.database import get_session
 from infrastructure.repository.stock_history import StockHistoryRepository
 from infrastructure.repository.user import UserRepository
 
-
 NEXT_DAY_MAP = {
     0: "tuesday",
     1: "wednesday",
@@ -31,7 +30,7 @@ class SchedulerTask:
 
     def __init__(self) -> None:
         self.last_notified_date = None
-    
+
     async def daily_check(self):
         now = datetime.now()
 
@@ -69,7 +68,7 @@ class SchedulerTask:
         tomorrow_day = NEXT_DAY_MAP[now.weekday()]
 
         return tomorrow_day
-    
+
     async def notify_users(self, day: str):
         session = get_session()
         user_repo = UserRepository(session)
@@ -77,7 +76,7 @@ class SchedulerTask:
         users_to_notify = []
 
         try:
-            users = user_repo.get_users_with_day(day)
+            users = await user_repo.get_users_with_day(day)
             today = datetime.now().date()
 
             for user_data in users:

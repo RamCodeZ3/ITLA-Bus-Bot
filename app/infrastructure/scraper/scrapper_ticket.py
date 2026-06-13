@@ -28,8 +28,8 @@ async def _block_resources(route):
 
 
 class ITLAScraper:
-    def __init__(self, discord_id: int, ticket: TicketSchema):
-        self.discord_id = discord_id
+    def __init__(self, user_id: int, ticket: TicketSchema):
+        self.user_id = user_id
         self.ticket = ticket
 
     async def run(self):
@@ -88,7 +88,7 @@ class ITLAScraper:
         try:
             session = get_session()
             repo = UserRepository(session)
-            user = repo.get_by_discord_id(self.discord_id)
+            user = await repo.get_by_user_id(self.user_id)
 
             if user is None:
                 return error(

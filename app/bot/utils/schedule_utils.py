@@ -1,5 +1,4 @@
 import discord
-
 from services.schedule import DAYS_ES, ScheduleService
 
 
@@ -18,7 +17,7 @@ async def save_schedule(interaction: discord.Interaction, state) -> None:
     service = ScheduleService()
     try:
         summary = await service.save_schedule(
-            discord_user_id=interaction.user.id,
+            user_id=interaction.user.id,
             term=state.term,
             days_data=state.days_data,
         )

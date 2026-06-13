@@ -1,8 +1,7 @@
 import discord
 from discord.ext import commands, tasks
-
-from ui.schedule_task.ticket_view import TicketView
 from services.remider_task import reminder_check
+from ui.schedule_task.ticket_view import TicketView
 
 REMINDER_DELAY_HOURS = 1
 
@@ -16,12 +15,12 @@ class ReminderTask(commands.Cog):
         self.reminder_check_cog.cancel()
 
     @tasks.loop(minutes=1)
-    async def redmider_check_cog(self):
+    async def reminder_check_cog(self):
         users_data = await reminder_check()
         for user_data in users_data:
             await self._send_reminder(user_data)
 
-    @reminder_check.before_loop
+    @reminder_check_cog.before_loop
     async def before_reminder_check(self):
         await self.bot.wait_until_ready()
 

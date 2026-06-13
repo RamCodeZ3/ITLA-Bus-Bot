@@ -37,7 +37,7 @@ class Register(commands.Cog):
                     name="Contraseña", value=password, inline=False
                 )
                 await interaction.followup.send(embed=embed, ephemeral=True)
-            
+
             else:
                 embed = discord.Embed(
                     title="✅ Credenciales Actualizadas",

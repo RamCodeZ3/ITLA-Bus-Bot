@@ -1,9 +1,7 @@
 import discord
 from discord.ext import commands, tasks
-
 from services.scheduler_task import SchedulerTask
 from ui.schedule_task.ticket_view import TicketView
-
 
 DAYS_ES = {
     "monday": "lunes",
@@ -49,10 +47,10 @@ class SchedulerTaskCog(commands.Cog):
 
         except Exception as e:
             print(f"[SchedulerTask] Error en notify_users: {e}")
-       
+
     async def _send_dm(self, user_data: dict, day: str):
         try:
-            user = await self.bot.fetch_user(user_data["discord_id"])
+            user = await self.bot.fetch_user(user_data["user_id"])
             if user is None:
                 return
 
@@ -84,11 +82,11 @@ class SchedulerTaskCog(commands.Cog):
         except discord.Forbidden:
             print(
                 f"[SchedulerTask] No se pudo enviar DM"
-                f" a {user_data['discord_id']} (DMs cerrados)"
+                f" a {user_data['user_id']} (DMs cerrados)"
             )
         except Exception as e:
             print(
-                f"[SchedulerTask] Error enviando DM a {user_data['discord_id']}: {e}"
+                f"[SchedulerTask] Error enviando DM a {user_data['user_id']}: {e}"
             )
 
 

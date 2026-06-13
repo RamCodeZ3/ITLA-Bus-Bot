@@ -1,7 +1,7 @@
-from data.routes_data import ROUTES_DATA
 from infrastructure.database import get_session
 from infrastructure.repository.schedule import ScheduleRepository
 from infrastructure.repository.user import UserRepository
+from routes_data import ROUTES_DATA
 from schemas.schedule_days_schema import ScheduleDaysSchema
 
 WEEKDAYS = ["monday", "tuesday", "wednesday", "thursday", "friday"]
@@ -35,20 +35,14 @@ def build_schedule_summary(term: str, days_data: dict) -> str:
 
 
 class ScheduleService:
-    async def save_schedule(self, discord_user_id: int, term: str, days_data: dict) -> str:
-        """
-        Persists the schedule for a user.
+    async def save_schedule(self, user_id: int, term: str, days_data: dict) -> str:
 
-        Returns a summary string on success.
-        Raises ValueError if the user is not registered.
-        Raises RuntimeError on unexpected errors.
-        """
         session = get_session()
         try:
             user_repo = UserRepository(session)
             schedule_repo = ScheduleRepository(session)
 
-            user = await user_repo.get_by_discord_id(discord_user_id)
+            user = await user_repo.get_by_user_id(user_id)
             if not user:
                 raise ValueError("user_not_registered")
 

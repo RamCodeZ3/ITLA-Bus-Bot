@@ -3,21 +3,21 @@ from datetime import datetime, timedelta
 from infrastructure.database import get_session
 from infrastructure.repository.schedule import ScheduleRepository
 from infrastructure.repository.stock_history import StockHistoryRepository
-from schemas.ticket_schema import TicketSchema
 from infrastructure.scraper.scrapper_ticket import ITLAScraper
+from schemas.ticket_schema import TicketSchema
 
 
-class Tickets: 
+class Tickets:
     def __init__(self, user_id: int) -> None:
         self.user_id = user_id
 
     async def buy_tickets(self):
         session = get_session()
-        
+
         schedule = await self.get_schedule_by_id()
         result = await self._buy_tickets(self.user_id, schedule)
 
-        try: 
+        try:
 
             if result and result["success"]:
                 stock_repo = StockHistoryRepository(session)
@@ -35,7 +35,7 @@ class Tickets:
                     date=datetime.now().date(),
                     status="failed",
                 )
-            
+
         except Exception as e:
             raise ValueError("Hubo un error registrando los boletos: ", e)
 
@@ -59,14 +59,14 @@ class Tickets:
             result = await scraper.run()
 
             return result
-        
+
         except Exception as e:
             raise ValueError("Hubo un error comprando los boletos: ", e)
 
     async def mark_as_refused(self) -> None:
         try:
             session = get_session()
-            schedule = self.get_schedule_by_id() 
+            schedule = self.get_schedule_by_id()
             stock_repo = StockHistoryRepository(session)
             stock_repo.create(
                 user_id=self.user_id,
@@ -98,7 +98,7 @@ class Tickets:
     async def mark_as_pending(self) -> None:
         try:
             session = get_session()
-            schedule = await self.get_schedule_by_id() 
+            schedule = await self.get_schedule_by_id()
             stock_repo = StockHistoryRepository(session)
             stock_repo.create(
                 user_id=self.user_id,

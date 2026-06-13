@@ -1,10 +1,8 @@
 from datetime import datetime, timedelta
-from typing import Dict
 
-from app.bot.cogs.remider_task_cog import REMINDER_DELAY_HOURS
-from infrastructure.repository.user import UserRepository
-from infrastructure.repository.stock_history import StockHistoryRepository
 from infrastructure.database import get_session
+from infrastructure.repository.stock_history import StockHistoryRepository
+from infrastructure.repository.user import UserRepository
 
 REMINDER_DELAY_HOURS = 1
 
@@ -23,7 +21,7 @@ async def reminder_check():
         )
 
         for record in pending:
-            user_data = user_repo.get_user_data_by_schedule_day_id(
+            user_data = await user_repo.get_user_data_by_schedule_day_id(
                 record.schedule_day_id
             )
             if user_data is None:
@@ -33,7 +31,7 @@ async def reminder_check():
 
     except Exception as e:
         print(f"[ReminderTask] Error: {e}")
-    
+
     finally:
         session.close()
         return users_data

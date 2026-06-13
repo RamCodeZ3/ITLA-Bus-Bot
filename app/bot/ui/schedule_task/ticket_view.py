@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta
 
 import discord
-
 from services.ticket import Tickets
 
 
@@ -10,7 +9,7 @@ class TicketView(discord.ui.View):
         super().__init__(timeout=None)
         self.user_data = user_data
         self.bot = bot
-        self.tickets = Tickets(user_data["discord_id"])
+        self.tickets = Tickets(user_data["user_id"])
 
     @discord.ui.button(
         label="🎫 Comprar boletos",
@@ -31,9 +30,9 @@ class TicketView(discord.ui.View):
         result = await self.tickets.buy_tickets()
 
         await self.buy_tickets(result, schedule)
- 
+
         if result and not result["success"]:
-           
+
             try:
                 user = await self.bot.fetch_user(interaction.user.id)
                 error_embed = self._build_error_embed(result["error"])
@@ -58,7 +57,7 @@ class TicketView(discord.ui.View):
             view=self,
         )
         await self.tickets.mark_as_refused()
-        
+
     @discord.ui.button(
         label="⏱️ Preguntar más tarde",
         style=discord.ButtonStyle.gray,
@@ -75,7 +74,7 @@ class TicketView(discord.ui.View):
             embed=None,
             view=self,
         )
-        
+
     def disable_all(self):
         for item in self.children:
             item.disabled = True
@@ -100,7 +99,7 @@ class TicketView(discord.ui.View):
     async def buy_tickets(self, result: dict, schedule_day: dict):
         tomorrow = (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d")
         try:
-            user = await self.bot.fetch_user(self.user_data["discord_id"])
+            user = await self.bot.fetch_user(self.user_data["user_id"])
         except discord.NotFound:
             return None
 
@@ -131,7 +130,7 @@ class RetryView(discord.ui.View):
         super().__init__(timeout=None)
         self.user_data = user_data
         self.bot = bot
-        self.tickets = Tickets(user_data["discord_id"])
+        self.tickets = Tickets(user_data["user_id"])
         self.schedule = schedule
 
     @discord.ui.button(
@@ -152,7 +151,7 @@ class RetryView(discord.ui.View):
 
         ticket_view = TicketView(self.user_data, self.bot)
 
-        result = await self.tickets.buy_tickets() 
+        result = await self.tickets.buy_tickets()
         await ticket_view.buy_tickets(result, self.schedule)
 
         if result and not result["success"]:
