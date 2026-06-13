@@ -1,5 +1,6 @@
 import discord
-from utils.schedule_utils import truncate
+
+from services.schedule import truncate
 
 MAX_OPTIONS = 25
 

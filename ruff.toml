@@ -3,3 +3,27 @@ target-version = "py312"
 
 [lint]
 select = ["E", "W", "F", "I", "UP"]
+
+[lint.isort]
+known-first-party = [
+  "services",
+  "schemas",
+  "models",
+  "utils",
+  "infrastructure",
+  "cog",
+  "bot",
+  "ui"
+]
+known-third-party = [
+  "discord",
+  "playwright"
+]
+section-order = [
+    "future",
+    "standard-library",
+    "third-party",
+    "first-party",
+    "local-folder"
+]
+

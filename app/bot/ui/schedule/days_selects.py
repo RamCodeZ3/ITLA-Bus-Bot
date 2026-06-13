@@ -1,7 +1,9 @@
 import discord
+
+from services.schedule import ALL_DAYS
 from ui.schedule.page_view import ScheduleState
 from ui.schedule.routes_selects import ArrivalRouteSelect
-from utils.schedule_utils import ALL_DAYS, DAYS_ES, day_embed
+from utils.schedule_utils import DAYS_ES, day_embed
 
 
 class DaysSelectView(discord.ui.View):

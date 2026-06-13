@@ -6,7 +6,7 @@ from sqlalchemy.orm import sessionmaker
 from .models import Base
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-DB_FOLDER = os.path.join(CURRENT_DIR, "..", "data")
+DB_FOLDER = os.path.join(CURRENT_DIR, "../../", "data")
 DB_NAME = "itla_bot.db"
 
 if not os.path.exists(DB_FOLDER):
