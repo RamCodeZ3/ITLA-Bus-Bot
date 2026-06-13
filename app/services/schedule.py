@@ -1,7 +1,8 @@
+from routes_data import ROUTES_DATA
+
 from infrastructure.database import get_session
 from infrastructure.repository.schedule import ScheduleRepository
 from infrastructure.repository.user import UserRepository
-from routes_data import ROUTES_DATA
 from schemas.schedule_days_schema import ScheduleDaysSchema
 
 WEEKDAYS = ["monday", "tuesday", "wednesday", "thursday", "friday"]
@@ -35,7 +36,12 @@ def build_schedule_summary(term: str, days_data: dict) -> str:
 
 
 class ScheduleService:
-    async def save_schedule(self, user_id: int, term: str, days_data: dict) -> str:
+    async def save_schedule(
+        self,
+        user_id: int,
+        term: str,
+        days_data: dict
+    ) -> str:
 
         session = get_session()
         try:

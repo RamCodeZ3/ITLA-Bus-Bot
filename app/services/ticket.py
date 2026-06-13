@@ -46,7 +46,9 @@ class Tickets:
 
     async def _buy_tickets(self, user_id: int, schedule_day):
         try:
-            tomorrow = (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d")
+            tomorrow = (
+                datetime.now() + timedelta(days=1)
+            ).strftime("%Y-%m-%d")
 
             ticket = TicketSchema(
                 date=tomorrow,

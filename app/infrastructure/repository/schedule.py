@@ -1,6 +1,7 @@
+from sqlalchemy.orm import Session
+
 from infrastructure.models import Schedule, ScheduleDay, User
 from schemas.schedule_days_schema import ScheduleDaysSchema
-from sqlalchemy.orm import Session
 
 
 class ScheduleRepository:

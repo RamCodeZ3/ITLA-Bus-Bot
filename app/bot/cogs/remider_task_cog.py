@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands, tasks
+
 from services.remider_task import reminder_check
 from ui.schedule_task.ticket_view import TicketView
 
@@ -61,7 +62,8 @@ class ReminderTask(commands.Cog):
             )
         except Exception as e:
             print(
-                f"[ReminderTask] Error enviando reminder a {user_data['discord_id']}: {e}"
+                f"[ReminderTask] Error enviando reminder"
+                f"a {user_data['discord_id']}: {e}"
             )
 
 

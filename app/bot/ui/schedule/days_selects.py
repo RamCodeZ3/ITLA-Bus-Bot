@@ -1,4 +1,5 @@
 import discord
+
 from services.schedule import ALL_DAYS
 from ui.schedule.page_view import ScheduleState
 from ui.schedule.routes_selects import ArrivalRouteSelect

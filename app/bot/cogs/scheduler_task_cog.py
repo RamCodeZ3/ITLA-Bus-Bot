@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands, tasks
+
 from services.scheduler_task import SchedulerTask
 from ui.schedule_task.ticket_view import TicketView
 
@@ -58,7 +59,8 @@ class SchedulerTaskCog(commands.Cog):
             embed = discord.Embed(
                 title=f"🚌 Recordatorio — Mañana es {day_name}",
                 description=(
-                    "Tienes clases mañana. ¿Deseas comprar tus boletos de transporte?"
+                    "Tienes clases mañana."
+                    " ¿Deseas comprar tus boletos de transporte?"
                 ),
                 color=discord.Color.darker_gray(),
             )
@@ -86,7 +88,8 @@ class SchedulerTaskCog(commands.Cog):
             )
         except Exception as e:
             print(
-                f"[SchedulerTask] Error enviando DM a {user_data['user_id']}: {e}"
+                f"[SchedulerTask] Error enviando DM"
+                f" a {user_data['user_id']}: {e}"
             )
 
 

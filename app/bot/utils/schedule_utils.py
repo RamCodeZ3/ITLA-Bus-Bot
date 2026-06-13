@@ -1,4 +1,5 @@
 import discord
+
 from services.schedule import DAYS_ES, ScheduleService
 
 

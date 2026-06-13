@@ -1,9 +1,10 @@
 import unicodedata
 from datetime import datetime
 
+from playwright.async_api import TimeoutError, async_playwright
+
 from infrastructure.database import get_session
 from infrastructure.repository.user import UserRepository
-from playwright.async_api import TimeoutError, async_playwright
 from schemas.ticket_schema import TicketSchema
 
 from .ticket_dowloader import TicketDownloader
