@@ -1,6 +1,7 @@
+from sqlalchemy.orm import Session
+
 from infrastructure.models import Schedule, ScheduleDay, User
 from schemas.schedule_days_schema import ScheduleDaysSchema
-from sqlalchemy.orm import Session
 
 
 class ScheduleRepository:
@@ -53,14 +54,14 @@ class ScheduleRepository:
         )
 
     def get_schedule_by_id_and_day(
-        self, discord_id: int, day: str
+        self, user_id: int, day: str
     ) -> dict | None:
         schedule_day = (
             self.session.query(ScheduleDay)
             .join(Schedule, Schedule.id == ScheduleDay.schedule_id)
             .join(User, User.id == Schedule.user_id)
             .filter(Schedule.active)
-            .filter(User.id == discord_id)
+            .filter(User.id == user_id)
             .filter(ScheduleDay.day == day)
             .first()
         )

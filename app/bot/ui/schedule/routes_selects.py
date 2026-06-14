@@ -1,9 +1,10 @@
 import discord
+
+from services.schedule import get_routes_for_day
 from ui.schedule.page_view import PagedView, ScheduleState
 from utils.schedule_utils import (
     DAYS_ES,
     day_embed,
-    get_routes_for_day,
     save_schedule,
 )
 

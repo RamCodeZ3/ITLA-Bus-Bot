@@ -1,11 +1,8 @@
 from datetime import datetime, timedelta
 
 import discord
-from infrastructure.database import get_session
-from infrastructure.repository.schedule import ScheduleRepository
-from infrastructure.repository.stock_history import StockHistoryRepository
-from schemas.ticket_schema import TicketSchema
-from scraper.scrapper_ticket import ITLAScraper
+
+from services.ticket import Tickets
 
 
 class TicketView(discord.ui.View):
@@ -13,6 +10,7 @@ class TicketView(discord.ui.View):
         super().__init__(timeout=None)
         self.user_data = user_data
         self.bot = bot
+        self.tickets = Tickets(user_data["user_id"])
 
     @discord.ui.button(
         label="🎫 Comprar boletos",
@@ -29,39 +27,12 @@ class TicketView(discord.ui.View):
             embed=None,
             view=self,
         )
+        schedule = await self.tickets.get_schedule_by_id()
+        result = await self.tickets.buy_tickets()
 
-        tomorrow = datetime.now() + timedelta(days=1)
-        day_name = tomorrow.strftime("%A").lower()
+        await self.buy_tickets(result, schedule)
 
-        session = get_session()
-        schedule_repo = ScheduleRepository(session)
-        schedule = schedule_repo.get_schedule_by_id_and_day(
-            interaction.user.id, day_name
-        )
-        session.close()
-
-        result = await self._buy_tickets(interaction.user.id, schedule)
-
-        if result and result["success"]:
-            session = get_session()
-            stock_repo = StockHistoryRepository(session)
-            stock_repo.create(
-                user_id=interaction.user.id,
-                schedule_day_id=schedule["schedule_day_id"],
-                date=datetime.now().date(),
-                status="bought",
-            )
-            session.close()
-        elif result and not result["success"]:
-            session = get_session()
-            stock_repo = StockHistoryRepository(session)
-            stock_repo.create(
-                user_id=interaction.user.id,
-                schedule_day_id=schedule["schedule_day_id"],
-                date=datetime.now().date(),
-                status="failed",
-            )
-            session.close()
+        if result and not result["success"]:
 
             try:
                 user = await self.bot.fetch_user(interaction.user.id)
@@ -86,23 +57,7 @@ class TicketView(discord.ui.View):
             embed=None,
             view=self,
         )
-
-        tomorrow = datetime.now() + timedelta(days=1)
-        day_name = tomorrow.strftime("%A").lower()
-
-        session = get_session()
-        schedule_repo = ScheduleRepository(session)
-        schedule = schedule_repo.get_schedule_by_id_and_day(
-            interaction.user.id, day_name
-        )
-        stock_repo = StockHistoryRepository(session)
-        stock_repo.create(
-            user_id=interaction.user.id,
-            schedule_day_id=schedule["schedule_day_id"],
-            date=datetime.now().date(),
-            status="refused",
-        )
-        session.close()
+        await self.tickets.mark_as_refused()
 
     @discord.ui.button(
         label="⏱️ Preguntar más tarde",
@@ -114,28 +69,12 @@ class TicketView(discord.ui.View):
         button: discord.ui.Button,
     ):
         self.disable_all()
+        await self.tickets.mark_as_pending()
         await interaction.response.edit_message(
             content="Se le recordada más tarde para comprar los boletos",
             embed=None,
             view=self,
         )
-
-        tomorrow = datetime.now() + timedelta(days=1)
-        day_name = tomorrow.strftime("%A").lower()
-
-        session = get_session()
-        schedule_repo = ScheduleRepository(session)
-        schedule = schedule_repo.get_schedule_by_id_and_day(
-            interaction.user.id, day_name
-        )
-        stock_repo = StockHistoryRepository(session)
-        stock_repo.create(
-            user_id=interaction.user.id,
-            schedule_day_id=schedule["schedule_day_id"],
-            date=datetime.now().date(),
-            status="pending",
-        )
-        session.close()
 
     def disable_all(self):
         for item in self.children:
@@ -158,23 +97,12 @@ class TicketView(discord.ui.View):
         embed.set_footer(text="ITLA Bot • Sistema de Boletos")
         return embed
 
-    async def _buy_tickets(self, discord_id: int, schedule_day: dict):
+    async def buy_tickets(self, result: dict, schedule_day: dict):
         tomorrow = (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d")
-
-        ticket = TicketSchema(
-            date=tomorrow,
-            arrival_route=schedule_day["arrival_route"],
-            pickup_stop=schedule_day["pickup_stop"],
-            departure_route=schedule_day["departure_route"],
-        )
-
         try:
-            user = await self.bot.fetch_user(discord_id)
+            user = await self.bot.fetch_user(self.user_data["user_id"])
         except discord.NotFound:
             return None
-
-        scraper = ITLAScraper(discord_id, ticket)
-        result = await scraper.run()
 
         if not result["success"]:
             return result
@@ -194,6 +122,7 @@ class TicketView(discord.ui.View):
             ),
             files=files,
         )
+
         return result
 
 
@@ -202,6 +131,7 @@ class RetryView(discord.ui.View):
         super().__init__(timeout=None)
         self.user_data = user_data
         self.bot = bot
+        self.tickets = Tickets(user_data["user_id"])
         self.schedule = schedule
 
     @discord.ui.button(
@@ -221,21 +151,11 @@ class RetryView(discord.ui.View):
         )
 
         ticket_view = TicketView(self.user_data, self.bot)
-        result = await ticket_view._buy_tickets(
-            interaction.user.id, self.schedule
-        )
 
-        if result and result["success"]:
-            session = get_session()
-            stock_repo = StockHistoryRepository(session)
-            stock_repo.create(
-                user_id=interaction.user.id,
-                schedule_day_id=self.schedule["schedule_day_id"],
-                date=datetime.now().date(),
-                status="bought",
-            )
-            session.close()
-        elif result and not result["success"]:
+        result = await self.tickets.buy_tickets()
+        await ticket_view.buy_tickets(result, self.schedule)
+
+        if result and not result["success"]:
             try:
                 user = await self.bot.fetch_user(interaction.user.id)
                 error_embed = ticket_view._build_error_embed(result["error"])
@@ -256,21 +176,12 @@ class RetryView(discord.ui.View):
         button: discord.ui.Button,
     ):
         self.disable_all()
+        await self.tickets.mark_as_cancelled()
         await interaction.response.edit_message(
             content="🚫 Compra cancelada.",
             embed=None,
             view=self,
         )
-
-        session = get_session()
-        stock_repo = StockHistoryRepository(session)
-        stock_repo.create(
-            user_id=interaction.user.id,
-            schedule_day_id=self.schedule["schedule_day_id"],
-            date=datetime.now().date(),
-            status="cancelled",
-        )
-        session.close()
 
     def disable_all(self):
         for item in self.children:

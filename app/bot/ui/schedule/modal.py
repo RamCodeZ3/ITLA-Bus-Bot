@@ -1,4 +1,5 @@
 import discord
+
 from ui.schedule.days_selects import DaysSelectView
 from ui.schedule.page_view import ScheduleState
 

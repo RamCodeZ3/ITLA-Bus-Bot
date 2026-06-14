@@ -1,8 +1,8 @@
 import discord
 from discord import app_commands
 from discord.ext import commands
-from infrastructure.database import get_session
-from infrastructure.repository.user import UserRepository
+
+from services.register import register_user
 
 
 class Register(commands.Cog):
@@ -22,17 +22,9 @@ class Register(commands.Cog):
     ):
         await interaction.response.defer(ephemeral=True)
 
-        session = get_session()
         try:
-            repository = UserRepository(session)
-            user = repository.get_by_discord_id(interaction.user.id)
-
-            if user is None:
-                repository.create(
-                    discord_id=interaction.user.id,
-                    email=email,
-                    password=password,  # Directo sin encriptar
-                )
+            result = await register_user(interaction.user.id, email, password)
+            if result:
                 embed = discord.Embed(
                     title="✅ Registro Exitoso",
                     description=(
@@ -46,12 +38,8 @@ class Register(commands.Cog):
                     name="Contraseña", value=password, inline=False
                 )
                 await interaction.followup.send(embed=embed, ephemeral=True)
+
             else:
-                repository.update(
-                    discord_id=interaction.user.id,
-                    email=email,
-                    password=password,
-                )
                 embed = discord.Embed(
                     title="✅ Credenciales Actualizadas",
                     description=(
@@ -71,8 +59,6 @@ class Register(commands.Cog):
                 "❌ Ocurrió un error al registrarte.", ephemeral=True
             )
             raise ValueError(f"[Register] Error: {e}")
-        finally:
-            session.close()
 
 
 async def setup(bot):
