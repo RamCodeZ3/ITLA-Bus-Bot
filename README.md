@@ -16,24 +16,36 @@
 ## 🗂️ Estructura del proyecto
 
 ```
-app/
-├── bot/
-│   ├── cogs/          # Comandos y eventos del bot (slash commands)
-│   ├── ui/            # Componentes de interfaz (modals, selects, botones)
-│   ├── utils/         # Utilidades del bot
-│   └── bot_discord.py # Entrada principal del bot
-├── data/              # Almacenamiento local / archivos de datos
-├── infrastructure/
-│   ├── repository/    # Capa de acceso a datos
-│   ├── database.py    # Configuración de la base de datos
-│   └── models.py      # Modelos ORM / esquemas
-├── models/            # Modelos de dominio / lógica de negocio
-├── scraper/           # Web scraping con Playwright
-└── main.py            # Punto de entrada de la aplicación
-.env.example           # Variables de entorno de ejemplo
-pyproject.toml         # Configuración del proyecto (UV)
-uv.lock                # Lock file de dependencias
-```
+ITLA-Bus-Bot/
+├── app/
+│   ├── bot/
+│   │   ├── cogs/                # Comandos y eventos del bot (slash commands)
+│   │   ├── ui/                  # Componentes de interfaz (modals, selects, botones)
+│   │   ├── utils/               # Utilidades del bot
+│   │   └── bot_discord.py       # Punto de entrada del bot de Discord
+│   │
+│   ├── infrastructure/
+│   │   ├── repository/          # Capa de acceso a datos
+│   │   ├── scraper/             # Web scraping con Playwright
+│   │   ├── database.py          # Configuración de la base de datos
+│   │   └── models.py            # Modelos ORM
+│   │
+│   ├── schemas/                 # Esquemas de validación (Pydantic, etc.)
+│   ├── services/                # Lógica de negocio / servicios de la app
+│   ├── main.py                  # Punto de entrada principal de la aplicación
+│   └── routes_data.py           # Data con las rutas de los buses
+│
+├── data/                        # Almacenamiento local con la base de datos
+│
+├── .env                         # Variables de entorno (no se sube al repo)
+├── .env.example                 # Plantilla de variables de entorno
+├── .gitignore
+├── .python-version
+├── README.md
+├── pyproject.toml               # Configuración del proyecto (UV)
+├── ruff.toml                    # Configuración del linter Ruff
+└── uv.lock                      # Lock file de dependencias
+``` 
 
 ---
 
