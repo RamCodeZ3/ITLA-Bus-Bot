@@ -105,6 +105,9 @@ Edita el archivo `.env`:
 ```env
 # Token del bot de Discord (obtenido en el Developer Portal)
 DISCORD_TOKEN=tu_token_aqui
+
+# Token para encriptar contraseñas (generado con cryptography.fernet)
+ENCRYPTION_KEY=el_token_aqui
 ```
 
 ---
@@ -112,7 +115,7 @@ DISCORD_TOKEN=tu_token_aqui
 ## ▶️ Ejecutar el bot
 
 ```bash
-uv run python app/main.py
+uv run app/main.py
 ```
 
 ---

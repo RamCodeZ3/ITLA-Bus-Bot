@@ -33,7 +33,6 @@ class TicketView(discord.ui.View):
         await self.buy_tickets(result, schedule)
 
         if result and not result["success"]:
-
             try:
                 user = await self.bot.fetch_user(interaction.user.id)
                 error_embed = self._build_error_embed(result["error"])

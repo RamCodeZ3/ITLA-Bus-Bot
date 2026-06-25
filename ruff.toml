@@ -17,7 +17,8 @@ known-first-party = [
 ]
 known-third-party = [
   "discord",
-  "playwright"
+  "playwright",
+  "dotenv"
 ]
 section-order = [
     "future",
