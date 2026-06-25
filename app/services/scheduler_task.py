@@ -27,7 +27,6 @@ TASK_MINUTE = 0
 
 
 class SchedulerTask:
-
     def __init__(self) -> None:
         self.last_notified_date = None
 
