@@ -37,10 +37,7 @@ def build_schedule_summary(term: str, days_data: dict) -> str:
 
 class ScheduleService:
     async def save_schedule(
-        self,
-        user_id: int,
-        term: str,
-        days_data: dict
+        self, user_id: int, term: str, days_data: dict
     ) -> str:
 
         session = get_session()

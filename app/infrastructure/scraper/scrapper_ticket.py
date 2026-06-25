@@ -6,6 +6,7 @@ from playwright.async_api import TimeoutError, async_playwright
 from infrastructure.database import get_session
 from infrastructure.repository.user import UserRepository
 from schemas.ticket_schema import TicketSchema
+from utils.encryption import descrypt
 
 from .ticket_dowloader import TicketDownloader
 
@@ -90,6 +91,7 @@ class ITLAScraper:
             session = get_session()
             repo = UserRepository(session)
             user = await repo.get_by_user_id(self.user_id)
+            descripted_password = await descrypt(user.password)
 
             if user is None:
                 return error(
@@ -101,7 +103,7 @@ class ITLAScraper:
             await page.wait_for_load_state("networkidle")
 
             await page.locator("#email").fill(user.email)
-            await page.locator("#password").fill(user.password)
+            await page.locator("#password").fill(descripted_password)
             await page.get_by_role("button", name="Iniciar Sesión").click()
             await page.wait_for_load_state("networkidle")
 
@@ -141,10 +143,9 @@ class ITLAScraper:
             balance_text = await page.locator(
                 "span", has_text="DOP"
             ).inner_text()
-            balance = int(float(balance_text.replace(
-                "DOP",
-                ""
-            ).replace(",", "").strip()))
+            balance = int(
+                float(balance_text.replace("DOP", "").replace(",", "").strip())
+            )
 
             if balance >= TICKET_PRICE * 2:
                 return ok(balance)
