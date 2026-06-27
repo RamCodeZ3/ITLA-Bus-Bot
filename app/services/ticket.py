@@ -3,8 +3,11 @@ from datetime import datetime, timedelta
 from infrastructure.database import get_session
 from infrastructure.repository.schedule import ScheduleRepository
 from infrastructure.repository.stock_history import StockHistoryRepository
+from infrastructure.repository.user import UserRepository
 from infrastructure.scraper.scrapper_ticket import ITLAScraper
 from schemas.ticket_schema import TicketSchema
+from utils.encryption import descrypt
+from utils.responses import error
 
 
 class Tickets:
@@ -55,7 +58,20 @@ class Tickets:
                 departure_route=schedule_day["departure_route"],
             )
 
-            scraper = ITLAScraper(user_id, ticket)
+            session = get_session()
+            repo = UserRepository(session)
+            user = await repo.get_by_user_id(self.user_id)
+            descripted_password = await descrypt(user.password)
+
+            if user is None:
+                return error(
+                    "Usuario no encontrado. Regístrate con /register"
+                    "antes de comprar los boletos."
+                )
+
+            scraper = ITLAScraper(
+                user_id, ticket, user.email, descripted_password
+            )
             result = await scraper.run()
 
             return result
