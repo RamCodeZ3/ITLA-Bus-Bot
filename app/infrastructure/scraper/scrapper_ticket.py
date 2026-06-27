@@ -3,23 +3,13 @@ from datetime import datetime
 
 from playwright.async_api import TimeoutError, async_playwright
 
-from infrastructure.database import get_session
-from infrastructure.repository.user import UserRepository
 from schemas.ticket_schema import TicketSchema
-from utils.encryption import descrypt
+from utils.responses import error, ok
 
 from .ticket_dowloader import TicketDownloader
 
 URL_CAMPUS = "https://campusvirtual.itla.edu.do"
 TICKET_PRICE = 30  # pesos
-
-
-def ok(data=None):
-    return {"success": True, "data": data, "error": None}
-
-
-def error(message: str):
-    return {"success": False, "data": None, "error": message}
 
 
 async def _block_resources(route):
@@ -30,9 +20,17 @@ async def _block_resources(route):
 
 
 class ITLAScraper:
-    def __init__(self, user_id: int, ticket: TicketSchema):
+    def __init__(
+        self,
+        user_id: int,
+        ticket: TicketSchema,
+        user_email: str,
+        user_password: str,
+    ):
         self.user_id = user_id
         self.ticket = ticket
+        self.user_email = user_email
+        self.user_password = user_password
 
     async def run(self):
         async with async_playwright() as p:
@@ -88,22 +86,11 @@ class ITLAScraper:
 
     async def login(self, page):
         try:
-            session = get_session()
-            repo = UserRepository(session)
-            user = await repo.get_by_user_id(self.user_id)
-            descripted_password = await descrypt(user.password)
-
-            if user is None:
-                return error(
-                    "Usuario no encontrado. Regístrate con /register"
-                    "antes de comprar los boletos."
-                )
-
             await page.goto(URL_CAMPUS)
             await page.wait_for_load_state("networkidle")
 
-            await page.locator("#email").fill(user.email)
-            await page.locator("#password").fill(descripted_password)
+            await page.locator("#email").fill(self.user_email)
+            await page.locator("#password").fill(self.user_password)
             await page.get_by_role("button", name="Iniciar Sesión").click()
             await page.wait_for_load_state("networkidle")
 
