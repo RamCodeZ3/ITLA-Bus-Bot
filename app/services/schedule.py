@@ -36,22 +36,24 @@ def build_schedule_summary(term: str, days_data: dict) -> str:
 
 
 class ScheduleService:
+
+    def __init__(self) -> None:
+        self.session = get_session()
+        self.user_repo = UserRepository(self.session)
+        self.schedule_repo = ScheduleRepository(self.session)
+    
     async def save_schedule(
         self, user_id: int, term: str, days_data: dict
     ) -> str:
 
-        session = get_session()
         try:
-            user_repo = UserRepository(session)
-            schedule_repo = ScheduleRepository(session)
-
-            user = await user_repo.get_by_user_id(user_id)
+            user = await self.user_repo.get_by_user_id(user_id)
             if not user:
                 raise ValueError("user_not_registered")
 
-            schedule = schedule_repo.create(user_id=user.id, term=term)
+            schedule = self.schedule_repo.create(user_id=user.id, term=term)
             for day, data in days_data.items():
-                schedule_repo.add_day(
+                self.schedule_repo.add_day(
                     ScheduleDaysSchema(
                         schedule_id=schedule.id,
                         day=day,
@@ -69,4 +71,15 @@ class ScheduleService:
         except Exception as e:
             raise RuntimeError("save_failed") from e
         finally:
-            session.close()
+            self.session.close()
+
+    async def get_schedule_days(self, user_id: int):
+        try:
+            schedule = self.schedule_repo.get_active(user_id)
+            days = self.schedule_repo.get_days(schedule.id)
+
+            return days
+        except Exception as e:
+            raise RuntimeError("Error consiguiendo los dias: ", e)
+        finally:
+            self.session.close()

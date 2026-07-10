@@ -44,6 +44,13 @@ class Help(commands.Cog):
             ),
             inline=False,
         )
+        embed.add_field(
+            name="**/get-schedule**",
+            value=(
+                "El comando **/get-schedule** se utiliza para obtener"
+                "tu horario actual de rutas."
+            ),
+        )
 
         await interaction.response.send_message(embed=embed)
 
