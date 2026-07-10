@@ -36,12 +36,11 @@ def build_schedule_summary(term: str, days_data: dict) -> str:
 
 
 class ScheduleService:
-
     def __init__(self) -> None:
         self.session = get_session()
         self.user_repo = UserRepository(self.session)
         self.schedule_repo = ScheduleRepository(self.session)
-    
+
     async def save_schedule(
         self, user_id: int, term: str, days_data: dict
     ) -> str:

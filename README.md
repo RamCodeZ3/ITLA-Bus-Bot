@@ -149,6 +149,12 @@ El flujo es el siguiente:
    | 🕔 Hora de salida | Hora a la que saldrás del ITLA |
 
 ---
+### `/get-schedule`
+
+Comando para mostrar el horario de rutas del cuatrimestre actual del ususario **campus virtual del ITLA**.
+
+---
+
 
 ## 🔄 Flujo completo
 
