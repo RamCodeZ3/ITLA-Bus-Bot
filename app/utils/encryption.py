@@ -4,29 +4,37 @@ import os
 from cryptography.fernet import Fernet
 from dotenv import load_dotenv
 
+load_dotenv()
 
-def _load_key() -> bytes:
-    load_dotenv()
-    KEY = os.getenv("ENCRYPTION_KEY")
-
-    if not KEY:
-        raise RuntimeError("ENCRYPTION_KEY is not valid Fernet key")
+def _get_fernet_instance():
+    key = os.getenv("ENCRYPTION_KEY")
+    
+    if not key:
+        return None
 
     try:
-        base64.urlsafe_b64decode(KEY)
-
-    except Exception as e:
-        raise RuntimeError("ENCRYPTION_KEY is not valid Fernet key", e)
-
-    return KEY.encode()
-
-
-_fernet = Fernet(_load_key())
+        base64.urlsafe_b64decode(key)
+        return Fernet(key.encode())
+    except Exception:
+        return None
 
 
 async def encrypt(value: str) -> str:
-    return _fernet.encrypt(value.encode()).decode()
+    fernet = _get_fernet_instance()
+    
+    if not fernet:
+        return value
+        
+    return fernet.encrypt(value.encode()).decode()
 
 
 async def descrypt(value: str) -> str:
-    return _fernet.decrypt(value.encode()).decode()
+    fernet = _get_fernet_instance()
+    
+    if not fernet:
+        return value
+        
+    try:
+        return fernet.decrypt(value.encode()).decode()
+    except Exception:
+        return value
