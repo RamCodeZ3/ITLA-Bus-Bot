@@ -2,21 +2,35 @@ from playwright.async_api import TimeoutError, async_playwright
 
 from utils.responses import ok, error
 
-class ITLAAuth:
+URL_CAMPUS="https://campusvirtual.itla.edu.do/account/login"
+
+class ItlaAuth:
     async def run(self, email: str, password: str):
         try:
             async with async_playwright() as p:
                 browser = await p.chromium.launch(
-                    headless=True,
+                    headless=False,
                     args=[
                         "--no-sandbox",
                         "--disable-dev-shm-usage",
                         "--disable-gpu",
+                        "--disable-images",
+                        "--blink-settings=imagesEnabled=false"
                     ],
                 )
+                
                 context = await browser.new_context()
-
-                await context.route("**/*", _block_resources)
+                await context.route(
+                    "**/*",
+                    lambda route: route.abort()
+                    if route.request.resource_type in [
+                        "image",
+                        "stylesheet",
+                        "font",
+                        "media"
+                    ]
+                    else route.continue_()
+                )
 
                 page = await context.new_page()
 
@@ -47,10 +61,9 @@ class ITLAAuth:
 
                 return ok(True)
 
-        except Exception as e:
-            return error(f"Error inesperado auteticando al usuario: {e}")
-        
         except TimeoutError as t:
-            ValueError("Hubo un error auteticando al usuario", e)
+            raise ValueError(f"Hubo un tiempo de espera agotado autenticando al usuario: {t}")
+        except Exception as e:
+            return error(f"Error inesperado autenticando al usuario: {e}")
 
-itla_auth = ITLAAuth()
+itla_auth = ItlaAuth()

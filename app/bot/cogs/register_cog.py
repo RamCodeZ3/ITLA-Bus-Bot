@@ -44,7 +44,6 @@ class Register(commands.Cog):
                     title="✅ Credenciales Actualizadas",
                     description=(
                         "Se actualizaron tus credenciales de manera exitosa."
-                        "Aquí están tus nuevas credenciales:"
                     ),
                     color=discord.Color.darker_gray(),
                 )
