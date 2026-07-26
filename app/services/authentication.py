@@ -2,7 +2,8 @@ from playwright.async_api import TimeoutError, async_playwright
 
 from utils.responses import ok, error
 
-URL_CAMPUS="https://campusvirtual.itla.edu.do/account/login"
+URL_CAMPUS = "https://campusvirtual.itla.edu.do/account/login"
+
 
 class ItlaAuth:
     async def run(self, email: str, password: str):
@@ -15,21 +16,19 @@ class ItlaAuth:
                         "--disable-dev-shm-usage",
                         "--disable-gpu",
                         "--disable-images",
-                        "--blink-settings=imagesEnabled=false"
+                        "--blink-settings=imagesEnabled=false",
                     ],
                 )
-                
+
                 context = await browser.new_context()
                 await context.route(
                     "**/*",
-                    lambda route: route.abort()
-                    if route.request.resource_type in [
-                        "image",
-                        "stylesheet",
-                        "font",
-                        "media"
-                    ]
-                    else route.continue_()
+                    lambda route: (
+                        route.abort()
+                        if route.request.resource_type
+                        in ["image", "stylesheet", "font", "media"]
+                        else route.continue_()
+                    ),
                 )
 
                 page = await context.new_page()
@@ -57,13 +56,18 @@ class ItlaAuth:
                     if await err.count() > 0:
                         msg = await err.first.inner_text()
                         return error(f"Login fallido: {msg.strip()}")
-                    return error("Login fallido. Verifica tu correo y contraseña.")
+                    return error(
+                        "Login fallido. Verifica tu correo y contraseña."
+                    )
 
                 return ok(True)
 
         except TimeoutError as t:
-            raise ValueError(f"Hubo un tiempo de espera agotado autenticando al usuario: {t}")
+            raise ValueError(
+                f"Hubo un tiempo de espera agotado autenticando al usuario: {t}"
+            )
         except Exception as e:
             return error(f"Error inesperado autenticando al usuario: {e}")
+
 
 itla_auth = ItlaAuth()

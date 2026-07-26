@@ -57,17 +57,19 @@ class Register(commands.Cog):
                 embed = discord.Embed(
                     title="❌ Credenciales incorrectas",
                     description=(
-                    "El correo o la contraseña ingresados para el "
-                    "**Campus Virtual** no son correctos.\n\n"
-                    "Por favor, verifica tus datos e intenta acceder"
-                    " de nuevo en el portal:\n"
-                    "🔗 https://campusvirtual.itla.edu.do/account/login"
+                        "El correo o la contraseña ingresados para el "
+                        "**Campus Virtual** no son correctos.\n\n"
+                        "Por favor, verifica tus datos e intenta acceder"
+                        " de nuevo en el portal:\n"
+                        "🔗 https://campusvirtual.itla.edu.do/account/login"
                     ),
                     color=discord.Color.darker_gray(),
                 )
 
                 embed.add_field(name="Email", value=f"`{email}`", inline=False)
-                embed.add_field(name="Contraseña", value=f"||{password}||", inline=False)
+                embed.add_field(
+                    name="Contraseña", value=f"||{password}||", inline=False
+                )
 
                 await interaction.followup.send(embed=embed, ephemeral=True)
 
