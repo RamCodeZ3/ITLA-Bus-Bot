@@ -4,6 +4,7 @@ from infrastructure.database import get_session
 from infrastructure.repository.schedule import ScheduleRepository
 from infrastructure.repository.stock_history import StockHistoryRepository
 from infrastructure.repository.user import UserRepository
+from infrastructure.models import StockHistory
 from infrastructure.scraper.scrapper_ticket import ITLAScraper
 from schemas.ticket_schema import TicketSchema
 from utils.encryption import descrypt
@@ -79,18 +80,22 @@ class Tickets:
         except Exception as e:
             raise ValueError("Hubo un error comprando los boletos: ", e)
 
-    async def mark_as_refused(self) -> None:
+    async def mark_as_refused(self) -> StockHistory:
         try:
             session = get_session()
-            schedule = self.get_schedule_by_id()
+            schedule = await self.get_schedule_by_id()
             stock_repo = StockHistoryRepository(session)
-            stock_repo.create(
+
+            stock = stock_repo.create(
                 user_id=self.user_id,
                 schedule_day_id=schedule["schedule_day_id"],
                 date=datetime.now().date(),
                 status="refused",
             )
+
             session.close()
+
+            return stock
 
         except Exception as e:
             raise ValueError("Hubo un error calcelando la compra: ", e)

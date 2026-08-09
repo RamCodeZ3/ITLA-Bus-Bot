@@ -51,12 +51,14 @@ class TicketView(discord.ui.View):
         button: discord.ui.Button,
     ):
         self.disable_all()
-        await interaction.response.edit_message(
-            content="👍 Entendido, no se comprarán los boletos de mañana.",
-            embed=None,
-            view=self,
-        )
-        await self.tickets.mark_as_refused()
+        result = await self.tickets.mark_as_refused()
+
+        if result is not None:
+            await interaction.response.edit_message(
+                content="👍 Entendido, no se comprarán los boletos de mañana.",
+                embed=None,
+                view=self,
+            )
 
     @discord.ui.button(
         label="⏱️ Preguntar más tarde",
@@ -176,6 +178,7 @@ class RetryView(discord.ui.View):
     ):
         self.disable_all()
         await self.tickets.mark_as_cancelled()
+
         await interaction.response.edit_message(
             content="🚫 Compra cancelada.",
             embed=None,
