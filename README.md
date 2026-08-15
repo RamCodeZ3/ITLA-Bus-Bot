@@ -165,7 +165,7 @@ Usuario                          Bot
   │                               │
   ├──/set-schedule───────────────►│  Configura horario del cuatrimestre
   │                               │
-  │     (11:00 AM, día anterior)  │
+  │     (08:00 AM, día anterior)  │
   │◄── "¿Deseas comprar tus  ─────┤  Notificación automática
   │     boletos para mañana?"     │
   │                               │
@@ -174,7 +174,7 @@ Usuario                          Bot
   │◄── 🎫 [Boletos adjuntos] ─────┤  Envía los boletos al chat
 ```
 
-> 🕙 **Hora de notificación:** el bot envía el recordatorio cada mañana a las **11:00 AM**, un día antes de cada clase presencial programada en tu horario.
+> 🕙 **Hora de notificación:** el bot envía el recordatorio cada mañana a las **08:00 AM**, un día antes de cada clase presencial programada en tu horario.
 > Para cambiar la hora, edita el archivo `app/bot/cogs/scheduler_task_cog.py`.
 
 ---

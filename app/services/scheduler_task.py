@@ -22,7 +22,7 @@ DAYS_ES = {
     "saturday": "sábado",
 }
 
-TASK_HOUR = 11
+TASK_HOUR = 8
 TASK_MINUTE = 0
 
 
@@ -48,7 +48,7 @@ class SchedulerTask:
         self.last_notified_date = today
         tomorrow_day = NEXT_DAY_MAP[now.weekday()]
 
-        await self.notify_users(tomorrow_day)
+        return tomorrow_day
 
     async def catchup_check(self):
         now = datetime.now()
