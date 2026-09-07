@@ -28,7 +28,7 @@ class Register(commands.Cog):
                 embed = discord.Embed(
                     title="✅ Registro Exitoso",
                     description=(
-                        "Te registraste de manera exitosa."
+                        "Te registraste de manera exitosa. "
                         "Aquí están tus credenciales:"
                     ),
                     color=discord.Color.darker_gray(),

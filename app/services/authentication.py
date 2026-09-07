@@ -10,7 +10,7 @@ class ItlaAuth:
         try:
             async with async_playwright() as p:
                 browser = await p.chromium.launch(
-                    headless=False,
+                    headless=True,
                     args=[
                         "--no-sandbox",
                         "--disable-dev-shm-usage",
