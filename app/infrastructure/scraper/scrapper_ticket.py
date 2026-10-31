@@ -1,11 +1,12 @@
 import unicodedata
 from datetime import datetime
 
-from playwright.async_api import TimeoutError, async_playwright
+from playwright.async_api import TimeoutError
 
 from schemas.ticket_schema import TicketSchema
 from utils.responses import error, ok
 
+from .browser import lightpanda_context
 from .ticket_dowloader import TicketDownloader
 
 URL_CAMPUS = "https://campusvirtual.itla.edu.do"
@@ -33,55 +34,43 @@ class ITLAScraper:
         self.user_password = user_password
 
     async def run(self):
-        async with async_playwright() as p:
-            browser = await p.chromium.launch(
-                headless=True,
-                args=[
-                    "--no-sandbox",
-                    "--disable-dev-shm-usage",
-                    "--disable-gpu",
-                ],
-            )
-            context = await browser.new_context()
-
+        async with lightpanda_context() as context:
             await context.route("**/*", _block_resources)
 
             page = await context.new_page()
             ticket_downloader = TicketDownloader()
 
             steps = [
-                ("login", self.login(page)),
-                ("go_to_transport", self.go_to_transport(page)),
-                ("balance_verification", self.balance_verification(page)),
-                ("fill_form", self.fill_form(page)),
-                ("confirm_reserve", self.confirm_reserve(page)),
+                ("login", self.login),
+                ("go_to_transport", self.go_to_transport),
+                ("balance_verification", self.balance_verification),
+                ("fill_form", self.fill_form),
+                ("confirm_reserve", self.confirm_reserve),
             ]
 
             balance_result = 0
 
             for name, step in steps:
-                result = await step
+                result = await step(page)
+                if not result["success"]:
+                    return result
                 if name == "balance_verification":
                     balance_result = result["data"]
 
-                if not result["success"]:
-                    await browser.close()
-                    return result
-
             await context.unroute("**/*", _block_resources)
 
-            await self.go_to_reserve_page(page)
+            reserve_result = await self.go_to_reserve_page(page)
+            if not reserve_result["success"]:
+                return reserve_result
 
             confirm_result = await self.confirm_buy(page)
             if not confirm_result["success"]:
-                await browser.close()
                 return confirm_result
 
             tickets = await ticket_downloader.download_tickets(
                 page, self.ticket.date
             )
-            await browser.close()
-            balance_result -= 60
+            balance_result -= TICKET_PRICE * 2
             return ok({"tickets": tickets, "balance": balance_result})
 
     async def login(self, page):
@@ -104,7 +93,8 @@ class ITLAScraper:
 
             if await page.locator("#email").count() > 0:
                 err = page.locator(
-                    ".alert-danger, .error-msg, .invalid-feedback, .text-danger"
+                    ".alert-danger, .error-msg, "
+                    ".invalid-feedback, .text-danger"
                 )
                 if await err.count() > 0:
                     msg = await err.first.inner_text()
