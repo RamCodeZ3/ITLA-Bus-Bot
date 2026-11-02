@@ -1,6 +1,7 @@
-from playwright.async_api import TimeoutError, async_playwright
+from playwright.async_api import TimeoutError
 
-from utils.responses import ok, error
+from infrastructure.scraper.browser import lightpanda_context
+from utils.responses import error, ok
 
 URL_CAMPUS = "https://campusvirtual.itla.edu.do/account/login"
 
@@ -8,19 +9,7 @@ URL_CAMPUS = "https://campusvirtual.itla.edu.do/account/login"
 class ItlaAuth:
     async def run(self, email: str, password: str):
         try:
-            async with async_playwright() as p:
-                browser = await p.chromium.launch(
-                    headless=True,
-                    args=[
-                        "--no-sandbox",
-                        "--disable-dev-shm-usage",
-                        "--disable-gpu",
-                        "--disable-images",
-                        "--blink-settings=imagesEnabled=false",
-                    ],
-                )
-
-                context = await browser.new_context()
+            async with lightpanda_context() as context:
                 await context.route(
                     "**/*",
                     lambda route: (
@@ -51,7 +40,8 @@ class ItlaAuth:
 
                 if await page.locator("#email").count() > 0:
                     err = page.locator(
-                        ".alert-danger, .error-msg, .invalid-feedback, .text-danger"
+                        ".alert-danger, .error-msg, "
+                        ".invalid-feedback, .text-danger"
                     )
                     if await err.count() > 0:
                         msg = await err.first.inner_text()
@@ -64,7 +54,8 @@ class ItlaAuth:
 
         except TimeoutError as t:
             raise ValueError(
-                f"Hubo un tiempo de espera agotado autenticando al usuario: {t}"
+                "Hubo un tiempo de espera agotado "
+                f"autenticando al usuario: {t}"
             )
         except Exception as e:
             return error(f"Error inesperado autenticando al usuario: {e}")
