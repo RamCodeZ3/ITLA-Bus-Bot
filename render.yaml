@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: itla-tickets-api
+    runtime: docker
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: API_KEY
+        generateValue: true
+      - key: BROWSER_ENGINE
+        value: lightpanda
+      - key: MAX_CONCURRENT_SESSIONS
+        value: "1"
+      - key: REQUEST_TIMEOUT
+        value: "180"

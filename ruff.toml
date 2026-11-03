@@ -1,30 +1,6 @@
 line-length = 79
 target-version = "py312"
-
 [lint]
-select = ["E", "W", "F", "I", "UP"]
-
-[lint.isort]
-known-first-party = [
-  "services",
-  "schemas",
-  "models",
-  "utils",
-  "infrastructure",
-  "cog",
-  "bot",
-  "ui"
-]
-known-third-party = [
-  "discord",
-  "playwright",
-  "dotenv"
-]
-section-order = [
-    "future",
-    "standard-library",
-    "third-party",
-    "first-party",
-    "local-folder"
-]
-
+select = ["E", "F", "W", "I", "N", "UP", "B", "ASYNC", "S", "SIM"]
+[lint.per-file-ignores]
+"tests/**" = ["S101", "S105", "S106"]

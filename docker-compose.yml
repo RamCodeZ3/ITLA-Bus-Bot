@@ -1,0 +1,13 @@
+services:
+  api:
+    build:
+      context: .
+      args:
+        TARGETARCH: ${TARGETARCH:-amd64}
+    env_file: .env
+    environment:
+      PORT: "10000"
+    ports:
+      - "10000:10000"
+    init: true
+    shm_size: 256mb
