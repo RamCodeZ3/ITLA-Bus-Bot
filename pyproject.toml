@@ -1,16 +1,24 @@
 [project]
-name = "itla-bus-bot"
-version = "1.2.3"
-description = "Bot de Discord para reserva automática de boletos del sistema de transporte del ITLA"
+name = "itla-tickets-api"
+version = "2.0.0"
+description = "Stateless Campus Virtual ticket automation API"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "cryptography>=49.0.0",
-    "discord>=2.3.2",
-    "dotenv>=0.9.9",
-    "fernet>=1.0.1",
-    "playwright>=1.58.0",
-    "pydantic>=2.12.5",
-    "ruff>=0.15.13",
-    "sqlalchemy>=2.0.48",
+  "fastapi>=0.115,<1",
+  "uvicorn>=0.34,<1",
+  "playwright>=1.58,<2",
+  "pydantic>=2.12,<3",
+  "pydantic-settings>=2.8,<3",
 ]
+
+[dependency-groups]
+dev = ["ruff>=0.15", "pytest>=8", "pytest-asyncio>=1", "httpx>=0.28"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+pythonpath = ["."]
+testpaths = ["tests"]
+markers = ["live: opt-in tests against real browser or Campus Virtual"]
+addopts = "-m 'not live'"
