@@ -1,5 +1,7 @@
 import io
 from datetime import datetime
+from pathlib import Path
+from tempfile import TemporaryDirectory
 
 from playwright.async_api import Download, Page
 
@@ -92,10 +94,11 @@ class TicketDownloader:
 
         download: Download = await download_info.value
 
-        # Leer el stream directamente a memoria
-        stream = await download.path()
-        with open(stream, "rb") as f:
-            buffer = io.BytesIO(f.read())
+        # CDP can connect to a remote server: download.path() is not portable.
+        with TemporaryDirectory(prefix="itla-ticket-") as directory:
+            path = Path(directory) / filename
+            await download.save_as(path)
+            buffer = io.BytesIO(path.read_bytes())
 
         buffer.seek(0)
 
