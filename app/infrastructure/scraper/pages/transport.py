@@ -33,6 +33,10 @@ class TransportPage(BasePage):
         await self.page.get_by_role(
             "button", name="Reservar", exact=True
         ).click()
+        # Wait for the async submission before navigation can cancel it.
+        await self.page.get_by_text(
+            "Reserva creada correctamente.", exact=True
+        ).first.wait_for(state="visible")
 
     async def _select(self, field: str, value: str | None) -> None:
         dropdown = self.page.locator(f"ngx-select-dropdown#{field}")

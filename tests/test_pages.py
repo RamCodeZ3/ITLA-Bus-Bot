@@ -154,3 +154,39 @@ async def test_retrieval_returns_available_directions(
     for value in ("1", "0"):
         if value not in available or value in disabled:
             radios[value].check.assert_not_awaited()
+
+
+async def test_reserve_waits_for_portal_confirmation():
+    from datetime import date
+
+    from app.domain.models import Trip
+    from app.infrastructure.scraper.pages.transport import TransportPage
+
+    page = MagicMock()
+    control = page.locator.return_value
+    control.wait_for = AsyncMock()
+    control.check = AsyncMock()
+    control.fill = AsyncMock()
+    submitted = False
+
+    async def submit():
+        nonlocal submitted
+        submitted = True
+
+    async def confirm(**kwargs):
+        assert submitted
+        assert kwargs == {"state": "visible"}
+
+    page.get_by_role.return_value.click = AsyncMock(side_effect=submit)
+    page.get_by_text.return_value.first.wait_for = AsyncMock(
+        side_effect=confirm
+    )
+    transport = TransportPage(page)
+    transport._select = AsyncMock()
+    await transport.reserve(
+        Trip(date(2026, 11, 4), "arrival", "stop", "departure")
+    )
+    page.get_by_text.assert_called_once_with(
+        "Reserva creada correctamente.", exact=True
+    )
+    page.get_by_text.return_value.first.wait_for.assert_awaited_once()
